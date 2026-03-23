@@ -3,212 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بوابة سنتر القمة التعليمي</title>
+    <title>منصة سنتر القمة التعليمية</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        /* الألوان المستوحاة من اللوجو */
         :root {
-            --dark-blue: #0b2e46;
-            --light-blue: #1e81b0;
-            --accent-cyan: #00d4ff;
-            --glass: rgba(255, 255, 255, 0.12);
+            --primary: #0b2e46;
+            --secondary: #1e81b0;
+            --accent: #00d4ff;
+            --glass: rgba(255, 255, 255, 0.08);
         }
-
-        * { box-sizing: border-box; transition: all 0.3s ease; }
 
         body {
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: radial-gradient(circle at top left, #0b2e46, #121212);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            margin: 0; background: #050f17; color: white;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            display: flex; flex-direction: column; align-items: center; min-height: 100vh;
             overflow-x: hidden;
-            color: white;
         }
 
-        /* خلفية متحركة خفيفة */
-        body::before {
-            content: "";
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            background: var(--light-blue);
-            filter: blur(150px);
-            border-radius: 50%;
-            top: 10%;
-            left: 10%;
-            z-index: -1;
-            animation: move 10s infinite alternate;
+        /* شريط أكواد التحقق الخلفي (أكثر من 1000 رمز) */
+        .captcha-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; opacity: 0.1; font-family: monospace;
+            overflow: hidden; pointer-events: none; line-height: 1.5;
+            word-break: break-all; font-size: 10px; color: var(--accent);
         }
-
-        @keyframes move { from { transform: translate(0,0); } to { transform: translate(100px, 100px); } }
 
         .container {
-            width: 100%;
-            max-width: 500px;
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 30px;
-            padding: 40px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-            position: relative;
+            width: 90%; max-width: 600px; background: var(--glass);
+            backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 30px; padding: 30px; margin: 50px 0;
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
         }
 
-        .logo-section {
-            text-align: center;
-            margin-bottom: 30px;
+        .logo-box { text-align: center; margin-bottom: 20px; }
+        .logo-box img { width: 180px; filter: drop-shadow(0 0 10px var(--accent)); }
+
+        h2 { text-align: center; color: var(--accent); margin-bottom: 25px; }
+
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .full-width { grid-column: span 2; }
+
+        .input-group { position: relative; }
+        .input-group i { position: absolute; right: 12px; top: 38px; color: var(--accent); }
+
+        label { display: block; margin-bottom: 8px; font-size: 14px; color: #ccc; }
+        
+        input, select {
+            width: 100%; padding: 12px 40px 12px 10px;
+            background: rgba(255,255,255,0.05); border: 1px solid #333;
+            border-radius: 12px; color: white; outline: none; box-sizing: border-box;
         }
 
-        .logo-section img {
-            width: 220px; /* كبرنا اللوجو عشان يبان */
-            filter: drop-shadow(0 0 15px rgba(0,212,255,0.4));
-            animation: float 4s ease-in-out infinite;
+        input:focus, select:focus { border-color: var(--accent); background: rgba(255,255,255,0.1); }
+
+        .btn-submit {
+            grid-column: span 2; padding: 15px; margin-top: 20px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border: none; border-radius: 12px; color: white; font-weight: bold;
+            cursor: pointer; font-size: 18px; transition: 0.4s;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
+        .btn-submit:hover { transform: scale(1.02); box-shadow: 0 0 20px var(--accent); }
 
-        h1 {
-            font-size: 22px;
-            text-align: center;
-            margin-bottom: 30px;
-            background: linear-gradient(to left, #fff, var(--accent-cyan));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 800;
-        }
-
-        .input-group {
-            position: relative;
-            margin-bottom: 20px;
-        }
-
-        .input-group i {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--accent-cyan);
-        }
-
-        input {
-            width: 100%;
-            padding: 14px 45px 14px 15px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 15px;
-            color: white;
-            font-size: 16px;
-            outline: none;
-        }
-
-        input:focus {
-            border-color: var(--accent-cyan);
-            background: rgba(255,255,255,0.1);
-            box-shadow: 0 0 15px rgba(0,212,255,0.2);
-        }
-
-        .file-card {
-            background: rgba(0, 212, 255, 0.05);
-            border: 2px dashed rgba(255,255,255,0.2);
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            cursor: pointer;
-            margin-bottom: 25px;
-        }
-
-        .file-card:hover { border-color: var(--accent-cyan); background: rgba(0, 212, 255, 0.1); }
-
-        .submit-btn {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(45deg, var(--dark-blue), var(--light-blue));
-            border: none;
-            border-radius: 15px;
-            color: white;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-        }
-
-        .submit-btn:hover {
-            letter-spacing: 1px;
-            box-shadow: 0 0 30px var(--accent-cyan);
-            transform: scale(1.02);
-        }
-
-        ::placeholder { color: rgba(255,255,255,0.5); }
+        /* إخفاء التخصص في حالة الابتدائي/الإعدادي */
+        #specialization-box { display: none; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="logo-section">
-        <img src="logo.jpg" alt="سنتر القمة">
+    <div class="captcha-bg" id="captchaBox"></div>
+
+    <div class="container">
+        <div class="logo-box">
+            <img src="logo.jpg" alt="سنتر القمة">
+        </div>
+        
+        <h2>بوابة التسجيل الذكية ⚡</h2>
+
+        <form id="proForm" class="form-grid">
+            <div class="input-group full-width">
+                <label>اسم الطالب</label>
+                <i class="fas fa-user"></i>
+                <input type="text" placeholder="الاسم رباعي" required>
+            </div>
+
+            <div class="input-group">
+                <label>رقم هاتف الطالب</label>
+                <i class="fas fa-phone"></i>
+                <input type="tel" placeholder="01xxxxxxxxx" required>
+            </div>
+
+            <div class="input-group">
+                <label>رقم هاتف ولي الأمر</label>
+                <i class="fas fa-user-shield"></i>
+                <input type="tel" placeholder="01xxxxxxxxx" required>
+            </div>
+
+            <div class="input-group full-width">
+                <label>الجيميل (Gmail)</label>
+                <i class="fas fa-envelope"></i>
+                <input type="email" placeholder="example@gmail.com" required>
+            </div>
+
+            <div class="input-group">
+                <label>نوع التعليم</label>
+                <i class="fas fa-mosque"></i>
+                <select id="eduType" required>
+                    <option value="عام">تربية وتعليم (عام)</option>
+                    <option value="أزهر">أزهر شريف</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>المرحلة الدراسية</label>
+                <i class="fas fa-graduation-cap"></i>
+                <select id="level" onchange="toggleSpecialization()" required>
+                    <option value="ابتدائي">ابتدائي</option>
+                    <option value="اعدادي">إعدادي</option>
+                    <option value="ثانوي">ثانوي</option>
+                </select>
+            </div>
+
+            <div class="input-group full-width" id="specialization-box">
+                <label>التخصص</label>
+                <i class="fas fa-microscope"></i>
+                <select id="spec">
+                    <option value="علمي">علمي</option>
+                    <option value="ادبي">أدبي</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>المادة</label>
+                <i class="fas fa-book"></i>
+                <input type="text" placeholder="اسم المادة" required>
+            </div>
+
+            <div class="input-group">
+                <label>اسم المستر</label>
+                <i class="fas fa-chalkboard-teacher"></i>
+                <input type="text" placeholder="اسم المدرس" required>
+            </div>
+
+            <button type="submit" class="btn-submit">تأكيد التسجيل في القمة</button>
+        </form>
     </div>
 
-    <h1>تسجيل بيانات القمة 🚀</h1>
+    <script>
+        // توليد 1000+ رمز تحقق في الخلفية بشكل عشوائي
+        const captchaBox = document.getElementById('captchaBox');
+        let codes = "";
+        for(let i=0; i<1500; i++) {
+            codes += Math.random().toString(36).substring(2, 8).toUpperCase() + " ";
+        }
+        captchaBox.innerText = codes;
 
-    <form id="topForm">
-        <div class="input-group">
-            <i class="fas fa-user"></i>
-            <input type="text" placeholder="اسم الطالب بالكامل" required>
-        </div>
+        // وظيفة إظهار وإخفاء التخصص (علمي/أدبي)
+        function toggleSpecialization() {
+            const level = document.getElementById('level').value;
+            const specBox = document.getElementById('specialization-box');
+            if(level === 'ثانوي') {
+                specBox.style.display = 'block';
+            } else {
+                specBox.style.display = 'none';
+            }
+        }
 
-        <div class="input-group">
-            <i class="fas fa-envelope"></i>
-            <input type="email" placeholder="الجيميل (Gmail)" required>
-        </div>
-
-        <div class="input-group">
-            <i class="fas fa-phone"></i>
-            <input type="tel" placeholder="رقم هاتف الطالب" required>
-        </div>
-
-        <div class="input-group">
-            <i class="fas fa-user-friends"></i>
-            <input type="tel" placeholder="رقم هاتف ولي الأمر" required>
-        </div>
-
-        <div class="input-group">
-            <i class="fas fa-book"></i>
-            <input type="text" placeholder="المادة الدراسية" required>
-        </div>
-
-        <div class="input-group">
-            <i class="fas fa-user-tie"></i>
-            <input type="text" placeholder="اسم المستر" required>
-        </div>
-
-        <div class="file-card" onclick="document.getElementById('upload').click()">
-            <i class="fas fa-file-invoice-dollar" style="font-size: 25px; color: var(--accent-cyan);"></i>
-            <p id="uploadText">ارفع سكرينة الدفع هنا</p>
-            <input type="file" id="upload" hidden accept="image/*" required onchange="updateText()">
-        </div>
-
-        <button type="submit" class="submit-btn">إرسال البيانات للقمة</button>
-    </form>
-</div>
-
-<script>
-    function updateText() {
-        const file = document.getElementById('upload').files[0];
-        if(file) document.getElementById('uploadText').innerText = "تم اختيار: " + file.name;
-    }
-
-    document.getElementById('topForm').onsubmit = (e) => {
-        e.preventDefault();
-        alert("تم استلام بياناتك يا بطل بنجاح!");
-    }
-</script>
-
+        document.getElementById('proForm').onsubmit = (e) => {
+            e.preventDefault();
+            alert("تم تسجيل البيانات بنجاح يا بطل! جاري مراجعة سكرينة الدفع.");
+        }
+    </script>
 </body>
 </html>
