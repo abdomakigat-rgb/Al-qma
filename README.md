@@ -3,232 +3,200 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سنتر القمة التعليمي النموذجي - المنصة الذكية</title>
-    
+    <title>سنتر القمة التعليمي - تسجيل الطلاب</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        /* التنسيقات العامة - CSS */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        :root {
+            --primary-color: #0b4a6b;
+            --secondary-color: #1e81b0;
+            --accent-color: #2ecc71;
+            --glass-bg: rgba(255, 255, 255, 0.9);
         }
 
         body {
-            background-color: #f0f2f5;
-            color: #333;
-            line-height: 1.6;
-        }
-
-        /* الهيدر */
-        header {
-            background-color: #1a252f;
-            color: white;
-            padding: 15px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #3498db;
-        }
-
-        /* حاوية تسجيل الدخول */
-        .auth-wrapper {
+            background: linear-gradient(135deg, #f5af19, #f12711); /* خلفية قريبة من روح اللوجو */
+            background-attachment: fixed;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: calc(100vh - 80px);
+            min-height: 100vh;
+            margin: 0;
             padding: 20px;
         }
 
-        .login-card {
-            background: white;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        .main-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
             width: 100%;
-            max-width: 400px;
+            max-width: 550px;
+            padding: 40px;
+            border: 1px solid rgba(255,255,255,0.3);
             text-align: center;
         }
 
-        .login-card h2 {
-            margin-bottom: 25px;
-            color: #2c3e50;
+        .logo-container img {
+            max-width: 180px;
+            filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.1));
+            margin-bottom: 20px;
         }
 
-        .input-group {
+        h2 {
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            font-size: 24px;
+            border-bottom: 2px solid var(--secondary-color);
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+
+        .input-box {
+            position: relative;
             margin-bottom: 20px;
             text-align: right;
         }
 
-        .input-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
+        .input-box i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--secondary-color);
+            font-size: 18px;
         }
 
-        .input-group input {
+        .input-box input, .input-box select {
             width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
+            padding: 12px 45px 12px 15px;
+            border: 2px solid #e1e1e1;
+            border-radius: 12px;
             outline: none;
-            transition: border-color 0.3s;
+            transition: 0.3s;
+            box-sizing: border-box;
+            font-size: 16px;
         }
 
-        .input-group input:focus {
-            border-color: #3498db;
+        .input-box input:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 8px rgba(30, 129, 176, 0.2);
         }
 
-        .btn-login {
-            background-color: #3498db;
+        .file-upload {
+            background: #f9f9f9;
+            border: 2px dashed var(--secondary-color);
+            padding: 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+
+        .file-upload:hover {
+            background: #f0f8ff;
+        }
+
+        .file-upload label {
+            cursor: pointer;
+            display: block;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        button {
+            background: linear-gradient(to left, var(--primary-color), var(--secondary-color));
             color: white;
             border: none;
-            padding: 14px;
-            width: 100%;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            cursor: pointer;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 18px;
             font-weight: bold;
-            transition: background 0.3s;
-        }
-
-        .btn-login:hover {
-            background-color: #2980b9;
-        }
-
-        /* قسم مكالمات الفيديو */
-        #video-platform {
-            display: none; /* مخفي حتى تسجيل الدخول */
-            padding: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .video-header {
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        }
-
-        #jitsi-container {
+            cursor: pointer;
             width: 100%;
-            height: 600px;
-            background: #000;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: 0.4s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
-        .status-badge {
-            background: #27ae60;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.9rem;
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .footer-text {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #777;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo">سنتر القمة التعليمي</div>
-        <div id="user-info" style="display:none;">مرحباً، <span id="user-name-display"></span></div>
-    </header>
-
-    <div class="auth-wrapper" id="auth-section">
-        <div class="login-card">
-            <h2>تسجيل الدخول</h2>
-            <form id="loginForm">
-                <div class="input-group">
-                    <label>الاسم أو البريد</label>
-                    <input type="text" id="username" placeholder="أدخل اسمك" required>
-                </div>
-                <div class="input-group">
-                    <label>كلمة المرور</label>
-                    <input type="password" id="password" placeholder="••••••••" required>
-                </div>
-                <button type="submit" class="btn-login">دخول للمنصة</button>
-            </form>
-            <p style="margin-top: 15px; font-size: 0.9rem; color: #666;">
-                تأكد من مراجعة مواعيد الحصص المباشرة.
-            </p>
-        </div>
+<div class="main-card">
+    <div class="logo-container">
+        <img src="logo.jpg" alt="سنتر القمة">
     </div>
+    
+    <h2>إستمارة تسجيل طالب جديد</h2>
 
-    <main id="video-platform">
-        <div class="video-header">
-            <h3>غرفة البث المباشر (التفاعلي)</h3>
-            <span class="status-badge">متصل الآن</span>
+    <form id="registrationForm">
+        <div class="input-box">
+            <i class="fas fa-user-graduate"></i>
+            <input type="text" id="name" placeholder="اسم الطالب بالكامل" required>
         </div>
-        
-        <div id="jitsi-container"></div>
-        
-        <div style="text-align: center; margin-top: 20px;">
-            <button onclick="location.reload()" style="background: #e74c3c; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
-                تسجيل الخروج
-            </button>
+
+        <div class="input-box">
+            <i class="fas fa-envelope"></i>
+            <input type="email" id="email" placeholder="البريد الإلكتروني (Gmail)" required>
         </div>
-    </main>
 
-    <script src="https://meet.jit.si/external_api.js"></script>
+        <div class="input-box">
+            <i class="fas fa-phone-alt"></i>
+            <input type="tel" id="studentPhone" placeholder="رقم هاتف الطالب" required>
+        </div>
 
-    <script>
-        const loginForm = document.getElementById('loginForm');
-        const authSection = document.getElementById('auth-section');
-        const videoPlatform = document.getElementById('video-platform');
-        const userInfo = document.getElementById('user-info');
-        const userNameDisplay = document.getElementById('user-name-display');
+        <div class="input-box">
+            <i class="fas fa-user-shield"></i>
+            <input type="tel" id="parentPhone" placeholder="رقم هاتف ولي الأمر" required>
+        </div>
 
-        loginForm.addEventListener('submit', function(e) {
-            e.preventDefault();
+        <div class="input-box">
+            <i class="fas fa-book-open"></i>
+            <input type="text" id="subject" placeholder="اسم المادة" required>
+        </div>
 
-            const name = document.getElementById('username').value;
-            
-            // 1. إخفاء واجهة الدخول وإظهار المنصة
-            authSection.style.display = 'none';
-            videoPlatform.style.display = 'block';
-            userInfo.style.display = 'block';
-            userNameDisplay.innerText = name;
+        <div class="input-box">
+            <i class="fas fa-chalkboard-teacher"></i>
+            <input type="text" id="teacher" placeholder="اسم المستر" required>
+        </div>
 
-            // 2. إعداد وتشغيل مكالمة الفيديو
-            // ملاحظة: الـ roomName يفضل أن يكون فريداً لكل حصة
-            const domain = "meet.jit.si";
-            const options = {
-                roomName: "ElQemmaCenter_Class_Room_Live", 
-                width: "100%",
-                height: 600,
-                parentNode: document.querySelector('#jitsi-container'),
-                userInfo: {
-                    displayName: name // يظهر اسم الطالب داخل المكالمة تلقائياً
-                },
-                configOverwrite: {
-                    startWithAudioMuted: true,
-                    startWithVideoMuted: false,
-                    enableWelcomePage: false
-                },
-                interfaceConfigOverwrite: {
-                    TOOLBAR_BUTTONS: [
-                        'microphone', 'camera', 'desktop', 'chat', 'raisehand',
-                        'fittowindow', 'hangup', 'videoquality', 'tileview'
-                    ],
-                    DEFAULT_REMOTE_DISPLAY_NAME: 'طالب متفاعل',
-                }
-            };
+        <div class="file-upload">
+            <label for="payment">
+                <i class="fas fa-cloud-upload-alt" style="font-size: 30px; margin-bottom: 10px;"></i><br>
+                ارفع سكرينة الدفع هنا
+            </label>
+            <input type="file" id="payment" accept="image/*" style="display: none;" required>
+            <p id="fileName" style="font-size: 12px; color: var(--accent-color); margin-top: 5px;"></p>
+        </div>
 
-            const api = new JitsiMeetExternalAPI(domain, options);
-        });
-    </script>
+        <button type="submit">تسجيل الآن <i class="fas fa-paper-plane"></i></button>
+    </form>
+
+    <p class="footer-text">نحن نصنع القمة.. بالتوفيق لجميع طلابنا</p>
+</div>
+
+<script>
+    // إظهار اسم الملف لما يترفع
+    document.getElementById('payment').onchange = function() {
+        document.getElementById('fileName').innerHTML = "تم اختيار: " + this.files[0].name;
+    };
+
+    document.getElementById('registrationForm').onsubmit = function(e) {
+        e.preventDefault();
+        alert("يا بطل! تم إرسال بياناتك لسنتر القمة بنجاح.");
+        // هنا ممكن تربط الكود بـ EmailJS أو Google Sheets
+    };
+</script>
 
 </body>
 </html>
