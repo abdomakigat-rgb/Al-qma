@@ -3,199 +3,211 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سنتر القمة التعليمي - تسجيل الطلاب</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>بوابة سنتر القمة التعليمي</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
+        /* الألوان المستوحاة من اللوجو */
         :root {
-            --primary-color: #0b4a6b;
-            --secondary-color: #1e81b0;
-            --accent-color: #2ecc71;
-            --glass-bg: rgba(255, 255, 255, 0.9);
+            --dark-blue: #0b2e46;
+            --light-blue: #1e81b0;
+            --accent-cyan: #00d4ff;
+            --glass: rgba(255, 255, 255, 0.12);
         }
 
+        * { box-sizing: border-box; transition: all 0.3s ease; }
+
         body {
-            background: linear-gradient(135deg, #f5af19, #f12711); /* خلفية قريبة من روح اللوجو */
-            background-attachment: fixed;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: radial-gradient(circle at top left, #0b2e46, #121212);
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
+            overflow-x: hidden;
+            color: white;
         }
 
-        .main-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            border-radius: 25px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        /* خلفية متحركة خفيفة */
+        body::before {
+            content: "";
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: var(--light-blue);
+            filter: blur(150px);
+            border-radius: 50%;
+            top: 10%;
+            left: 10%;
+            z-index: -1;
+            animation: move 10s infinite alternate;
+        }
+
+        @keyframes move { from { transform: translate(0,0); } to { transform: translate(100px, 100px); } }
+
+        .container {
             width: 100%;
-            max-width: 550px;
+            max-width: 500px;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 30px;
             padding: 40px;
-            border: 1px solid rgba(255,255,255,0.3);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        .logo-section {
             text-align: center;
-        }
-
-        .logo-container img {
-            max-width: 180px;
-            filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.1));
-            margin-bottom: 20px;
-        }
-
-        h2 {
-            color: var(--primary-color);
             margin-bottom: 30px;
-            font-size: 24px;
-            border-bottom: 2px solid var(--secondary-color);
-            display: inline-block;
-            padding-bottom: 10px;
         }
 
-        .input-box {
+        .logo-section img {
+            width: 220px; /* كبرنا اللوجو عشان يبان */
+            filter: drop-shadow(0 0 15px rgba(0,212,255,0.4));
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h1 {
+            font-size: 22px;
+            text-align: center;
+            margin-bottom: 30px;
+            background: linear-gradient(to left, #fff, var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        .input-group {
             position: relative;
             margin-bottom: 20px;
-            text-align: right;
         }
 
-        .input-box i {
+        .input-group i {
             position: absolute;
             right: 15px;
             top: 50%;
             transform: translateY(-50%);
-            color: var(--secondary-color);
-            font-size: 18px;
+            color: var(--accent-cyan);
         }
 
-        .input-box input, .input-box select {
+        input {
             width: 100%;
-            padding: 12px 45px 12px 15px;
-            border: 2px solid #e1e1e1;
-            border-radius: 12px;
-            outline: none;
-            transition: 0.3s;
-            box-sizing: border-box;
-            font-size: 16px;
-        }
-
-        .input-box input:focus {
-            border-color: var(--secondary-color);
-            box-shadow: 0 0 8px rgba(30, 129, 176, 0.2);
-        }
-
-        .file-upload {
-            background: #f9f9f9;
-            border: 2px dashed var(--secondary-color);
-            padding: 20px;
-            border-radius: 12px;
-            cursor: pointer;
-            margin-bottom: 20px;
-            transition: 0.3s;
-        }
-
-        .file-upload:hover {
-            background: #f0f8ff;
-        }
-
-        .file-upload label {
-            cursor: pointer;
-            display: block;
-            color: var(--primary-color);
-            font-weight: bold;
-        }
-
-        button {
-            background: linear-gradient(to left, var(--primary-color), var(--secondary-color));
+            padding: 14px 45px 14px 15px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 15px;
             color: white;
+            font-size: 16px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: var(--accent-cyan);
+            background: rgba(255,255,255,0.1);
+            box-shadow: 0 0 15px rgba(0,212,255,0.2);
+        }
+
+        .file-card {
+            background: rgba(0, 212, 255, 0.05);
+            border: 2px dashed rgba(255,255,255,0.2);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            margin-bottom: 25px;
+        }
+
+        .file-card:hover { border-color: var(--accent-cyan); background: rgba(0, 212, 255, 0.1); }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(45deg, var(--dark-blue), var(--light-blue));
             border: none;
-            padding: 15px 40px;
-            border-radius: 50px;
+            border-radius: 15px;
+            color: white;
             font-size: 18px;
             font-weight: bold;
             cursor: pointer;
-            width: 100%;
-            transition: 0.4s;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
         }
 
-        button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        .submit-btn:hover {
+            letter-spacing: 1px;
+            box-shadow: 0 0 30px var(--accent-cyan);
+            transform: scale(1.02);
         }
 
-        .footer-text {
-            margin-top: 20px;
-            font-size: 14px;
-            color: #777;
-        }
+        ::placeholder { color: rgba(255,255,255,0.5); }
     </style>
 </head>
 <body>
 
-<div class="main-card">
-    <div class="logo-container">
+<div class="container">
+    <div class="logo-section">
         <img src="logo.jpg" alt="سنتر القمة">
     </div>
-    
-    <h2>إستمارة تسجيل طالب جديد</h2>
 
-    <form id="registrationForm">
-        <div class="input-box">
-            <i class="fas fa-user-graduate"></i>
-            <input type="text" id="name" placeholder="اسم الطالب بالكامل" required>
+    <h1>تسجيل بيانات القمة 🚀</h1>
+
+    <form id="topForm">
+        <div class="input-group">
+            <i class="fas fa-user"></i>
+            <input type="text" placeholder="اسم الطالب بالكامل" required>
         </div>
 
-        <div class="input-box">
+        <div class="input-group">
             <i class="fas fa-envelope"></i>
-            <input type="email" id="email" placeholder="البريد الإلكتروني (Gmail)" required>
+            <input type="email" placeholder="الجيميل (Gmail)" required>
         </div>
 
-        <div class="input-box">
-            <i class="fas fa-phone-alt"></i>
-            <input type="tel" id="studentPhone" placeholder="رقم هاتف الطالب" required>
+        <div class="input-group">
+            <i class="fas fa-phone"></i>
+            <input type="tel" placeholder="رقم هاتف الطالب" required>
         </div>
 
-        <div class="input-box">
-            <i class="fas fa-user-shield"></i>
-            <input type="tel" id="parentPhone" placeholder="رقم هاتف ولي الأمر" required>
+        <div class="input-group">
+            <i class="fas fa-user-friends"></i>
+            <input type="tel" placeholder="رقم هاتف ولي الأمر" required>
         </div>
 
-        <div class="input-box">
-            <i class="fas fa-book-open"></i>
-            <input type="text" id="subject" placeholder="اسم المادة" required>
+        <div class="input-group">
+            <i class="fas fa-book"></i>
+            <input type="text" placeholder="المادة الدراسية" required>
         </div>
 
-        <div class="input-box">
-            <i class="fas fa-chalkboard-teacher"></i>
-            <input type="text" id="teacher" placeholder="اسم المستر" required>
+        <div class="input-group">
+            <i class="fas fa-user-tie"></i>
+            <input type="text" placeholder="اسم المستر" required>
         </div>
 
-        <div class="file-upload">
-            <label for="payment">
-                <i class="fas fa-cloud-upload-alt" style="font-size: 30px; margin-bottom: 10px;"></i><br>
-                ارفع سكرينة الدفع هنا
-            </label>
-            <input type="file" id="payment" accept="image/*" style="display: none;" required>
-            <p id="fileName" style="font-size: 12px; color: var(--accent-color); margin-top: 5px;"></p>
+        <div class="file-card" onclick="document.getElementById('upload').click()">
+            <i class="fas fa-file-invoice-dollar" style="font-size: 25px; color: var(--accent-cyan);"></i>
+            <p id="uploadText">ارفع سكرينة الدفع هنا</p>
+            <input type="file" id="upload" hidden accept="image/*" required onchange="updateText()">
         </div>
 
-        <button type="submit">تسجيل الآن <i class="fas fa-paper-plane"></i></button>
+        <button type="submit" class="submit-btn">إرسال البيانات للقمة</button>
     </form>
-
-    <p class="footer-text">نحن نصنع القمة.. بالتوفيق لجميع طلابنا</p>
 </div>
 
 <script>
-    // إظهار اسم الملف لما يترفع
-    document.getElementById('payment').onchange = function() {
-        document.getElementById('fileName').innerHTML = "تم اختيار: " + this.files[0].name;
-    };
+    function updateText() {
+        const file = document.getElementById('upload').files[0];
+        if(file) document.getElementById('uploadText').innerText = "تم اختيار: " + file.name;
+    }
 
-    document.getElementById('registrationForm').onsubmit = function(e) {
+    document.getElementById('topForm').onsubmit = (e) => {
         e.preventDefault();
-        alert("يا بطل! تم إرسال بياناتك لسنتر القمة بنجاح.");
-        // هنا ممكن تربط الكود بـ EmailJS أو Google Sheets
-    };
+        alert("تم استلام بياناتك يا بطل بنجاح!");
+    }
 </script>
 
 </body>
