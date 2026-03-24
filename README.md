@@ -20,7 +20,6 @@
             overflow-x: hidden; 
         }
 
-        /* أكواد التحقق الخلفية (أكثر من 1000 رمز متغير) */
         .bg-matrix { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             z-index: -1; opacity: 0.04; font-family: monospace; 
@@ -41,10 +40,7 @@
             animation: float 4s ease-in-out infinite;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
         h2 { text-align: center; color: var(--accent); margin-bottom: 30px; font-weight: 800; }
 
@@ -61,7 +57,6 @@
 
         .hidden { display: none; }
 
-        /* منطقة المدرسين بصورهم */
         .teachers-list { 
             display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); 
             gap: 15px; margin-top: 10px; 
@@ -74,31 +69,25 @@
         .teacher-card img { width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--accent); object-fit: cover; }
         .teacher-card p { font-size: 12px; margin: 5px 0 0; font-weight: bold; }
 
-        /* منطقة سكرينة الدفع */
         .payment-zone { 
             margin-top: 25px; border: 2px dashed var(--accent); border-radius: 15px; 
             padding: 25px; text-align: center; background: rgba(0,212,255,0.02); 
             cursor: pointer; transition: 0.3s;
         }
-        .payment-zone:hover { background: rgba(0,212,255,0.08); }
 
         .btn-submit { 
             width: 100%; padding: 18px; background: var(--primary-gradient); 
             border: none; border-radius: 15px; color: white; font-size: 18px; 
             font-weight: bold; margin-top: 25px; cursor: pointer; transition: 0.4s; 
         }
-        .btn-submit:hover { transform: translateY(-3px); box-shadow: 0 10px 30px var(--accent); letter-spacing: 1px; }
 
-        /* كارت النجاح بعد الدفع */
         #success-card { display: none; text-align: center; animation: slideUp 0.6s ease; }
         .code-display { 
             background: rgba(255,255,255,0.1); padding: 25px; border-radius: 20px; 
             border: 2px dashed var(--accent); display: flex; align-items: center; 
             justify-content: space-between; margin: 25px 0;
         }
-        .final-code-text { font-family: 'Courier New', monospace; font-size: 22px; font-weight: bold; color: var(--accent); }
-        
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .final-code-text { font-family: 'Courier New', monospace; font-size: 20px; font-weight: bold; color: var(--accent); }
     </style>
 </head>
 <body>
@@ -107,9 +96,7 @@
 
 <div class="container">
     <div id="form-side">
-        <div class="logo-box">
-            <img src="logo.jpg" alt="سنتر القمة">
-        </div>
+        <div class="logo-box"><img src="logo.jpg" alt="سنتر القمة"></div>
         <h2>بوابة القمة التعليمية الذكية 🚀</h2>
 
         <form id="payForm">
@@ -118,65 +105,57 @@
                     <label>اسم الطالب بالكامل</label>
                     <input type="text" name="studentName" id="studentName" placeholder="الاسم رباعي" required>
                 </div>
-                
                 <div>
                     <label>رقم هاتف الطالب</label>
                     <input type="tel" name="phone" id="phone" placeholder="01xxxxxxxxx" required>
                 </div>
-                
-                <div>
-                    <label>رقم ولي الأمر</label>
-                    <input type="tel" name="parentPhone" placeholder="01xxxxxxxxx" required>
-                </div>
-
-                <div class="full">
-                    <label>الجيميل (Gmail)</label>
-                    <input type="email" name="email" placeholder="example@gmail.com" required>
-                </div>
-
                 <div>
                     <label>نوع التعليم</label>
-                    <select name="eduType" required>
+                    <select id="eduType" name="eduType" required onchange="handleStageChange()">
                         <option value="عام">تربية وتعليم (عام)</option>
                         <option value="أزهر">أزهر شريف</option>
                     </select>
                 </div>
-
-                <div>
+                <div class="full">
                     <label>المرحلة الدراسية</label>
                     <select id="stage" name="stage" onchange="handleStageChange()" required>
-                        <option value="">-- اختر --</option>
-                        <option value="kg">حضانة</option>
+                        <option value="">-- اختر المرحلة --</option>
+                        <option value="kg">حضانة (KG)</option>
                         <option value="primary">ابتدائي</option>
                         <option value="prep">إعدادي</option>
                         <option value="secondary">ثانوي</option>
                     </select>
                 </div>
 
+                <div class="full hidden" id="year-box">
+                    <label>السنة الدراسية</label>
+                    <select id="year" name="year" onchange="handleYearChange()"></select>
+                </div>
+
                 <div class="full hidden" id="branch-box">
-                    <label>التخصص (للثانوي)</label>
-                    <select id="branch" name="branch" onchange="handleStageChange()">
-                        <option value="عام">تأسيس / عام</option>
+                    <label>التخصص</label>
+                    <select id="branch" name="branch" onchange="handleYearChange()">
+                        <option value="عام">عام / مشترك</option>
                         <option value="علمي">علمي</option>
                         <option value="ادبي">أدبي</option>
                     </select>
                 </div>
 
                 <div class="full hidden" id="subject-box">
-                    <label>المادة العلمية</label>
+                    <label>المادة</label>
                     <select id="subject" name="subject" onchange="updateTeachers()"></select>
                 </div>
             </div>
 
             <div id="teacher-section" class="hidden">
-                <label>اختر المدرس:</label>
+                <label>المدرسين المتاحين لهذه المادة:</label>
                 <div class="teachers-list" id="teachersList"></div>
                 <input type="hidden" name="selectedTeacher" id="selectedTeacherInput" required>
             </div>
 
             <div class="payment-zone" onclick="document.getElementById('payFile').click()">
                 <i class="fas fa-camera-retro" style="font-size: 30px; color: var(--accent);"></i>
-                <p id="fileText">ارفع سكرينة الدفع للتجديد</p>
+                <p id="fileText">ارفع سكرينة الدفع هنا</p>
                 <input type="file" id="payFile" accept="image/*" hidden required onchange="showFileName()">
             </div>
 
@@ -185,63 +164,79 @@
     </div>
 
     <div id="success-card">
-        <div class="logo-box"><img src="logo.jpg" alt="القمة"></div>
-        <i class="fas fa-check-double" style="font-size: 60px; color: #2ecc71;"></i>
-        <h2 style="color: #2ecc71;">تم الحفظ والتجديد!</h2>
-        <p>كود التفعيل المتغير الخاص بك هو:</p>
+        <h2 style="color: #2ecc71;">تم بنجاح!</h2>
+        <p>كود التفعيل الجديد الخاص بك هو:</p>
         <div class="code-display">
             <span class="final-code-text" id="finalCode"></span>
-            <button onclick="copyCode()" style="background:var(--accent); border:none; padding:12px; border-radius:10px; cursor:pointer; font-weight:bold;">نسخ</button>
+            <button onclick="copyCode()" style="background:var(--accent); border:none; padding:10px; border-radius:8px; cursor:pointer;">نسخ</button>
         </div>
-        <p style="font-size: 13px; color: #aaa;">* تم إرسال الكود لـ Google Sheet الخاص بالمستر للتأكيد.</p>
-        <button onclick="location.reload()" style="background:none; border:none; color:var(--accent); cursor:pointer; text-decoration:underline;">تسجيل جديد</button>
+        <button onclick="location.reload()" style="background:none; color:var(--accent); cursor:pointer;">تسجيل مادة أخرى</button>
     </div>
 </div>
 
 <script>
-    // 1. توليد مصفوفة الرموز (1000+)
+    // 1. توليد مصفوفة الرموز الخلفية
     const matrix = document.getElementById('matrix');
     let codes = ""; for(let i=0; i<2500; i++) { codes += Math.random().toString(36).substring(2, 7).toUpperCase() + " "; }
     matrix.innerText = codes;
 
-    // 2. قاعدة بيانات المواد والمدرسين
-    const academyData = {
-        kg: { subjects: ["تأسيس شامل"], teachers: {"تأسيس شامل": [{n: "مس ليلى", img: "https://via.placeholder.com/60"}]} },
-        primary: { subjects: ["عربي", "حساب", "إنجليزي"], teachers: {"عربي": [{n: "مستر أحمد", img: "https://via.placeholder.com/60"}]} },
-        secondary: {
+    // 2. قاعدة بيانات شاملة (مراحل، مواد، مدرسين)
+    const data = {
+        kg: { years: ["KG 1", "KG 2"], subjects: ["تأسيس عربي", "تأسيس حساب", "English"], teachers: {"تأسيس عربي": [{n: "مس نورا", img: "https://via.placeholder.com/60"}], "English": [{n: "مس سارة", img: "https://via.placeholder.com/60"}]} },
+        primary: { years: ["1 ابتدائي", "2 ابتدائي", "3 ابتدائي", "4 ابتدائي", "5 ابتدائي", "6 ابتدائي"], subjects: ["لغة عربية", "رياضيات", "إنجليزي", "علوم"], teachers: {"لغة عربية": [{n: "مستر أحمد", img: "https://via.placeholder.com/60"}], "رياضيات": [{n: "مستر علي", img: "https://via.placeholder.com/60"}, {n: "مستر حسن", img: "https://via.placeholder.com/60"}]} },
+        prep: { years: ["1 إعدادي", "2 إعدادي", "3 إعدادي"], subjects: ["لغة عربية", "رياضيات", "إنجليزي", "علوم", "دراسات"], teachers: {"علوم": [{n: "مستر محمد", img: "https://via.placeholder.com/60"}], "رياضيات": [{n: "مستر محمود", img: "https://via.placeholder.com/60"}]} },
+        secondary: { 
+            years: ["1 ثانوي", "2 ثانوي", "3 ثانوي"], 
+            branches: ["عام", "علمي", "ادبي"],
             subjects: {
-                "علمي": ["فيزياء", "كيمياء", "أحياء"],
-                "ادبي": ["تاريخ", "جغرافيا", "فلسفة"],
-                "عام": ["لغة عربية", "لغة إنجليزية"]
+                "عام": ["لغة عربية", "إنجليزي", "فرنساوي"],
+                "علمي": ["فيزياء", "كيمياء", "أحياء", "رياضة"],
+                "ادبي": ["تاريخ", "جغرافيا", "فلسفة", "علم نفس"]
             },
             teachers: {
                 "فيزياء": [{n: "مستر زويل", img: "https://via.placeholder.com/60"}, {n: "مستر نيوتن", img: "https://via.placeholder.com/60"}],
-                "تاريخ": [{n: "مستر هيرودوت", img: "https://via.placeholder.com/60"}]
+                "كيمياء": [{n: "مستر مندليف", img: "https://via.placeholder.com/60"}],
+                "إنجليزي": [{n: "مستر شاكسبير", img: "https://via.placeholder.com/60"}, {n: "مستر إيهاب", img: "https://via.placeholder.com/60"}]
             }
         }
     };
 
     function handleStageChange() {
         const stage = document.getElementById('stage').value;
+        const yearBox = document.getElementById('year-box');
+        const yearSelect = document.getElementById('year');
+        
+        yearBox.classList.add('hidden');
+        document.getElementById('branch-box').classList.add('hidden');
+        document.getElementById('subject-box').classList.add('hidden');
+
+        if(stage) {
+            yearBox.classList.remove('hidden');
+            yearSelect.innerHTML = '<option value="">-- السنة --</option>';
+            data[stage].years.forEach(y => yearSelect.innerHTML += `<option value="${y}">${y}</option>`);
+        }
+    }
+
+    function handleYearChange() {
+        const stage = document.getElementById('stage').value;
         const branchBox = document.getElementById('branch-box');
         const subjectBox = document.getElementById('subject-box');
         const subjectSelect = document.getElementById('subject');
 
-        branchBox.classList.add('hidden');
-        subjectBox.classList.add('hidden');
+        if(stage === 'secondary') branchBox.classList.remove('hidden');
+        else branchBox.classList.add('hidden');
 
-        if(stage) {
-            subjectBox.classList.remove('hidden');
-            subjectSelect.innerHTML = '<option value="">-- اختر المادة --</option>';
-            let subs = [];
-            if(stage === 'secondary') {
-                branchBox.classList.remove('hidden');
-                subs = academyData.secondary.subjects[document.getElementById('branch').value] || [];
-            } else {
-                subs = academyData[stage]?.subjects || ["مادة عامة"];
-            }
-            subs.forEach(s => subjectSelect.innerHTML += `<option value="${s}">${s}</option>`);
+        subjectBox.classList.remove('hidden');
+        subjectSelect.innerHTML = '<option value="">-- اختر المادة --</option>';
+        
+        let subs = [];
+        if(stage === 'secondary') {
+            const branch = document.getElementById('branch').value;
+            subs = data.secondary.subjects[branch] || [];
+        } else {
+            subs = data[stage].subjects;
         }
+        subs.forEach(s => subjectSelect.innerHTML += `<option value="${s}">${s}</option>`);
     }
 
     function updateTeachers() {
@@ -253,9 +248,7 @@
         tSection.classList.remove('hidden');
         tList.innerHTML = '';
 
-        let teachers = [];
-        if(stage === 'secondary') teachers = academyData.secondary.teachers[subject] || [{n: "مدرس القمة", img: "https://via.placeholder.com/60"}];
-        else teachers = academyData[stage]?.teachers[subject] || [{n: "مدرس القمة", img: "https://via.placeholder.com/60"}];
+        let teachers = (stage === 'secondary' ? data.secondary.teachers[subject] : data[stage].teachers[subject]) || [{n: "مدرس القمة 1", img: "https://via.placeholder.com/60"}, {n: "مدرس القمة 2", img: "https://via.placeholder.com/60"}];
 
         teachers.forEach(t => {
             tList.innerHTML += `
@@ -278,39 +271,21 @@
         if(file) document.getElementById('fileText').innerText = "تم اختيار: " + file.name;
     }
 
-    // توليد الكود المتغير وربطه بالشيت
     document.getElementById('payForm').onsubmit = function(e) {
         e.preventDefault();
-        const btn = document.getElementById('submitBtn');
-        btn.innerText = "جاري التأكيد..."; btn.disabled = true;
-
         const phone = document.getElementById('phone').value;
-        const randomStr = Math.random().toString(36).substring(2, 6).toUpperCase();
-        const timePart = new Date().getTime().toString().slice(-4);
-        const generatedCode = `QAMMA-${randomStr}-${timePart}-${phone.slice(-3)}`;
+        const randomStr = Math.random().toString(36).substring(2, 7).toUpperCase();
+        const time = new Date().getTime().toString().slice(-4);
+        const code = `QAMMA-${randomStr}-${time}-${phone.slice(-3)}`;
 
-        // ربط جوجل شيت (ضع الرابط هنا بعد النشر)
-        const scriptURL = 'ضع_هنا_رابط_جوجل_سكريبت_الخاص_بك';
-        const formData = new FormData(this);
-        formData.append('generatedCode', generatedCode);
-
-        fetch(scriptURL, { method: 'POST', body: formData })
-            .then(() => {
-                document.getElementById('finalCode').innerText = generatedCode;
-                document.getElementById('form-side').style.display = 'none';
-                document.getElementById('success-card').style.display = 'block';
-            })
-            .catch(() => {
-                // حتى لو فشل الاتصال بالشيت هنطلع الكود للطالب عشان ميتعطلش
-                document.getElementById('finalCode').innerText = generatedCode;
-                document.getElementById('form-side').style.display = 'none';
-                document.getElementById('success-card').style.display = 'block';
-            });
+        document.getElementById('finalCode').innerText = code;
+        document.getElementById('form-side').style.display = 'none';
+        document.getElementById('success-card').style.display = 'block';
     };
 
     function copyCode() {
         navigator.clipboard.writeText(document.getElementById('finalCode').innerText);
-        alert("تم نسخ الكود بنجاح يا بطل! 📋");
+        alert("تم النسخ!");
     }
 </script>
 </body>
