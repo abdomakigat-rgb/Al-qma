@@ -288,5 +288,120 @@
         alert("تم النسخ!");
     }
 </script>
+<style>
+/* تحسينات بصرية */
+.teacher-card:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 15px rgba(0,212,255,0.4);
+}
+
+.btn-submit:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 20px rgba(0,212,255,0.5);
+}
+
+input:invalid {
+    border-color: #e74c3c;
+}
+
+.glow {
+    animation: glowPulse 1.5s infinite alternate;
+}
+
+@keyframes glowPulse {
+    from { box-shadow: 0 0 5px var(--accent); }
+    to { box-shadow: 0 0 20px var(--accent); }
+}
+
+/* صورة المعاينة */
+.preview-img {
+    margin-top: 10px;
+    max-width: 100%;
+    border-radius: 10px;
+    display: none;
+}
+</style>
+
+<script>
+// 🔥 حفظ البيانات تلقائي
+const inputs = document.querySelectorAll("input, select");
+inputs.forEach(input => {
+    input.addEventListener("change", () => {
+        localStorage.setItem(input.id, input.value);
+    });
+
+    // تحميل البيانات
+    if(localStorage.getItem(input.id)) {
+        input.value = localStorage.getItem(input.id);
+    }
+});
+
+// 🔥 تحسين زر الإرسال (Loading)
+document.getElementById('payForm').addEventListener('submit', function() {
+    const btn = document.getElementById('submitBtn');
+    btn.innerText = "جاري المعالجة...";
+    btn.disabled = true;
+});
+
+// 🔥 Preview للصورة
+const payFile = document.getElementById("payFile");
+const preview = document.createElement("img");
+preview.className = "preview-img";
+document.querySelector(".payment-zone").appendChild(preview);
+
+payFile.addEventListener("change", function() {
+    const file = this.files[0];
+    if(file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+            preview.style.display = "block";
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// 🔥 تحسين اختيار المدرس بصوت (اختياري)
+function playClick() {
+    const audio = new Audio("https://www.soundjay.com/buttons/sounds/button-16.mp3");
+    audio.play();
+}
+
+const oldSelectTeacher = selectTeacher;
+selectTeacher = function(el, name) {
+    playClick();
+    oldSelectTeacher(el, name);
+};
+
+// 🔥 Validation أقوى
+document.getElementById("payForm").addEventListener("submit", function(e){
+    const phone = document.getElementById("phone").value;
+    if(!/^01[0-9]{9}$/.test(phone)){
+        alert("رقم الهاتف غير صحيح!");
+        e.preventDefault();
+        return;
+    }
+});
+
+// 🔥 تأثير دخول الصفحة
+document.querySelector(".container").style.opacity = 0;
+setTimeout(()=>{
+    document.querySelector(".container").style.transition = "1s";
+    document.querySelector(".container").style.opacity = 1;
+},200);
+
+// 🔥 زر النسخ محسّن
+const oldCopy = copyCode;
+copyCode = function() {
+    oldCopy();
+    const btns = document.querySelectorAll("button");
+    btns.forEach(b=>{
+        if(b.innerText === "نسخ"){
+            b.innerText = "✔ تم النسخ";
+            setTimeout(()=> b.innerText = "نسخ",2000);
+        }
+    });
+};
+</script>
 </body>
 </html>
