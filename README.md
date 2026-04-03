@@ -138,6 +138,17 @@
         
         input[type="file"] { background: transparent; color: white; border: 1px dashed var(--gold); }
 
+        .price-display {
+            background: var(--gold);
+            color: var(--main-dark);
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: 900;
+            display: none; /* يظهر بالجافا سكريبت */
+        }
+
         .payment-info {
             background: rgba(251, 191, 36, 0.1);
             border: 1px solid var(--gold);
@@ -230,6 +241,36 @@
             </div>
 
             <div class="form-group">
+                <label>المرحلة الدراسية</label>
+                <select name="grade" id="gradeSelect" required onchange="updatePrice()">
+                    <option value="">اختر الصف الدراسي</option>
+                    <optgroup label="مرحلة الحضانة">
+                        <option value="kg1">أولى حضانة (KG1)</option>
+                        <option value="kg2">ثانية حضانة (KG2)</option>
+                    </optgroup>
+                    <optgroup label="المرحلة الابتدائية">
+                        <option value="p1">الصف الأول الابتدائي</option>
+                        <option value="p2">الصف الثاني الابتدائي</option>
+                        <option value="p3">الصف الثالث الابتدائي</option>
+                        <option value="p4">الصف الرابع الابتدائي</option>
+                        <option value="p5">الصف الخامس الابتدائي</option>
+                        <option value="p6">الصف السادس الابتدائي</option>
+                    </optgroup>
+                    <optgroup label="المرحلة الإعدادية">
+                        <option value="m1">الصف الأول الإعدادي</option>
+                        <option value="m2">الصف الثاني الإعدادي</option>
+                        <option value="m3">الصف الثالث الإعدادي</option>
+                    </optgroup>
+                    <optgroup label="المرحلة الثانوية">
+                        <option value="s1">الصف الأول الثانوي</option>
+                        <option value="s2">الصف الثاني الثانوي</option>
+                        <option value="s3">الصف الثالث الثانوي</option>
+                    </optgroup>
+                </select>
+                <div id="priceBox" class="price-display"></div>
+            </div>
+
+            <div class="form-group">
                 <label>المدرس المطلوب</label>
                 <select name="teacher" required>
                     <option value="">اختر المدرس</option>
@@ -271,12 +312,35 @@
     </footer>
 
     <script>
+        function updatePrice() {
+            const grade = document.getElementById('gradeSelect').value;
+            const priceBox = document.getElementById('priceBox');
+            let price = "";
+
+            if (grade.startsWith('s')) {
+                price = "سعر الشهر لهذه المرحلة: 150 جنيه";
+            } else if (grade.startsWith('m')) {
+                price = "سعر الشهر لهذه المرحلة: 50 جنيه";
+            } else if (grade.startsWith('p')) {
+                price = "سعر الشهر لهذه المرحلة: 50 جنيه";
+            } else if (grade.startsWith('kg')) {
+                price = "سعر الشهر لهذه المرحلة: 100 جنيه";
+            }
+
+            if (price) {
+                priceBox.innerText = price;
+                priceBox.style.display = "block";
+            } else {
+                priceBox.style.display = "none";
+            }
+        }
+
         const form = document.getElementById('studentForm');
         form.onsubmit = (e) => {
             e.preventDefault();
-            // هنا يتم الربط مع Google Apps Script مستقبلاً
             alert('تم استلام بياناتك بنجاح! سيتم مراجعة إسكرينة الدفع والتواصل معك فوراً.');
             form.reset();
+            document.getElementById('priceBox').style.display = "none";
         };
     </script>
 </body>
