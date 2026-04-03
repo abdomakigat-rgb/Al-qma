@@ -1,631 +1,228 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>بوابة القمة التعليمية</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سنتر القمة التعليمي النموذجي | القمة مكانك</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Reem+Kufi:wght@700&display=swap" rel="stylesheet">
 
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --main-dark: #0f172a;
+            --gold: #fbbf24;
+            --gold-dark: #d97706;
+            --soft-white: #f8fafc;
+            --glass: rgba(255, 255, 255, 0.1);
+        }
 
-<style>
-:root{
-    --accent:#00d4ff;
-    --dark:#02060a;
-    --glass: rgba(255,255,255,0.05);
-}
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+            scroll-behavior: smooth;
+        }
 
-body{
-    margin:0;
-    background:var(--dark);
-    color:white;
-    font-family:'Segoe UI', sans-serif;
-    display:flex;
-    justify-content:center;
-    min-height:100vh;
-}
+        body {
+            background-color: var(--soft-white);
+            color: var(--main-dark);
+            overflow-x: hidden;
+        }
 
-.container{
-    width:95%;
-    max-width:700px;
-    background:var(--glass);
-    backdrop-filter:blur(25px);
-    border-radius:25px;
-    padding:30px;
-    margin:20px;
-    box-shadow:0 15px 40px rgba(0,0,0,0.7);
-}
+        /* حركات الأنيميشن */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-h2{
-    text-align:center;
-    color:var(--accent);
-    margin-bottom:20px;
-}
+        /* الهيدر الزجاجي */
+        header {
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 15px 8%;
+            position: fixed; width: 100%; top: 0; z-index: 1000;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 2px solid var(--gold);
+        }
 
-input, select{
-    width:100%;
-    padding:12px;
-    margin-top:10px;
-    border-radius:10px;
-    border:1px solid #333;
-    background:#111;
-    color:white;
-}
+        .logo {
+            font-family: 'Reem Kufi', sans-serif;
+            color: var(--gold);
+            font-size: 1.8rem;
+        }
 
-.icon-input{
-    display:flex;
-    align-items:center;
-    gap:10px;
-}
+        .nav-links { display: flex; list-style: none; }
+        .nav-links li { margin: 0 20px; }
+        .nav-links a {
+            color: white; text-decoration: none; font-weight: bold;
+            transition: 0.3s; position: relative;
+        }
+        .nav-links a:hover { color: var(--gold); }
+        .nav-links a::after {
+            content: ''; width: 0; height: 2px; background: var(--gold);
+            position: absolute; bottom: -5px; right: 0; transition: 0.3s;
+        }
+        .nav-links a:hover::after { width: 100%; }
 
-.icon-input input{
-    flex:1;
-}
+        /* قسم البطل (Hero) */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(45deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.8)), 
+                        url('https://images.unsplash.com/photo-1513258496099-48168024aec0?auto=format&fit=crop&w=1350&q=80');
+            background-size: cover; background-position: center;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; color: white; padding: 20px;
+        }
 
-.btn{
-    width:100%;
-    padding:15px;
-    background:linear-gradient(45deg,#0b2e46,#1e81b0);
-    border:none;
-    border-radius:12px;
-    margin-top:20px;
-    color:white;
-    font-size:16px;
-    cursor:pointer;
-}
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 900; margin-bottom: 20px;
+            animation: fadeIn 1s ease-out;
+        }
 
-.teachers{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:10px;
-    margin-top:15px;
-}
+        .hero p {
+            font-size: 1.5rem; max-width: 700px; margin-bottom: 30px;
+            opacity: 0.9; animation: fadeIn 1.5s ease-out;
+        }
 
-.teacher{
-    padding:10px;
-    background:#111;
-    border-radius:12px;
-    text-align:center;
-    cursor:pointer;
-}
+        .btn-gold {
+            background: var(--gold); color: var(--main-dark);
+            padding: 15px 40px; border-radius: 50px; text-decoration: none;
+            font-weight: 900; font-size: 1.2rem; transition: 0.4s;
+            box-shadow: 0 5px 20px rgba(251, 191, 36, 0.4);
+        }
+        .btn-gold:hover { transform: scale(1.1); background: var(--gold-dark); }
 
-/* الدفع */
-.payment{
-    border:2px dashed var(--accent);
-    padding:20px;
-    text-align:center;
-    margin-top:20px;
-    cursor:pointer;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    gap:10px;
-}
+        /* كروت المدرسين (تصميم جبار) */
+        .teachers-section { padding: 100px 8%; background: #fff; }
+        .grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px; margin-top: 50px;
+        }
 
-.captcha-box{
-    background:#111;
-    padding:10px;
-    margin-top:15px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    border-radius:10px;
-    font-family:'Courier New', monospace;
-    font-size:18px;
-    color:var(--accent);
-}
+        .card {
+            background: white; border-radius: 25px; padding: 30px;
+            text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.05);
+            transition: 0.5s; border: 1px solid #eee;
+        }
+        .card:hover { transform: translateY(-15px); border-color: var(--gold); }
 
-.success{
-    display:none;
-    text-align:center;
-    margin-top:20px;
-}
+        .card img {
+            width: 120px; height: 120px; border-radius: 50%;
+            background: var(--soft-white); margin-bottom: 20px;
+            border: 4px solid var(--gold); object-fit: cover;
+        }
 
-.code{
-    background:#111;
-    padding:15px;
-    border-radius:10px;
-    margin-top:15px;
-    color:var(--accent);
-}
-    // توليد الرموز العشوائية للخلفية
-const matrixDiv = document.getElementById("matrix");
-let matrixCodes = "";
-for(let i=0;i<3000;i++){
-    matrixCodes += Math.random().toString(36).substring(2,7).toUpperCase() + " ";
-}
-matrixDiv.innerText = matrixCodes;
-</style>
+        .subject {
+            background: var(--main-dark); color: var(--gold);
+            padding: 5px 15px; border-radius: 10px; font-size: 0.9rem;
+            display: inline-block; margin-bottom: 10px;
+        }
+
+        /* فورم التسجيل */
+        .reg-section { padding: 80px 8%; background: var(--main-dark); color: white; }
+        form {
+            max-width: 600px; margin: 40px auto; background: var(--glass);
+            padding: 40px; border-radius: 20px; backdrop-filter: blur(5px);
+        }
+        input, select {
+            width: 100%; padding: 12px; margin: 10px 0;
+            border-radius: 8px; border: none; outline: none;
+        }
+        .submit-btn {
+            background: var(--gold); width: 100%; padding: 15px;
+            border-radius: 8px; border: none; font-weight: bold; cursor: pointer;
+        }
+
+        footer { text-align: center; padding: 40px; background: #070b14; color: #666; }
+    </style>
 </head>
-
 <body>
-<div class="bg-matrix" id="matrix"></div>
-<div class="container">
 
-<h2>بوابة القمة 🚀</h2>
-
-<!-- بيانات الطالب -->
-<div class="icon-input">
-    <i class="fas fa-user"></i>
-    <input type="text" id="name" placeholder="اسم الطالب بالكامل">
-</div>
-
-<div class="icon-input">
-    <i class="fas fa-phone"></i>
-    <input type="tel" id="phone" placeholder="رقم الهاتف">
-</div>
-
-<!-- نوع التعليم -->
-<div class="icon-input">
-    <i class="fas fa-school"></i>
-    <select id="eduType">
-        <option value="">نوع التعليم</option>
-        <option value="عام">تعليم عام</option>
-        <option value="أزهر">أزهر</option>
-    </select>
-</div>
-
-<!-- المرحلة -->
-<div class="icon-input">
-    <i class="fas fa-layer-group"></i>
-    <select id="stage">
-        <option value="">اختر المرحلة</option>
-        <option value="kg">KG</option>
-        <option value="primary">ابتدائي</option>
-        <option value="prep">إعدادي</option>
-        <option value="secondary">ثانوي</option>
-    </select>
-</div>
-
-<!-- السنة -->
-<div class="icon-input">
-    <i class="fas fa-calendar-alt"></i>
-    <select id="year">
-        <option value="">اختر السنة</option>
-    </select>
-</div>
-
-<!-- التخصص -->
-<div class="icon-input">
-    <i class="fas fa-clipboard-list"></i>
-    <select id="branch">
-        <option value="">التخصص</option>
-    </select>
-</div>
-
-<!-- المادة -->
-<div class="icon-input">
-    <i class="fas fa-book"></i>
-    <select id="subject">
-        <option value="">اختر المادة</option>
-    </select>
-</div>
-
-<!-- المدرسين -->
-<div class="teachers" id="teachers"></div>
-
-<!-- الدفع -->
-<div class="payment" onclick="document.getElementById('file').click()">
-    <i class="fas fa-camera-retro" style="font-size:25px;"></i>
-    <span id="fileText">ارفع سكرينة الدفع</span>
-    <input type="file" id="file" hidden>
-</div>
-
-<!-- رموز التحقق -->
-<div class="captcha-box" id="captchaBox">
-    <span id="captchaText"></span>
-    <button onclick="generateCaptcha()" style="background:var(--accent); border:none; border-radius:6px; cursor:pointer; padding:5px 10px; color:#000;">تحديث</button>
-</div>
-
-<button class="btn" id="btn">استلام الكود</button>
-
-<div class="success" id="success">
-    <h2>تم بنجاح ✅</h2>
-    <p>الكود:</p>
-    <div class="code" id="code"></div>
-</div>
-
-</div>
-
-<script>
-// 🔥 توليد رموز تحقق بسيطة
-function generateCaptcha(){
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let captcha = '';
-    for(let i=0;i<6;i++){
-        captcha += chars.charAt(Math.floor(Math.random()*chars.length));
-    }
-    document.getElementById('captchaText').innerText = captcha;
-}
-
-// أول مرة
-generateCaptcha();
-
-</script>// ==============================
-// الدفعة الثانية: النظام الذكي
-// ==============================
-
-// قاعدة بيانات مبسطة لكل المراحل والمواد والمدرسين
-const data = {
-    kg: {
-        years: ["KG 1","KG 2"],
-        subjects: ["تأسيس عربي","تأسيس حساب","English","Math"],
-        teachers: {
-            "تأسيس عربي":[{n:"مس نورا",img:"https://via.placeholder.com/60"}],
-            "English":[{n:"مس سارة",img:"https://via.placeholder.com/60"}]
-        }
-    },
-    primary:{
-        years:["1 ابتدائي","2 ابتدائي","3 ابتدائي","4 ابتدائي","5 ابتدائي","6 ابتدائي"],
-        subjects:["لغة عربية","رياضيات","English","علوم","دراسات","تربية دينية"],
-        teachers:{
-            "لغة عربية":[{n:"مستر أحمد",img:"https://via.placeholder.com/60"}],
-            "رياضيات":[{n:"مستر علي",img:"https://via.placeholder.com/60"}],
-            "English":[{n:"مس سارة",img:"https://via.placeholder.com/60"}],
-            "علوم":[{n:"مستر محمود",img:"https://via.placeholder.com/60"}],
-        }
-    },
-    prep:{
-        years:["1 إعدادي","2 إعدادي","3 إعدادي"],
-        subjects:["لغة عربية","رياضيات","English","علوم","دراسات","تربية دينية"],
-        teachers:{
-            "لغة عربية":[{n:"مستر أحمد",img:"https://via.placeholder.com/60"}],
-            "رياضيات":[{n:"مستر علي",img:"https://via.placeholder.com/60"}],
-        }
-    },
-    secondary:{
-        years:["1 ثانوي","2 ثانوي","3 ثانوي"],
-        branches:["علمي","أدبي"],
-        subjects:{
-            "علمي":["لغة عربية","English","رياضيات","فيزياء","كيمياء","أحياء"],
-            "أدبي":["لغة عربية","English","تاريخ","جغرافيا","فلسفة","علم نفس"]
-        },
-        teachers:{
-            "فيزياء":[{n:"مستر زويل",img:"https://via.placeholder.com/60"}],
-            "كيمياء":[{n:"مستر مندليف",img:"https://via.placeholder.com/60"}],
-            "أحياء":[{n:"مستر محمد",img:"https://via.placeholder.com/60"}],
-            "رياضيات":[{n:"مستر محمود",img:"https://via.placeholder.com/60"}],
-            "لغة عربية":[{n:"مستر أحمد",img:"https://via.placeholder.com/60"}],
-            "English":[{n:"مس سارة",img:"https://via.placeholder.com/60"}],
-            "تاريخ":[{n:"مستر كريم",img:"https://via.placeholder.com/60"}],
-            "جغرافيا":[{n:"مستر سامي",img:"https://via.placeholder.com/60"}],
-            "فلسفة":[{n:"مستر عمرو",img:"https://via.placeholder.com/60"}],
-            "علم نفس":[{n:"مستر خالد",img:"https://via.placeholder.com/60"}]
-        }
-    }
-};
-
-// عناصر DOM
-const stageSelect = document.getElementById("stage");
-const yearSelect = document.getElementById("year");
-const branchSelect = document.getElementById("branch");
-const subjectSelect = document.getElementById("subject");
-const teachersDiv = document.getElementById("teachers");
-
-// ============================
-// 1. عند اختيار المرحلة
-// ============================
-stageSelect.addEventListener("change", ()=>{
-    const stage = stageSelect.value;
-
-    // مسح البيانات السابقة
-    yearSelect.innerHTML = "<option value=''>اختر السنة</option>";
-    branchSelect.innerHTML = "<option value=''>التخصص</option>";
-    subjectSelect.innerHTML = "<option value=''>اختر المادة</option>";
-    teachersDiv.innerHTML = "";
-
-    if(!stage) return;
-
-    // إضافة السنوات
-    data[stage].years.forEach(y=>{
-        const opt = document.createElement("option");
-        opt.value = y;
-        opt.textContent = y;
-        yearSelect.appendChild(opt);
-    });
-
-    // إظهار فرع إذا كانت ثانوي
-    if(stage==="secondary"){
-        branchSelect.disabled = false;
-        branchSelect.innerHTML="<option value=''>التخصص</option>";
-        data.secondary.branches.forEach(b=>{
-            const opt = document.createElement("option");
-            opt.value = b;
-            opt.textContent = b;
-            branchSelect.appendChild(opt);
-        });
-    } else {
-        branchSelect.disabled = true;
-    }
-});
-
-// ============================
-// 2. عند اختيار السنة أو التخصص (الثانوي)
-// ============================
-function updateSubjects(){
-    const stage = stageSelect.value;
-    const branch = branchSelect.value;
-
-    subjectSelect.innerHTML = "<option value=''>اختر المادة</option>";
-    teachersDiv.innerHTML = "";
-
-    if(!stage) return;
-
-    let subjectsList = [];
-
-    if(stage==="secondary"){
-        if(branch) subjectsList = data.secondary.subjects[branch];
-    } else {
-        subjectsList = data[stage].subjects;
-    }
-
-    subjectsList.forEach(s=>{
-        const opt = document.createElement("option");
-        opt.value = s;
-        opt.textContent = s;
-        subjectSelect.appendChild(opt);
-    });
-}
-
-// ============================
-// 3. عند اختيار المادة → عرض المدرسين
-// ============================
-subjectSelect.addEventListener("change", ()=>{
-    const stage = stageSelect.value;
-    const branch = branchSelect.value;
-    const subject = subjectSelect.value;
-
-    teachersDiv.innerHTML = "";
-
-    if(!subject) return;
-
-    let teachersList = [];
-
-    if(stage==="secondary"){
-        teachersList = data.secondary.teachers[subject] || [];
-    } else {
-        teachersList = data[stage].teachers[subject] || [];
-    }
-
-    teachersList.forEach(t=>{
-        const div = document.createElement("div");
-        div.className="teacher";
-        div.innerHTML=`<img src="${t.img}" style="width:50px;border-radius:50%;"><p>${t.n}</p>`;
-        div.addEventListener("click", ()=>selectTeacher(t.n, div));
-        teachersDiv.appendChild(div);
-    });
-});
-
-// ============================
-// 4. تحديد المدرس
-// ============================
-let selectedTeacher = "";
-function selectTeacher(name, el){
-    selectedTeacher = name;
-    document.querySelectorAll(".teacher").forEach(c=>c.style.border="none");
-    el.style.border="2px solid var(--accent)";
-}// ============================
-// الدفعة الثالثة: الدفع + الكود النهائي + النسخ
-// ============================
-
-const fileInput = document.getElementById("file");
-const fileText = document.getElementById("fileText");
-const btn = document.getElementById("btn");
-const successDiv = document.getElementById("success");
-const codeDiv = document.getElementById("code");
-const captchaText = document.getElementById("captchaText");
-
-let currentCaptcha = captchaText.innerText;
-
-// عند اختيار ملف الدفع
-fileInput.addEventListener("change", ()=>{
-    if(fileInput.files.length > 0){
-        fileText.innerText = "تم اختيار: " + fileInput.files[0].name;
-    }
-});
-
-// عند ضغط زر استلام الكود
-btn.addEventListener("click", ()=>{
-
-    // التحقق من البيانات الأساسية
-    const name = document.getElementById("name").value.trim();
-    const phone = document.getElementById("phone").value.trim();
-    const eduType = document.getElementById("eduType").value;
-    const stage = stageSelect.value;
-    const year = yearSelect.value;
-    const branch = branchSelect.value;
-    const subject = subjectSelect.value;
-
-    if(!name || !phone || !eduType || !stage || !year || !subject){
-        alert("من فضلك املأ جميع الحقول");
-        return;
-    }
-
-    // تحقق من اختيار مدرس
-    if(!selectedTeacher){
-        alert("اختر مدرساً");
-        return;
-    }
-
-    // تحقق من رفع الملف
-    if(fileInput.files.length===0){
-        alert("من فضلك ارفع سكرينة الدفع");
-        return;
-    }
-
-    // تحقق CAPTCHA
-    const userCaptcha = prompt("اكتب رمز التحقق الموجود أعلى الصفحة:");
-    if(!userCaptcha || userCaptcha.toUpperCase() !== currentCaptcha){
-        alert("رمز التحقق غير صحيح!");
-        generateCaptcha();
-        return;
-    }
-
-    // توليد كود فريد
-    const randomStr = Math.random().toString(36).substring(2,7).toUpperCase();
-    const time = new Date().getTime().toString().slice(-4);
-    const code = `QAMMA-${randomStr}-${time}-${phone.slice(-3)}`;
-
-    // عرض الكود
-    codeDiv.innerText = code;
-    successDiv.style.display = "block";
-
-    // مسح البيانات (اختياري)
-    document.getElementById("name").value="";
-    document.getElementById("phone").value="";
-    eduType.value="";
-    stageSelect.value="";
-    yearSelect.value="";
-    branchSelect.value="";
-    subjectSelect.value="";
-    teachersDiv.innerHTML="";
-    selectedTeacher="";
-    fileInput.value="";
-    fileText.innerText="ارفع سكرينة الدفع";
-
-    // توليد رمز جديد للCAPTCHA
-    generateCaptcha();
-});
-
-// وظيفة نسخ الكود
-codeDiv.addEventListener("click", ()=>{
-    navigator.clipboard.writeText(codeDiv.innerText);
-    alert("تم نسخ الكود!");
-});/* خلفية Matrix */
-.bg-matrix{
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    font-family: monospace;
-    font-size: 12px;
-    color: rgba(0,212,255,0.04);
-    z-index:-1;
-    pointer-events:none;
-    white-space:pre-wrap;
-}
-
-/* تأثير float للصور والأيقونات */
-@keyframes float {
-    0%,100%{transform:translateY(0);}
-    50%{transform:translateY(-8px);}
-}
-
-.teacher img{
-    animation: float 3s ease-in-out infinite;
-}
-
-.teacher:hover{
-    transform:scale(1.05);
-    transition:0.3s;
-}
-
-.btn:hover{
-    transform:scale(1.03);
-    transition:0.3s;
-}
-
-.icon-input i{
-    color: var(--accent);
-    font-size: 18px;
-    animation: float 2s ease-in-out infinite alternate;
-}// رابط Web App من Google Apps Script
-const sheetURL = "ضع_هنا_رابط_WebApp";
-
-// عند الضغط على زر استلام الكود
-btn.addEventListener("click", ()=>{
-    // التحقق من الحقول الأساسية
-    const name = document.getElementById("name").value.trim();
-    const phone = document.getElementById("phone").value.trim();
-    const eduType = document.getElementById("eduType").value;
-    const stage = stageSelect.value;
-    const year = yearSelect.value;
-    const branch = branchSelect.value;
-    const subject = subjectSelect.value;
-
-    if(!name || !phone || !eduType || !stage || !year || !subject){
-        alert("من فضلك املأ جميع الحقول");
-        return;
-    }
-
-    if(!selectedTeacher){
-        alert("اختر مدرساً");
-        return;
-    }
-
-    if(fileInput.files.length===0){
-        alert("من فضلك ارفع سكرينة الدفع");
-        return;
-    }
-
-    // التحقق من CAPTCHA
-    const userCaptcha = prompt("اكتب رمز التحقق الموجود أعلى الصفحة:");
-    if(!userCaptcha || userCaptcha.toUpperCase() !== currentCaptcha){
-        alert("رمز التحقق غير صحيح!");
-        generateCaptcha();
-        return;
-    }
-
-    // توليد كود فريد
-    const randomStr = Math.random().toString(36).substring(2,7).toUpperCase();
-    const time = new Date().getTime().toString().slice(-4);
-    const code = `QAMMA-${randomStr}-${time}-${phone.slice(-3)}`;
-
-    // عرض الكود للمستخدم
-    codeDiv.innerText = code;
-    successDiv.style.display = "block";
-
-    // إرسال البيانات إلى Google Sheets
-    const payload = {
-        name: name,
-        phone: phone,
-        eduType: eduType,
-        stage: stage,
-        year: year,
-        branch: branch,
-        subject: subject,
-        teacher: selectedTeacher,
-        code: code,
-        captcha: currentCaptcha
-    };
-
-    fetch(sheetURL, {
-        method:"POST",
-        body: JSON.stringify(payload),
-        headers: {"Content-Type":"application/json"}
-    })
-    .then(res=>res.json())
-    .then(data=>{
-        console.log("تم الحفظ على Google Sheet:", data);
-    })
-    .catch(err=>{
-        console.error("خطأ في حفظ البيانات:", err);
-    });
-
-    // مسح البيانات من النموذج (اختياري)
-    document.getElementById("name").value="";
-    document.getElementById("phone").value="";
-    eduType.value="";
-    stageSelect.value="";
-    yearSelect.value="";
-    branchSelect.value="";
-    subjectSelect.value="";
-    teachersDiv.innerHTML="";
-    selectedTeacher="";
-    fileInput.value="";
-    fileText.innerText="ارفع سكرينة الدفع";
-
-    // توليد CAPTCHA جديد
-    generateCaptcha();
-});
-
-// النسخ عند الضغط على الكود
-codeDiv.addEventListener("click", ()=>{
-    navigator.clipboard.writeText(codeDiv.innerText);
-    alert("تم نسخ الكود!");
-});
-
-</script>
-
+    <header>
+        <div class="logo"><i class="fas fa-star"></i> سنتر القمة</div>
+        <ul class="nav-links">
+            <li><a href="#">الرئيسية</a></li>
+            <li><a href="#teachers">المدرسين</a></li>
+            <li><a href="#register">سجل الآن</a></li>
+        </ul>
+    </header>
+
+    <section class="hero">
+        <h1>اصنع مستقبلك في القمة</h1>
+        <p>النموذج المثالي للتعليم الحديث مع أقوى نخبة من مدرسي الجمهورية.</p>
+        <a href="#register" class="btn-gold">احجز مكانك الآن</a>
+    </section>
+
+    <section class="teachers-section" id="teachers">
+        <center><h2 style="font-size: 2.5rem;">عمالقة القمة</h2></center>
+        <div class="grid">
+            <div class="card">
+                <img src="https://ui-avatars.com/api/?name=محمد+العدلي&background=0f172a&color=fbbf24" alt="">
+                <span class="subject">المشرف العام</span>
+                <h3>أ/ محمد العدلي</h3>
+                <p>خبير الإدارة والتعليم</p>
+            </div>
+            <div class="card">
+                <img src="https://ui-avatars.com/api/?name=عبد+الرحمن&background=0f172a&color=fbbf24" alt="">
+                <span class="subject">اللغة الإنجليزية</span>
+                <h3>أ/ عبد الرحمن</h3>
+                <p>خبرة في المناهج الدولية</p>
+            </div>
+            <div class="card">
+                <img src="https://ui-avatars.com/api/?name=وليد+الضوي&background=0f172a&color=fbbf24" alt="">
+                <span class="subject">اللغة العربية</span>
+                <h3>أ/ وليد الضوي</h3>
+                <p>فارس لغة الضاد</p>
+            </div>
+            <div class="card">
+                <img src="https://ui-avatars.com/api/?name=أحمد+النوبي&background=0f172a&color=fbbf24" alt="">
+                <span class="subject">اللغة العربية</span>
+                <h3>أ/ أحمد النوبي</h3>
+                <p>عميد المادة</p>
+            </div>
+            <div class="card">
+                <img src="https://ui-avatars.com/api/?name=إبراهيم+حسن&background=0f172a&color=fbbf24" alt="">
+                <span class="subject">Français</span>
+                <h3>أ/ إبراهيم حسن</h3>
+                <p>خبير اللغة الفرنسية</p>
+            </div>
+            <div class="card">
+                <img src="https://ui-avatars.com/api/?name=محمد+العادلي&background=0f172a&color=fbbf24" alt="">
+                <span class="subject">المواد العلمية</span>
+                <h3>أ/ محمد العادلي</h3>
+                <p>متاح من السبت إلى الأربعاء</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="reg-section" id="register">
+        <center><h2>سجل بياناتك للتواصل</h2></center>
+        <form id="studentForm">
+            <input type="text" name="name" placeholder="اسم الطالب بالكامل" required>
+            <input type="tel" name="phone" placeholder="رقم الموبايل" required>
+            <select name="teacher">
+                <option value="">اختر المدرس</option>
+                <option value="العدلي">محمد العدلي</option>
+                <option value="عبدالرحمن">عبد الرحمن (إنجليزي)</option>
+                <option value="الضوي">وليد الضوي (عربي)</option>
+            </select>
+            <button type="submit" class="submit-btn">إرسال البيانات</button>
+        </form>
+    </section>
+
+    <footer>
+        <p>جميع الحقوق محفوظة &copy; سنتر القمة التعليمي النموذجي 2026</p>
+    </footer>
+
+    <script>
+        // سكريبت بسيط للتفاعل
+        const form = document.getElementById('studentForm');
+        form.onsubmit = (e) => {
+            e.preventDefault();
+            alert('تم استلام بياناتك بنجاح! سيتواصل معك فريق القمة فوراً.');
+            form.reset();
+        };
+    </script>
 </body>
 </html>
