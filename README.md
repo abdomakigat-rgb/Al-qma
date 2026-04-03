@@ -122,17 +122,38 @@
         /* فورم التسجيل */
         .reg-section { padding: 80px 8%; background: var(--main-dark); color: white; }
         form {
-            max-width: 600px; margin: 40px auto; background: var(--glass);
+            max-width: 650px; margin: 40px auto; background: var(--glass);
             padding: 40px; border-radius: 20px; backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.1);
         }
+        
+        .form-group { margin-bottom: 15px; text-align: right; }
+        label { display: block; margin-bottom: 8px; color: var(--gold); font-weight: bold; }
+
         input, select {
-            width: 100%; padding: 12px; margin: 10px 0;
-            border-radius: 8px; border: none; outline: none;
+            width: 100%; padding: 12px; margin: 5px 0;
+            border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); outline: none;
+            background: rgba(255,255,255,0.9); color: #333;
         }
+        
+        input[type="file"] { background: transparent; color: white; border: 1px dashed var(--gold); }
+
+        .payment-info {
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid var(--gold);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .payment-info strong { color: var(--gold); font-size: 1.2rem; }
+
         .submit-btn {
             background: var(--gold); width: 100%; padding: 15px;
             border-radius: 8px; border: none; font-weight: bold; cursor: pointer;
+            font-size: 1.1rem; transition: 0.3s;
         }
+        .submit-btn:hover { background: var(--gold-dark); transform: scale(1.02); }
 
         footer { text-align: center; padding: 40px; background: #070b14; color: #666; }
     </style>
@@ -197,17 +218,51 @@
     </section>
 
     <section class="reg-section" id="register">
-        <center><h2>سجل بياناتك للتواصل</h2></center>
+        <center><h2>استمارة التسجيل والحجز</h2></center>
+        
         <form id="studentForm">
-            <input type="text" name="name" placeholder="اسم الطالب بالكامل" required>
-            <input type="tel" name="phone" placeholder="رقم الموبايل" required>
-            <select name="teacher">
-                <option value="">اختر المدرس</option>
-                <option value="العدلي">محمد العدلي</option>
-                <option value="عبدالرحمن">عبد الرحمن (إنجليزي)</option>
-                <option value="الضوي">وليد الضوي (عربي)</option>
-            </select>
-            <button type="submit" class="submit-btn">إرسال البيانات</button>
+            <div class="form-group">
+                <label>بيانات الطالب الأساسية</label>
+                <input type="text" name="name" placeholder="اسم الطالب بالكامل" required>
+                <input type="tel" name="phone" placeholder="رقم موبايل الطالب" required>
+                <input type="tel" name="parent_phone" placeholder="رقم ولي الأمر" required>
+                <input type="text" name="address" placeholder="العنوان بالتفصيل" required>
+            </div>
+
+            <div class="form-group">
+                <label>المدرس المطلوب</label>
+                <select name="teacher" required>
+                    <option value="">اختر المدرس</option>
+                    <option value="العدلي">أ/ محمد العدلي</option>
+                    <option value="عبدالرحمن">أ/ عبد الرحمن (إنجليزي)</option>
+                    <option value="الضوي">أ/ وليد الضوي (عربي)</option>
+                    <option value="النوبي">أ/ أحمد النوبي (عربي)</option>
+                    <option value="إبراهيم">أ/ إبراهيم حسن (فرنساوي)</option>
+                    <option value="العادلي">أ/ محمد العادلي</option>
+                </select>
+            </div>
+
+            <div class="payment-info">
+                <p>للدفع الإلكتروني، يرجى التحويل على الرقم التالي:</p>
+                <strong>01152956200</strong>
+                <p>(فودافون كاش / اتصالات كاش / انستا باي)</p>
+            </div>
+
+            <div class="form-group">
+                <label>تفاصيل الدفع</label>
+                <select name="payment_method" required>
+                    <option value="">طريقة الدفع</option>
+                    <option value="instapay">انستا باي (InstaPay)</option>
+                    <option value="vodafone">فودافون كاش</option>
+                    <option value="etisalat">اتصالات كاش</option>
+                    <option value="offline">الدفع في السنتر (الحضور)</option>
+                </select>
+                <input type="tel" name="payment_number" placeholder="الرقم الذي تم التحويل منه">
+                <label style="margin-top: 10px;">رفع إسكرينة الدفع (صورة التحويل)</label>
+                <input type="file" name="screenshot" accept="image/*">
+            </div>
+
+            <button type="submit" class="submit-btn">تأكيد الحجز في القمة</button>
         </form>
     </section>
 
@@ -216,11 +271,11 @@
     </footer>
 
     <script>
-        // سكريبت بسيط للتفاعل
         const form = document.getElementById('studentForm');
         form.onsubmit = (e) => {
             e.preventDefault();
-            alert('تم استلام بياناتك بنجاح! سيتواصل معك فريق القمة فوراً.');
+            // هنا يتم الربط مع Google Apps Script مستقبلاً
+            alert('تم استلام بياناتك بنجاح! سيتم مراجعة إسكرينة الدفع والتواصل معك فوراً.');
             form.reset();
         };
     </script>
