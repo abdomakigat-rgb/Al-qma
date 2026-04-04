@@ -221,10 +221,11 @@
         
         <form id="studentForm">
             <div class="form-group">
-                <label>بيانات الطالب</label>
+                <label>بيانات الطالب الأساسية</label>
                 <input type="text" name="name" placeholder="اسم الطالب بالكامل" required>
                 <input type="tel" name="phone" placeholder="رقم موبايل الطالب" required>
-                <input type="text" name="address" placeholder="العنوان" required>
+                <input type="tel" name="parent_phone" placeholder="رقم ولي الأمر" required>
+                <input type="text" name="address" placeholder="العنوان بالتفصيل" required>
             </div>
 
             <div class="form-group">
@@ -260,14 +261,16 @@
             </div>
 
             <div class="form-group">
-                <label>طريقة الدفع</label>
+                <label>تفاصيل الدفع</label>
                 <select name="payment_method" required>
                     <option value="">اختر طريقة الدفع</option>
                     <option value="vodafone">فودافون كاش (01152956200)</option>
                     <option value="instapay">انستا باي</option>
                     <option value="center">دفع نقدي في السنتر</option>
                 </select>
-                <label style="margin-top:10px;">إرفاق صورة التحويل (اختياري)</label>
+                <input type="tel" name="payment_number" placeholder="الرقم الذي تم التحويل منه">
+                
+                <label style="margin-top:10px;">إرفاق صورة التحويل (إسكرينة الدفع)</label>
                 <input type="file" name="screenshot" accept="image/*" onchange="previewImage(event)">
                 <center><img id="screenshot-preview" src="#"></center>
             </div>
