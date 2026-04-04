@@ -204,7 +204,7 @@
 
         footer { text-align: center; padding: 40px; background: #070b14; color: #fff; }
 
-        /* استايل رسالة الكود الفريد */
+        /* استايل رسالة الكود الفريد المعدل لعدم إظهار الكود */
         #success-modal {
             display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
             background: white; color: var(--main-dark); padding: 30px; border-radius: 20px;
@@ -385,10 +385,9 @@
 
     <div id="success-modal">
         <i class="fas fa-check-circle" style="font-size: 4rem; color: #10b981;"></i>
-        <h2 style="margin: 15px 0;">تم الحجز بنجاح!</h2>
-        <p>كود الحجز الفريد الخاص بك هو:</p>
-        <h1 id="unique-code" style="color: var(--gold-dark); background: #fef3c7; padding: 10px; border-radius: 10px; margin: 15px 0; border: 2px dashed var(--gold);">TOP-0000</h1>
-        <p style="font-size: 0.9rem; color: #666;">يرجى تصوير هذه الشاشة وإظهارها عند الحضور للسنتر</p>
+        <h2 style="margin: 15px 0;">تم إرسال طلبك بنجاح!</h2>
+        <p>سيتم مراجعة بياناتك والدفع الآن.</p>
+        <p style="font-size: 1.1rem; color: var(--gold-dark); margin: 15px 0; font-weight: bold;">انتظر رسالة على الواتساب بكود الدخول الخاص بك خلال دقائق.</p>
         <button class="btn-gold" style="margin-top: 20px;" onclick="location.reload()">تم</button>
     </div>
 
@@ -428,10 +427,11 @@
         // 3. نظام فتح المكتبة
         function unlockLibrary() {
             const codeInput = document.getElementById('student-code').value;
-            if(codeInput === "2026") {
+            // هنا تضع الأكواد التي تريدها أن تعمل يدوياً (أو تربطها بقاعدة بيانات لاحقاً)
+            if(codeInput === "TOP-ADMIN-2026") { 
                 document.getElementById('lock-box').style.display = "none";
                 document.getElementById('video-display').style.display = "block";
-            } else { alert("الكود غير صحيح!"); }
+            } else { alert("عذراً، هذا الكود غير مفعل أو غير صحيح!"); }
         }
 
         function updatePrice() {
@@ -447,27 +447,29 @@
             else { priceBox.style.display = "none"; }
         }
 
-        // 4. نظام إرسال البيانات للشيت وتوليد كود فريد لكل شخص
+        // 4. نظام إرسال البيانات للشيت "بدون إظهار الكود للطالب"
         const form = document.getElementById('studentForm');
         form.onsubmit = (e) => {
             e.preventDefault();
             
-            // توليد كود فريد للمشترك
+            // الموقع يُنشئ كود عشوائي للطالب داخلياً فقط
             const randomID = Math.floor(1000 + Math.random() * 9000);
-            const userCode = "TOP-" + randomID;
+            const userCodeForAdmin = "TOP-" + randomID;
 
-            // تجهيز البيانات للإرسال لـ Google Sheets (تحتاج WebApp URL)
+            // تجهيز البيانات للإرسال
             const formData = new FormData(form);
-            formData.append('unique_id', userCode);
+            formData.append('student_secret_code', userCodeForAdmin); // هذا الكود سيذهب للشيت عندك فقط
 
-            // إظهار رسالة النجاح والكود للمستخدم
-            document.getElementById('unique-code').innerText = userCode;
+            // إظهار رسالة النجاح للطالب "بدون الكود"
             document.getElementById('success-modal').style.display = "block";
             
-            /* ملاحظة للمسؤول: لكي تظهر البيانات في الشيت عندك، 
-               استخدم Apps Script في جوجل شيت واربطه بـ fetch هنا.
+            // هنا يتم الربط بـ Google Apps Script ليرسل البيانات للشيت
+            console.log("تم إرسال البيانات للإدارة. الكود المُنشأ للمراجعة: " + userCodeForAdmin);
+            
+            /* ملاحظة لمكي: 
+               لكي تصلك هذه البيانات في جوجل شيت فعلياً، 
+               تحتاج لاستخدام Fetch API مع رابط Web App من Apps Script.
             */
-            console.log("تم حفظ البيانات للشيت بكود: " + userCode);
         };
     </script>
 </body>
