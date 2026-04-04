@@ -58,7 +58,7 @@
             transition: all 0.5s ease;
         }
 
-        /* الهيدر المطور: لوجو وساعة فقط */
+        /* الهيدر المطور */
         header {
             background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(10px);
@@ -75,7 +75,6 @@
             object-fit: contain;
         }
 
-        /* القائمة الجانبية */
         .menu-trigger {
             color: var(--gold);
             font-size: 1.5rem;
@@ -89,7 +88,7 @@
             width: 280px; height: 100%;
             background: var(--main-dark);
             z-index: 2000;
-            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: 0.4s;
             padding: 80px 20px;
             box-shadow: -5px 0 20px rgba(0,0,0,0.5);
         }
@@ -104,7 +103,6 @@
             margin-bottom: 10px;
             border-radius: 8px;
             font-weight: bold;
-            transition: 0.3s;
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
 
@@ -122,7 +120,6 @@
             border-radius: 8px;
             border: 1px solid rgba(251, 191, 36, 0.2);
             text-align: center;
-            line-height: 1.2;
         }
         #clock-time { color: var(--gold); font-weight: 900; font-size: 1.1rem; display: block; }
         #clock-date { font-size: 0.7rem; opacity: 0.8; }
@@ -137,14 +134,30 @@
             text-align: center; color: white; padding: 20px;
         }
 
-        .hero h1 { font-size: clamp(2rem, 5vw, 4rem); font-weight: 900; margin-bottom: 15px; }
+        .hero h1 { font-size: clamp(2rem, 5vw, 4rem); font-weight: 900; }
+
+        /* قسم المدرسين */
+        .teachers-section { padding: 80px 5%; background: white; }
+        .teachers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px; margin-top: 40px;
+        }
+        .teacher-card {
+            background: var(--soft-white); border-radius: 20px; padding: 30px;
+            text-align: center; border: 1px solid #eee; transition: 0.3s;
+            position: relative; overflow: hidden;
+        }
+        .teacher-card:hover { transform: translateY(-10px); border-color: var(--gold); }
+        .teacher-card img { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--gold); margin-bottom: 15px; }
+        .subject-tag { background: var(--main-dark); color: var(--gold); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: bold; }
+        .price-tag { color: var(--gold-dark); font-weight: 900; font-size: 1.2rem; margin-top: 10px; display: block; }
 
         /* استمارة التسجيل */
         .reg-section { padding: 80px 8%; background: var(--main-dark); color: white; }
         form {
             max-width: 650px; margin: 40px auto; background: var(--glass);
-            padding: 30px; border-radius: 20px; backdrop-filter: blur(5px);
-            border: 1px solid rgba(255,255,255,0.1);
+            padding: 30px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);
         }
         
         .form-group { margin-bottom: 15px; text-align: right; }
@@ -152,20 +165,20 @@
 
         input, select {
             width: 100%; padding: 12px; margin: 5px 0;
-            border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); outline: none;
-            background: rgba(255,255,255,0.9); color: #333;
+            border-radius: 8px; outline: none; border: none;
+            background: rgba(255,255,255,0.95); color: #333;
         }
 
         .price-display {
-            background: var(--gold); color: var(--main-dark); padding: 10px;
+            background: var(--gold); color: var(--main-dark); padding: 12px;
             border-radius: 8px; margin-bottom: 15px; text-align: center;
-            font-weight: 900; display: none;
+            font-weight: 900; display: none; font-size: 1.1rem;
         }
 
         .submit-btn {
             background: var(--gold); width: 100%; padding: 15px;
             border-radius: 8px; border: none; font-weight: bold; cursor: pointer;
-            font-size: 1.1rem; transition: 0.3s; margin-top: 10px;
+            font-size: 1.1rem; transition: 0.3s;
         }
         .submit-btn:hover { background: var(--gold-dark); transform: scale(1.02); }
 
@@ -189,12 +202,12 @@
 
     <header>
         <div class="logo-box">
-            <img src="https://i.ibb.co/Gf63XzLz/logo.jpg" alt="اللوجو">
+            <img src="https://i.ibb.co/Gf63XzLz/logo.jpg" alt="سنتر القمة">
         </div>
 
         <div class="live-clock">
             <span id="clock-time">00:00:00</span>
-            <span id="clock-date">اليوم - التاريخ</span>
+            <span id="clock-date">جاري التحميل...</span>
         </div>
 
         <div class="menu-trigger" onclick="toggleMenu()">
@@ -205,15 +218,38 @@
     <div class="side-nav" id="sideNav">
         <i class="fas fa-times close-nav" onclick="toggleMenu()"></i>
         <a href="#" onclick="toggleMenu()">الرئيسية</a>
+        <a href="#teachers" onclick="toggleMenu()">عمالقة القمة</a>
         <a href="#register" onclick="toggleMenu()">تسجيل جديد</a>
-        <a href="#teachers" onclick="toggleMenu()">المدرسين</a>
-        <a href="#library" onclick="toggleMenu()">المكتبة الرقمية</a>
     </div>
 
     <section class="hero">
         <h1>اصنع مستقبلك في القمة</h1>
         <p>النموذج المثالي للتعليم الحديث مع أقوى نخبة من مدرسي الجمهورية.</p>
-        <a href="#register" style="text-decoration: none;" class="submit-btn">احجز مكانك الآن</a>
+        <a href="#register" style="text-decoration: none; display: inline-block; width: auto; padding: 15px 40px;" class="submit-btn">احجز مكانك الآن</a>
+    </section>
+
+    <section class="teachers-section" id="teachers">
+        <center><h2>نخبة المدرسين والأسعار</h2></center>
+        <div class="teachers-grid">
+            <div class="teacher-card">
+                <img src="https://ui-avatars.com/api/?name=محمد+العدلي&background=0f172a&color=fbbf24" alt="العدلي">
+                <br><span class="subject-tag">إشراف عام</span>
+                <h3>أ/ محمد العدلي</h3>
+                <span class="price-tag">الثانوي: 150ج | الإعدادي: 80ج</span>
+            </div>
+            <div class="teacher-card">
+                <img src="https://ui-avatars.com/api/?name=عبد+الرحمن&background=0f172a&color=fbbf24" alt="عبدالرحمن">
+                <br><span class="subject-tag">لغة إنجليزية</span>
+                <h3>أ/ عبد الرحمن</h3>
+                <span class="price-tag">الثانوي: 140ج | الإعدادي: 70ج</span>
+            </div>
+            <div class="teacher-card">
+                <img src="https://ui-avatars.com/api/?name=وليد+الضوي&background=0f172a&color=fbbf24" alt="وليد">
+                <br><span class="subject-tag">لغة عربية</span>
+                <h3>أ/ وليد الضوي</h3>
+                <span class="price-tag">الثانوي: 150ج | الإعدادي: 75ج</span>
+            </div>
+        </div>
     </section>
 
     <section class="reg-section" id="register">
@@ -221,11 +257,11 @@
         
         <form id="studentForm">
             <div class="form-group">
-                <label>بيانات الطالب الأساسية</label>
+                <label>بيانات الطالب</label>
                 <input type="text" name="name" placeholder="اسم الطالب بالكامل" required>
                 <input type="tel" name="phone" placeholder="رقم موبايل الطالب" required>
                 <input type="tel" name="parent_phone" placeholder="رقم ولي الأمر" required>
-                <input type="text" name="address" placeholder="العنوان بالتفصيل" required>
+                <input type="text" name="address" placeholder="العنوان" required>
             </div>
 
             <div class="form-group">
@@ -241,11 +277,24 @@
                 <label>المرحلة الدراسية</label>
                 <select name="grade" id="gradeSelect" required onchange="updatePrice()">
                     <option value="">اختر الصف الدراسي</option>
-                    <option value="s3">الثالث الثانوي</option>
-                    <option value="s2">الثاني الثانوي</option>
-                    <option value="s1">الأول الثانوي</option>
-                    <option value="m">المرحلة الإعدادية</option>
-                    <option value="p">المرحلة الابتدائية</option>
+                    <optgroup label="ثانوي عام">
+                        <option value="s3_gen">الثالث الثانوي (عام)</option>
+                        <option value="s2_gen">الثاني الثانوي (عام)</option>
+                        <option value="s1_gen">الأول الثانوي (عام)</option>
+                    </optgroup>
+                    <optgroup label="ثانوي أزهري">
+                        <option value="s3_azhar">الثالث الثانوي (أزهر)</option>
+                        <option value="s2_azhar">الثاني الثانوي (أزهر)</option>
+                        <option value="s1_azhar">الأول الثانوي (أزهر)</option>
+                    </optgroup>
+                    <optgroup label="المرحلة الإعدادية">
+                        <option value="m3">الثالث الإعدادي</option>
+                        <option value="m2">الثاني الإعدادي</option>
+                        <option value="m1">الأول الإعدادي</option>
+                    </optgroup>
+                    <optgroup label="المرحلة الابتدائية">
+                        <option value="p">صفوف الابتدائي</option>
+                    </optgroup>
                 </select>
                 <div id="priceBox" class="price-display"></div>
             </div>
@@ -270,7 +319,7 @@
                 </select>
                 <input type="tel" name="payment_number" placeholder="الرقم الذي تم التحويل منه">
                 
-                <label style="margin-top:10px;">إرفاق صورة التحويل (إسكرينة الدفع)</label>
+                <label style="margin-top:10px;">إرفاق إسكرينة الدفع</label>
                 <input type="file" name="screenshot" accept="image/*" onchange="previewImage(event)">
                 <center><img id="screenshot-preview" src="#"></center>
             </div>
@@ -319,9 +368,19 @@
         function updatePrice() {
             const grade = document.getElementById('gradeSelect').value;
             const priceBox = document.getElementById('priceBox');
-            let price = grade.startsWith('s') ? "150 جنيه" : "50 جنيه";
-            priceBox.innerText = "سعر الشهر: " + price;
-            priceBox.style.display = "block";
+            let price = "";
+
+            if (grade.includes('s3')) price = "150 جنيه";
+            else if (grade.includes('s2') || grade.includes('s1')) price = "140 جنيه";
+            else if (grade.startsWith('m')) price = "80 جنيه";
+            else if (grade === 'p') price = "50 جنيه";
+
+            if (price) {
+                priceBox.innerText = "سعر الشهر لهذه المرحلة: " + price;
+                priceBox.style.display = "block";
+            } else {
+                priceBox.style.display = "none";
+            }
         }
 
         const form = document.getElementById('studentForm');
@@ -332,7 +391,6 @@
             btn.disabled = true;
 
             const formData = new FormData(form);
-            
             fetch(scriptURL, { method: 'POST', body: formData, mode: 'no-cors' })
             .then(() => {
                 document.getElementById('success-modal').style.display = "block";
