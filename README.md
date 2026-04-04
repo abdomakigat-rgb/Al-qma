@@ -39,7 +39,7 @@
         header {
             background: rgba(15, 23, 42, 0.9);
             backdrop-filter: blur(10px);
-            padding: 10px 5%;
+            padding: 15px 8%;
             position: fixed; width: 100%; top: 0; z-index: 1000;
             display: flex; justify-content: space-between; align-items: center;
             border-bottom: 2px solid var(--gold);
@@ -48,26 +48,14 @@
         .logo {
             font-family: 'Reem Kufi', sans-serif;
             color: var(--gold);
-            font-size: 1.5rem;
+            font-size: 1.8rem;
         }
-
-        /* ستايل الساعة */
-        .digital-clock {
-            color: white;
-            text-align: center;
-            background: rgba(0,0,0,0.3);
-            padding: 5px 15px;
-            border-radius: 10px;
-            border: 1px solid var(--gold);
-            font-size: 0.85rem;
-        }
-        .clock-time { color: var(--gold); font-weight: bold; display: block; font-size: 1rem; }
 
         .nav-links { display: flex; list-style: none; }
-        .nav-links li { margin: 0 15px; }
+        .nav-links li { margin: 0 20px; }
         .nav-links a {
             color: white; text-decoration: none; font-weight: bold;
-            transition: 0.3s; position: relative; font-size: 0.9rem;
+            transition: 0.3s; position: relative;
         }
         .nav-links a:hover { color: var(--gold); }
         .nav-links a::after {
@@ -105,7 +93,7 @@
         }
         .btn-gold:hover { transform: scale(1.1); background: var(--gold-dark); }
 
-        /* كروت المدرسين */
+        /* كروت المدرسين (تصميم جبار) */
         .teachers-section { padding: 100px 8%; background: #fff; }
         .grid {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -158,7 +146,7 @@
             margin-bottom: 15px;
             text-align: center;
             font-weight: 900;
-            display: none;
+            display: none; /* يظهر بالجافا سكريبت */
         }
 
         .payment-info {
@@ -178,26 +166,13 @@
         }
         .submit-btn:hover { background: var(--gold-dark); transform: scale(1.02); }
 
-        footer { text-align: center; padding: 40px; background: #070b14; color: white; }
-        .dev-info { color: var(--gold); font-weight: bold; margin-top: 10px; font-size: 0.9rem; }
-
-        @media (max-width: 768px) {
-            header { flex-direction: column; height: auto; gap: 10px; padding: 10px; }
-            .nav-links { display: none; }
-        }
+        footer { text-align: center; padding: 40px; background: #070b14; color: #666; }
     </style>
 </head>
 <body>
 
     <header>
         <div class="logo"><i class="fas fa-star"></i> سنتر القمة</div>
-        
-        <div class="digital-clock">
-            <span id="clockDay"></span>
-            <span id="clockTime" class="clock-time">00:00:00</span>
-            <span id="clockDate" style="font-size: 0.75rem; opacity: 0.8;"></span>
-        </div>
-
         <ul class="nav-links">
             <li><a href="#">الرئيسية</a></li>
             <li><a href="#teachers">المدرسين</a></li>
@@ -263,15 +238,6 @@
                 <input type="tel" name="phone" placeholder="رقم موبايل الطالب" required>
                 <input type="tel" name="parent_phone" placeholder="رقم ولي الأمر" required>
                 <input type="text" name="address" placeholder="العنوان بالتفصيل" required>
-            </div>
-
-            <div class="form-group">
-                <label>نظام الدراسة</label>
-                <select name="study_type" required>
-                    <option value="">اختر نظام الدراسة</option>
-                    <option value="center">الحضور في السنتر</option>
-                    <option value="online">دراسة أون لاين (Online)</option>
-                </select>
             </div>
 
             <div class="form-group">
@@ -343,23 +309,9 @@
 
     <footer>
         <p>جميع الحقوق محفوظة &copy; سنتر القمة التعليمي النموذجي 2026</p>
-        <p style="margin-top: 10px;">تحت إدارة <span style="color:var(--gold)">أبو سيف</span></p>
-        <p class="dev-info">تم إنشاء الموقع بواسطة عبدو مكي (داعم المواهب للقران)</p>
     </footer>
 
     <script>
-        // وظيفة الساعة الذكية
-        function updateClock() {
-            const now = new Date();
-            const days = ['الأحد', 'الأثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
-            
-            document.getElementById('clockDay').innerText = days[now.getDay()];
-            document.getElementById('clockTime').innerText = now.toLocaleTimeString('ar-EG');
-            document.getElementById('clockDate').innerText = now.toLocaleDateString('ar-EG');
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
-
         function updatePrice() {
             const grade = document.getElementById('gradeSelect').value;
             const priceBox = document.getElementById('priceBox');
