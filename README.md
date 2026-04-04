@@ -35,21 +35,36 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* الهيدر الزجاجي */
+        /* الهيدر الزجاجي المطور */
         header {
             background: rgba(15, 23, 42, 0.9);
             backdrop-filter: blur(10px);
-            padding: 15px 8%;
+            padding: 10px 8%;
             position: fixed; width: 100%; top: 0; z-index: 1000;
             display: flex; justify-content: space-between; align-items: center;
             border-bottom: 2px solid var(--gold);
         }
 
+        .logo-box { display: flex; align-items: center; gap: 15px; }
+
         .logo {
             font-family: 'Reem Kufi', sans-serif;
             color: var(--gold);
-            font-size: 1.8rem;
+            font-size: 1.5rem;
         }
+
+        /* تنسيق الساعة الجديد */
+        .live-clock {
+            color: white;
+            background: rgba(255,255,255,0.05);
+            padding: 5px 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(251, 191, 36, 0.2);
+            text-align: center;
+            line-height: 1.2;
+        }
+        #clock-time { color: var(--gold); font-weight: 900; font-size: 1.1rem; display: block; }
+        #clock-date { font-size: 0.7rem; opacity: 0.8; }
 
         .nav-links { display: flex; list-style: none; }
         .nav-links li { margin: 0 20px; }
@@ -58,11 +73,6 @@
             transition: 0.3s; position: relative;
         }
         .nav-links a:hover { color: var(--gold); }
-        .nav-links a::after {
-            content: ''; width: 0; height: 2px; background: var(--gold);
-            position: absolute; bottom: -5px; right: 0; transition: 0.3s;
-        }
-        .nav-links a:hover::after { width: 100%; }
 
         /* قسم البطل (Hero) */
         .hero {
@@ -80,20 +90,26 @@
             animation: fadeIn 1s ease-out;
         }
 
-        .hero p {
-            font-size: 1.5rem; max-width: 700px; margin-bottom: 30px;
-            opacity: 0.9; animation: fadeIn 1.5s ease-out;
+        /* قسم المكتبة الرقمية (جديد) */
+        .library-section { padding: 80px 8%; background: #f1f5f9; text-align: center; }
+        .lock-container {
+            max-width: 500px; margin: 30px auto; background: white;
+            padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 2px solid var(--gold);
         }
+        #video-display { display: none; margin-top: 30px; }
+        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 15px; }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
 
         .btn-gold {
             background: var(--gold); color: var(--main-dark);
             padding: 15px 40px; border-radius: 50px; text-decoration: none;
             font-weight: 900; font-size: 1.2rem; transition: 0.4s;
-            box-shadow: 0 5px 20px rgba(251, 191, 36, 0.4);
+            box-shadow: 0 5px 20px rgba(251, 191, 36, 0.4); border: none; cursor: pointer;
         }
         .btn-gold:hover { transform: scale(1.1); background: var(--gold-dark); }
 
-        /* كروت المدرسين (تصميم جبار) */
+        /* كروت المدرسين */
         .teachers-section { padding: 100px 8%; background: #fff; }
         .grid {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -139,23 +155,14 @@
         input[type="file"] { background: transparent; color: white; border: 1px dashed var(--gold); }
 
         .price-display {
-            background: var(--gold);
-            color: var(--main-dark);
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            text-align: center;
-            font-weight: 900;
-            display: none; /* يظهر بالجافا سكريبت */
+            background: var(--gold); color: var(--main-dark); padding: 10px;
+            border-radius: 8px; margin-bottom: 15px; text-align: center;
+            font-weight: 900; display: none;
         }
 
         .payment-info {
-            background: rgba(251, 191, 36, 0.1);
-            border: 1px solid var(--gold);
-            padding: 15px;
-            border-radius: 10px;
-            margin: 20px 0;
-            text-align: center;
+            background: rgba(251, 191, 36, 0.1); border: 1px solid var(--gold);
+            padding: 15px; border-radius: 10px; margin: 20px 0; text-align: center;
         }
         .payment-info strong { color: var(--gold); font-size: 1.2rem; }
 
@@ -166,15 +173,22 @@
         }
         .submit-btn:hover { background: var(--gold-dark); transform: scale(1.02); }
 
-        footer { text-align: center; padding: 40px; background: #070b14; color: #666; }
+        footer { text-align: center; padding: 40px; background: #070b14; color: #fff; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo"><i class="fas fa-star"></i> سنتر القمة</div>
+        <div class="logo-box">
+            <div class="logo"><i class="fas fa-star"></i> سنتر القمة</div>
+            <div class="live-clock">
+                <span id="clock-time">00:00:00</span>
+                <span id="clock-date">اليوم - التاريخ</span>
+            </div>
+        </div>
         <ul class="nav-links">
             <li><a href="#">الرئيسية</a></li>
+            <li><a href="#library">المكتبة الرقمية</a></li>
             <li><a href="#teachers">المدرسين</a></li>
             <li><a href="#register">سجل الآن</a></li>
         </ul>
@@ -184,6 +198,28 @@
         <h1>اصنع مستقبلك في القمة</h1>
         <p>النموذج المثالي للتعليم الحديث مع أقوى نخبة من مدرسي الجمهورية.</p>
         <a href="#register" class="btn-gold">احجز مكانك الآن</a>
+    </section>
+
+    <section class="library-section" id="library">
+        <center><h2><i class="fas fa-play-circle"></i> مكتبة الفيديوهات التعليمية</h2></center>
+        
+        <div class="lock-container" id="lock-box">
+            <i class="fas fa-lock" style="font-size: 3rem; color: #cbd5e1; margin-bottom: 20px; display: block;"></i>
+            <h3>المحتوى مغلق</h3>
+            <p style="color: #64748b; margin-bottom: 20px;">أدخل كود الطالب لمشاهدة الحصص</p>
+            <input type="password" id="student-code" placeholder="أدخل كود الدخول هنا" style="text-align: center; margin-bottom: 15px; border: 2px solid #e2e8f0;">
+            <button class="submit-btn" onclick="unlockLibrary()">دخول المكتبة</button>
+        </div>
+
+        <div id="video-display">
+            <div class="lock-container" style="max-width: 900px;">
+                <h3 style="margin-bottom: 20px; color: var(--main-dark);">مرحباً بك يا بطل القمة.. مشاهدة ممتعة</h3>
+                <div class="video-wrapper">
+                    <iframe id="main-video" src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+                </div>
+                <button class="btn-gold" style="margin-top: 20px; font-size: 0.9rem; padding: 10px 30px;" onclick="location.reload()">تسجيل خروج</button>
+            </div>
+        </div>
     </section>
 
     <section class="teachers-section" id="teachers">
@@ -309,9 +345,41 @@
 
     <footer>
         <p>جميع الحقوق محفوظة &copy; سنتر القمة التعليمي النموذجي 2026</p>
+        <p style="color: var(--gold); margin-top: 10px; font-weight: bold;">تحت إدارة أبو سيف</p>
+        <p style="font-size: 0.7rem; opacity: 0.5;">تم التطوير بواسطة عبدو مكي (داعم المواهب للقران)</p>
     </footer>
 
     <script>
+        // نظام الساعة والتاريخ الذكي
+        function updateLiveClock() {
+            const now = new Date();
+            const days = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+            const dayName = days[now.getDay()];
+            const timeString = now.toLocaleTimeString('ar-EG');
+            const dateString = now.toLocaleDateString('ar-EG');
+            
+            document.getElementById('clock-time').innerText = timeString;
+            document.getElementById('clock-date').innerText = dayName + " - " + dateString;
+        }
+        setInterval(updateLiveClock, 1000);
+        updateLiveClock();
+
+        // نظام فتح المكتبة بالكود
+        function unlockLibrary() {
+            const codeInput = document.getElementById('student-code').value;
+            const lockBox = document.getElementById('lock-box');
+            const videoBox = document.getElementById('video-display');
+            
+            // الكود الموحد للدخول هو 2026 (يمكنك تغييره)
+            if(codeInput === "2026") {
+                lockBox.style.display = "none";
+                videoBox.style.display = "block";
+                alert("تم التحقق بنجاح.. مشاهدة طيبة");
+            } else {
+                alert("الكود غير صحيح! يرجى التواصل مع الإدارة.");
+            }
+        }
+
         function updatePrice() {
             const grade = document.getElementById('gradeSelect').value;
             const priceBox = document.getElementById('priceBox');
