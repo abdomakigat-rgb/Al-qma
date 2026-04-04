@@ -6,7 +6,7 @@
     <title>سنتر القمة التعليمي النموذجي | القمة مكانك</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Reem+Kufi:wght@700&display=swap" rel="stylesheet">
 
     <style>
         :root {
@@ -58,7 +58,7 @@
             transition: all 0.5s ease;
         }
 
-        /* الهيدر المطور */
+        /* الهيدر المطور (لوجو وساعة ومنيو) */
         header {
             background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(10px);
@@ -68,29 +68,35 @@
             border-bottom: 2px solid var(--gold);
         }
 
-        .logo-box img {
-            height: 55px;
+        .logo-box { display: flex; align-items: center; gap: 15px; }
+
+        /* تعديل مقاس اللوجو للظهور الكامل */
+        .logo img {
+            height: 60px; /* مقاس واضح وكامل للوجو */
             width: auto;
             border-radius: 8px;
             object-fit: contain;
         }
 
-        .menu-trigger {
+        .header-left { display: flex; align-items: center; gap: 20px; }
+
+        /* المنيو الجانبي */
+        .menu-btn {
             color: var(--gold);
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             cursor: pointer;
-            padding: 5px;
+            transition: 0.3s;
         }
 
         .side-nav {
             position: fixed;
-            top: 0; right: -280px;
+            top: 0; right: -300px;
             width: 280px; height: 100%;
             background: var(--main-dark);
             z-index: 2000;
-            transition: 0.4s;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             padding: 80px 20px;
-            box-shadow: -5px 0 20px rgba(0,0,0,0.5);
+            box-shadow: -5px 0 30px rgba(0,0,0,0.5);
         }
 
         .side-nav.active { right: 0; }
@@ -104,25 +110,26 @@
             border-radius: 8px;
             font-weight: bold;
             border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: 0.3s;
         }
 
         .side-nav a:hover { background: var(--gold); color: var(--main-dark); }
 
         .close-nav {
             position: absolute; top: 20px; left: 20px;
-            color: white; font-size: 1.8rem; cursor: pointer;
+            color: white; font-size: 2rem; cursor: pointer;
         }
 
         .live-clock {
             color: white;
             background: rgba(255,255,255,0.05);
-            padding: 5px 12px;
+            padding: 5px 15px;
             border-radius: 8px;
             border: 1px solid rgba(251, 191, 36, 0.2);
             text-align: center;
         }
-        #clock-time { color: var(--gold); font-weight: 900; font-size: 1.1rem; display: block; }
-        #clock-date { font-size: 0.7rem; opacity: 0.8; }
+        #clock-time { color: var(--gold); font-weight: 900; font-size: 1.2rem; display: block; }
+        #clock-date { font-size: 0.75rem; opacity: 0.8; }
 
         /* قسم البطل */
         .hero {
@@ -134,246 +141,163 @@
             text-align: center; color: white; padding: 20px;
         }
 
-        .hero h1 { font-size: clamp(2rem, 5vw, 4rem); font-weight: 900; }
+        .hero h1 { font-size: clamp(2rem, 6vw, 4.5rem); font-weight: 900; margin-bottom: 20px; }
 
-        /* قسم المدرسين */
-        .teachers-section { padding: 80px 5%; background: white; }
-        .teachers-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px; margin-top: 40px;
+        /* كروت المدرسين */
+        .teachers-section { padding: 100px 8%; background: #fff; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 50px; }
+        .card {
+            background: white; border-radius: 20px; padding: 30px;
+            text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: 0.4s; border: 1px solid #eee;
         }
-        .teacher-card {
-            background: var(--soft-white); border-radius: 20px; padding: 30px;
-            text-align: center; border: 1px solid #eee; transition: 0.3s;
-            position: relative; overflow: hidden;
-        }
-        .teacher-card:hover { transform: translateY(-10px); border-color: var(--gold); }
-        .teacher-card img { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--gold); margin-bottom: 15px; }
-        .subject-tag { background: var(--main-dark); color: var(--gold); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: bold; }
-        .price-tag { color: var(--gold-dark); font-weight: 900; font-size: 1.2rem; margin-top: 10px; display: block; }
+        .card:hover { transform: translateY(-10px); border-color: var(--gold); }
+        .card img { width: 110px; height: 110px; border-radius: 50%; border: 3px solid var(--gold); margin-bottom: 15px; object-fit: cover; }
+        .subject { background: var(--main-dark); color: var(--gold); padding: 4px 12px; border-radius: 8px; font-size: 0.85rem; margin-bottom: 10px; display: inline-block; }
 
-        /* استمارة التسجيل */
+        /* فورم التسجيل */
         .reg-section { padding: 80px 8%; background: var(--main-dark); color: white; }
-        form {
-            max-width: 650px; margin: 40px auto; background: var(--glass);
-            padding: 30px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .form-group { margin-bottom: 15px; text-align: right; }
+        form { max-width: 650px; margin: 40px auto; background: var(--glass); padding: 35px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); }
+        .form-group { margin-bottom: 18px; text-align: right; }
         label { display: block; margin-bottom: 8px; color: var(--gold); font-weight: bold; }
+        input, select { width: 100%; padding: 12px; border-radius: 8px; border: none; background: rgba(255,255,255,0.95); color: #333; }
 
-        input, select {
-            width: 100%; padding: 12px; margin: 5px 0;
-            border-radius: 8px; outline: none; border: none;
-            background: rgba(255,255,255,0.95); color: #333;
-        }
-
-        /* تنبيه رقم الدفع */
-        .payment-notice {
-            background: rgba(251, 191, 36, 0.15);
-            border-right: 4px solid var(--gold);
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 0.95rem;
-            color: #fff;
-            text-align: center;
-        }
-        .payment-notice strong { color: var(--gold); font-size: 1.1rem; }
-
-        .price-display {
-            background: var(--gold); color: var(--main-dark); padding: 12px;
-            border-radius: 8px; margin-bottom: 15px; text-align: center;
-            font-weight: 900; display: none; font-size: 1.1rem;
-        }
-
-        .submit-btn {
-            background: var(--gold); width: 100%; padding: 15px;
-            border-radius: 8px; border: none; font-weight: bold; cursor: pointer;
-            font-size: 1.1rem; transition: 0.3s;
-        }
+        .price-display { background: var(--gold); color: var(--main-dark); padding: 12px; border-radius: 8px; margin-bottom: 20px; text-align: center; font-weight: 900; display: none; }
+        .submit-btn { background: var(--gold); width: 100%; padding: 16px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; font-size: 1.1rem; transition: 0.3s; }
         .submit-btn:hover { background: var(--gold-dark); transform: scale(1.02); }
 
-        #screenshot-preview {
-            display: none; width: 100%; max-width: 200px; margin: 15px auto;
-            border-radius: 10px; border: 3px solid var(--gold);
-        }
-
         footer { text-align: center; padding: 40px; background: #070b14; color: #fff; }
-
+        
         #success-modal {
             display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: white; color: var(--main-dark); padding: 30px; border-radius: 20px;
+            background: white; color: var(--main-dark); padding: 40px; border-radius: 20px;
             z-index: 3000; border: 3px solid var(--gold); text-align: center;
         }
+
+        /* تنسيق المكتبة */
+        .library-section { padding: 80px 8%; background: #f1f5f9; text-align: center; }
+        .lock-container { max-width: 500px; margin: 30px auto; background: white; padding: 40px; border-radius: 20px; border: 2px solid var(--gold); }
     </style>
 </head>
 <body>
 
-    <button class="view-switcher" onclick="toggleView()">تبديل المظهر (PC/Mobile)</button>
+    <button class="view-switcher" onclick="toggleView()">
+        <i class="fas fa-desktop"></i> تبديل المظهر (PC/Mobile)
+    </button>
 
-    <header>
+    <header id="main-header">
         <div class="logo-box">
-            <img src="https://i.ibb.co/Gf63XzLz/logo.jpg" alt="سنتر القمة">
+            <img src="https://i.ibb.co/Gf63XzLz/logo.jpg" alt="لوجو سنتر القمة">
         </div>
 
-        <div class="live-clock">
-            <span id="clock-time">00:00:00</span>
-            <span id="clock-date">جاري التحميل...</span>
-        </div>
-
-        <div class="menu-trigger" onclick="toggleMenu()">
-            <i class="fas fa-ellipsis-v"></i>
+        <div class="header-left">
+            <div class="live-clock">
+                <span id="clock-time">00:00:00</span>
+                <span id="clock-date">جاري التحميل...</span>
+            </div>
+            <div class="menu-btn" onclick="toggleSideNav()">
+                <i class="fas fa-bars"></i>
+            </div>
         </div>
     </header>
 
     <div class="side-nav" id="sideNav">
-        <i class="fas fa-times close-nav" onclick="toggleMenu()"></i>
-        <a href="#" onclick="toggleMenu()">الرئيسية</a>
-        <a href="#teachers" onclick="toggleMenu()">عمالقة القمة</a>
-        <a href="#register" onclick="toggleMenu()">تسجيل جديد</a>
+        <i class="fas fa-times close-nav" onclick="toggleSideNav()"></i>
+        <a href="#" onclick="toggleSideNav()">الرئيسية</a>
+        <a href="#library" onclick="toggleSideNav()">المكتبة الرقمية</a>
+        <a href="#teachers" onclick="toggleSideNav()">عمالقة القمة</a>
+        <a href="#register" onclick="toggleSideNav()">تسجيل طالب جديد</a>
     </div>
 
     <section class="hero">
         <h1>اصنع مستقبلك في القمة</h1>
         <p>النموذج المثالي للتعليم الحديث مع أقوى نخبة من مدرسي الجمهورية.</p>
-        <a href="#register" style="text-decoration: none; display: inline-block; width: auto; padding: 15px 40px;" class="submit-btn">احجز مكانك الآن</a>
+        <a href="#register" style="text-decoration:none; display:inline-block; width:auto; padding: 15px 40px;" class="submit-btn">احجز مكانك الآن</a>
+    </section>
+
+    <section class="library-section" id="library">
+        <center><h2><i class="fas fa-play-circle"></i> المكتبة الرقمية</h2></center>
+        <div class="lock-container">
+            <i class="fas fa-lock" style="font-size: 3rem; color: #cbd5e1; margin-bottom: 20px; display: block;"></i>
+            <h3>المحتوى مخصص للطلاب</h3>
+            <p>سجل بياناتك الآن للحصول على كود تفعيل المحتوى</p>
+        </div>
     </section>
 
     <section class="teachers-section" id="teachers">
-        <center><h2>نخبة المدرسين والأسعار</h2></center>
-        <div class="teachers-grid">
-            <div class="teacher-card">
-                <img src="https://ui-avatars.com/api/?name=محمد+العدلي&background=0f172a&color=fbbf24" alt="العدلي">
-                <br><span class="subject-tag">إشراف عام</span>
+        <center><h2 style="font-size: 2.5rem;">عمالقة القمة</h2></center>
+        <div class="grid">
+            <div class="card">
+                <img src="https://ui-avatars.com/api/?name=محمد+العدلي&background=0f172a&color=fbbf24" alt="">
+                <br><span class="subject">المشرف العام</span>
                 <h3>أ/ محمد العدلي</h3>
-                <span class="price-tag">الثانوي: 150ج | الإعدادي: 80ج</span>
             </div>
-            <div class="teacher-card">
-                <img src="https://ui-avatars.com/api/?name=عبد+الرحمن&background=0f172a&color=fbbf24" alt="عبدالرحمن">
-                <br><span class="subject-tag">لغة إنجليزية</span>
+            <div class="card">
+                <img src="https://ui-avatars.com/api/?name=عبد+الرحمن&background=0f172a&color=fbbf24" alt="">
+                <br><span class="subject">اللغة الإنجليزية</span>
                 <h3>أ/ عبد الرحمن</h3>
-                <span class="price-tag">الثانوي: 140ج | الإعدادي: 70ج</span>
             </div>
-            <div class="teacher-card">
-                <img src="https://ui-avatars.com/api/?name=وليد+الضوي&background=0f172a&color=fbbf24" alt="وليد">
-                <br><span class="subject-tag">لغة عربية</span>
+            <div class="card">
+                <img src="https://ui-avatars.com/api/?name=وليد+الضوي&background=0f172a&color=fbbf24" alt="">
+                <br><span class="subject">اللغة العربية</span>
                 <h3>أ/ وليد الضوي</h3>
-                <span class="price-tag">الثانوي: 150ج | الإعدادي: 75ج</span>
             </div>
         </div>
     </section>
 
     <section class="reg-section" id="register">
         <center><h2>استمارة التسجيل والحجز</h2></center>
-        
         <form id="studentForm">
-            <div class="payment-notice">
-                <i class="fas fa-info-circle" style="color: var(--gold);"></i>
-                برجاء تحويل المبلغ على رقم فودافون كاش: <br>
-                <strong>01152956200</strong>
-            </div>
-
             <div class="form-group">
                 <label>بيانات الطالب</label>
                 <input type="text" name="name" placeholder="اسم الطالب بالكامل" required>
-                <input type="tel" name="phone" placeholder="رقم موبايل الطالب" required>
-                <input type="tel" name="parent_phone" placeholder="رقم ولي الأمر" required>
+                <input type="tel" name="phone" placeholder="رقم الموبايل" required>
                 <input type="text" name="address" placeholder="العنوان" required>
-            </div>
-
-            <div class="form-group">
-                <label>نظام الدراسة</label>
-                <select name="attendance_type" required>
-                    <option value="">اختر نظام الحضور</option>
-                    <option value="center">حضور في السنتر</option>
-                    <option value="online">أون لاين (من خلال المنصة)</option>
-                </select>
             </div>
 
             <div class="form-group">
                 <label>المرحلة الدراسية</label>
                 <select name="grade" id="gradeSelect" required onchange="updatePrice()">
                     <option value="">اختر الصف الدراسي</option>
-                    <optgroup label="ثانوي عام">
-                        <option value="s3_gen">الثالث الثانوي (عام)</option>
-                        <option value="s2_gen">الثاني الثانوي (عام)</option>
-                        <option value="s1_gen">الأول الثانوي (عام)</option>
-                    </optgroup>
-                    <optgroup label="ثانوي أزهري">
-                        <option value="s3_azhar">الثالث الثانوي (أزهر)</option>
-                        <option value="s2_azhar">الثاني الثانوي (أزهر)</option>
-                        <option value="s1_azhar">الأول الثانوي (أزهر)</option>
-                    </optgroup>
-                    <optgroup label="المرحلة الإعدادية">
-                        <option value="m3">الثالث الإعدادي</option>
-                        <option value="m2">الثاني الإعدادي</option>
-                        <option value="m1">الأول الإعدادي</option>
-                    </optgroup>
-                    <optgroup label="المرحلة الابتدائية">
-                        <option value="p">صفوف الابتدائي</option>
-                    </optgroup>
+                    <option value="s">المرحلة الثانوية</option>
+                    <option value="m">المرحلة الإعدادية</option>
+                    <option value="p">المرحلة الابتدائية</option>
                 </select>
                 <div id="priceBox" class="price-display"></div>
             </div>
 
             <div class="form-group">
-                <label>المدرس المطلوب</label>
-                <select name="teacher" required>
-                    <option value="">اختر المدرس</option>
-                    <option value="العدلي">أ/ محمد العدلي</option>
-                    <option value="عبدالرحمن">أ/ عبد الرحمن</option>
-                    <option value="الضوي">أ/ وليد الضوي</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>تفاصيل الدفع</label>
-                <select name="payment_method" required>
-                    <option value="">اختر طريقة الدفع</option>
-                    <option value="vodafone">فودافون كاش (01152956200)</option>
-                    <option value="instapay">انستا باي</option>
-                    <option value="center">دفع نقدي في السنتر</option>
-                </select>
+                <label>تحويل فودافون كاش (01152956200)</label>
                 <input type="tel" name="payment_number" placeholder="الرقم الذي تم التحويل منه">
-                
-                <label style="margin-top:10px;">إرفاق إسكرينة الدفع</label>
-                <input type="file" name="screenshot" accept="image/*" onchange="previewImage(event)">
-                <center><img id="screenshot-preview" src="#"></center>
+                <label style="margin-top:10px;">ارفق صورة التحويل</label>
+                <input type="file" name="screenshot" accept="image/*">
             </div>
 
-            <button type="submit" class="submit-btn" id="submitBtn">تأكيد الحجز في القمة</button>
+            <button type="submit" class="submit-btn" id="submitBtn">تأكيد الحجز</button>
         </form>
     </section>
 
     <div id="success-modal">
-        <i class="fas fa-check-circle" style="font-size: 3rem; color: #10b981;"></i>
-        <h2>تم الإرسال بنجاح!</h2>
-        <p>سيتم التواصل معك عبر الواتساب قريباً.</p>
-        <button class="submit-btn" onclick="location.reload()">إغلاق</button>
+        <i class="fas fa-check-circle" style="font-size: 4rem; color: #10b981;"></i>
+        <h2>تم بنجاح!</h2>
+        <p>سيتم التواصل معك لتأكيد الحجز وإرسال كود المكتبة.</p>
+        <button class="submit-btn" style="margin-top:20px;" onclick="location.reload()">إغلاق</button>
     </div>
 
     <footer>
         <p>جميع الحقوق محفوظة &copy; سنتر القمة التعليمي النموذجي 2026</p>
-        <p style="color: var(--gold); font-weight: bold;">إدارة أبو سيف | تطوير عبدو مكي</p>
+        <p style="color: var(--gold); margin-top: 10px; font-weight: bold;">إدارة أبو سيف | تطوير عبدو مكي</p>
     </footer>
 
     <script>
         const scriptURL = 'https://script.google.com/macros/s/AKfycbwR30Ou-ohpjth0Ipmpbh8u3imG2J40T24R3SD5nISKo4NWlxAj4L-cwXwrPgvbR9FV7g/exec';
 
-        function toggleMenu() {
+        function toggleSideNav() {
             document.getElementById('sideNav').classList.toggle('active');
         }
 
         function toggleView() {
             document.body.classList.toggle('mobile-view');
-        }
-
-        function previewImage(event) {
-            const preview = document.getElementById('screenshot-preview');
-            preview.src = URL.createObjectURL(event.target.files[0]);
-            preview.style.display = 'block';
         }
 
         function updateLiveClock() {
@@ -387,20 +311,9 @@
         function updatePrice() {
             const grade = document.getElementById('gradeSelect').value;
             const priceBox = document.getElementById('priceBox');
-            let price = "";
-
-            // تحديد السعر بناءً على المرحلة
-            if (grade.includes('s3')) price = "150 جنيه";
-            else if (grade.includes('s2') || grade.includes('s1')) price = "140 جنيه";
-            else if (grade.startsWith('m')) price = "80 جنيه";
-            else if (grade === 'p') price = "50 جنيه";
-
-            if (price) {
-                priceBox.innerText = "سعر الشهر لهذه المرحلة: " + price;
-                priceBox.style.display = "block";
-            } else {
-                priceBox.style.display = "none";
-            }
+            let price = grade === 's' ? "150 جنيه" : "50 جنيه";
+            priceBox.innerText = "سعر الشهر: " + price;
+            priceBox.style.display = "block";
         }
 
         const form = document.getElementById('studentForm');
@@ -416,7 +329,7 @@
                 document.getElementById('success-modal').style.display = "block";
             })
             .catch(() => {
-                alert("حدث خطأ، يرجى المحاولة مرة أخرى.");
+                alert("خطأ في الإرسال");
                 btn.disabled = false;
                 btn.innerText = "تأكيد الحجز";
             });
