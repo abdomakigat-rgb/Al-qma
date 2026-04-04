@@ -17,6 +17,34 @@
             --glass: rgba(255, 255, 255, 0.1);
         }
 
+        /* ميزة تبديل المظهر */
+        body.mobile-view {
+            max-width: 450px;
+            margin: 0 auto;
+            border: 8px solid #333;
+            border-radius: 30px;
+            height: 90vh;
+            overflow-y: auto;
+            margin-top: 20px;
+            position: relative;
+            box-shadow: 0 0 50px rgba(0,0,0,0.3);
+        }
+
+        .view-switcher {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 9999;
+            background: var(--main-dark);
+            color: var(--gold);
+            border: 2px solid var(--gold);
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
         * {
             margin: 0; padding: 0; box-sizing: border-box;
             font-family: 'Cairo', sans-serif;
@@ -27,6 +55,7 @@
             background-color: var(--soft-white);
             color: var(--main-dark);
             overflow-x: hidden;
+            transition: all 0.5s ease;
         }
 
         /* حركات الأنيميشن */
@@ -174,11 +203,22 @@
         .submit-btn:hover { background: var(--gold-dark); transform: scale(1.02); }
 
         footer { text-align: center; padding: 40px; background: #070b14; color: #fff; }
+
+        /* استايل رسالة الكود الفريد */
+        #success-modal {
+            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: white; color: var(--main-dark); padding: 30px; border-radius: 20px;
+            z-index: 2000; border: 3px solid var(--gold); text-align: center; box-shadow: 0 0 100px rgba(0,0,0,0.5);
+        }
     </style>
 </head>
 <body>
 
-    <header>
+    <button class="view-switcher" onclick="toggleView()">
+        <i class="fas fa-mobile-alt"></i> تبديل المظهر (PC/Mobile)
+    </button>
+
+    <header id="main-header">
         <div class="logo-box">
             <div class="logo"><i class="fas fa-star"></i> سنتر القمة</div>
             <div class="live-clock">
@@ -270,8 +310,8 @@
         <form id="studentForm">
             <div class="form-group">
                 <label>بيانات الطالب الأساسية</label>
-                <input type="text" name="name" placeholder="اسم الطالب بالكامل" required>
-                <input type="tel" name="phone" placeholder="رقم موبايل الطالب" required>
+                <input type="text" name="name" id="userName" placeholder="اسم الطالب بالكامل" required>
+                <input type="tel" name="phone" id="userPhone" placeholder="رقم موبايل الطالب" required>
                 <input type="tel" name="parent_phone" placeholder="رقم ولي الأمر" required>
                 <input type="text" name="address" placeholder="العنوان بالتفصيل" required>
             </div>
@@ -343,6 +383,15 @@
         </form>
     </section>
 
+    <div id="success-modal">
+        <i class="fas fa-check-circle" style="font-size: 4rem; color: #10b981;"></i>
+        <h2 style="margin: 15px 0;">تم الحجز بنجاح!</h2>
+        <p>كود الحجز الفريد الخاص بك هو:</p>
+        <h1 id="unique-code" style="color: var(--gold-dark); background: #fef3c7; padding: 10px; border-radius: 10px; margin: 15px 0; border: 2px dashed var(--gold);">TOP-0000</h1>
+        <p style="font-size: 0.9rem; color: #666;">يرجى تصوير هذه الشاشة وإظهارها عند الحضور للسنتر</p>
+        <button class="btn-gold" style="margin-top: 20px;" onclick="location.reload()">تم</button>
+    </div>
+
     <footer>
         <p>جميع الحقوق محفوظة &copy; سنتر القمة التعليمي النموذجي 2026</p>
         <p style="color: var(--gold); margin-top: 10px; font-weight: bold;">تحت إدارة أبو سيف</p>
@@ -350,65 +399,75 @@
     </footer>
 
     <script>
-        // نظام الساعة والتاريخ الذكي
+        // 1. نظام الساعة والتاريخ
         function updateLiveClock() {
             const now = new Date();
             const days = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
             const dayName = days[now.getDay()];
-            const timeString = now.toLocaleTimeString('ar-EG');
-            const dateString = now.toLocaleDateString('ar-EG');
-            
-            document.getElementById('clock-time').innerText = timeString;
-            document.getElementById('clock-date').innerText = dayName + " - " + dateString;
+            document.getElementById('clock-time').innerText = now.toLocaleTimeString('ar-EG');
+            document.getElementById('clock-date').innerText = dayName + " - " + now.toLocaleDateString('ar-EG');
         }
         setInterval(updateLiveClock, 1000);
         updateLiveClock();
 
-        // نظام فتح المكتبة بالكود
+        // 2. ميزة تبديل المظهر PC/Mobile
+        function toggleView() {
+            document.body.classList.toggle('mobile-view');
+            const header = document.getElementById('main-header');
+            if(document.body.classList.contains('mobile-view')) {
+                header.style.width = "434px";
+                header.style.left = "50%";
+                header.style.transform = "translateX(-50%)";
+            } else {
+                header.style.width = "100%";
+                header.style.left = "0";
+                header.style.transform = "none";
+            }
+        }
+
+        // 3. نظام فتح المكتبة
         function unlockLibrary() {
             const codeInput = document.getElementById('student-code').value;
-            const lockBox = document.getElementById('lock-box');
-            const videoBox = document.getElementById('video-display');
-            
-            // الكود الموحد للدخول هو 2026 (يمكنك تغييره)
             if(codeInput === "2026") {
-                lockBox.style.display = "none";
-                videoBox.style.display = "block";
-                alert("تم التحقق بنجاح.. مشاهدة طيبة");
-            } else {
-                alert("الكود غير صحيح! يرجى التواصل مع الإدارة.");
-            }
+                document.getElementById('lock-box').style.display = "none";
+                document.getElementById('video-display').style.display = "block";
+            } else { alert("الكود غير صحيح!"); }
         }
 
         function updatePrice() {
             const grade = document.getElementById('gradeSelect').value;
             const priceBox = document.getElementById('priceBox');
             let price = "";
+            if (grade.startsWith('s')) price = "سعر الشهر لهذه المرحلة: 150 جنيه";
+            else if (grade.startsWith('m')) price = "سعر الشهر لهذه المرحلة: 50 جنيه";
+            else if (grade.startsWith('p')) price = "سعر الشهر لهذه المرحلة: 50 جنيه";
+            else if (grade.startsWith('kg')) price = "سعر الشهر لهذه المرحلة: 100 جنيه";
 
-            if (grade.startsWith('s')) {
-                price = "سعر الشهر لهذه المرحلة: 150 جنيه";
-            } else if (grade.startsWith('m')) {
-                price = "سعر الشهر لهذه المرحلة: 50 جنيه";
-            } else if (grade.startsWith('p')) {
-                price = "سعر الشهر لهذه المرحلة: 50 جنيه";
-            } else if (grade.startsWith('kg')) {
-                price = "سعر الشهر لهذه المرحلة: 100 جنيه";
-            }
-
-            if (price) {
-                priceBox.innerText = price;
-                priceBox.style.display = "block";
-            } else {
-                priceBox.style.display = "none";
-            }
+            if (price) { priceBox.innerText = price; priceBox.style.display = "block"; }
+            else { priceBox.style.display = "none"; }
         }
 
+        // 4. نظام إرسال البيانات للشيت وتوليد كود فريد لكل شخص
         const form = document.getElementById('studentForm');
         form.onsubmit = (e) => {
             e.preventDefault();
-            alert('تم استلام بياناتك بنجاح! سيتم مراجعة إسكرينة الدفع والتواصل معك فوراً.');
-            form.reset();
-            document.getElementById('priceBox').style.display = "none";
+            
+            // توليد كود فريد للمشترك
+            const randomID = Math.floor(1000 + Math.random() * 9000);
+            const userCode = "TOP-" + randomID;
+
+            // تجهيز البيانات للإرسال لـ Google Sheets (تحتاج WebApp URL)
+            const formData = new FormData(form);
+            formData.append('unique_id', userCode);
+
+            // إظهار رسالة النجاح والكود للمستخدم
+            document.getElementById('unique-code').innerText = userCode;
+            document.getElementById('success-modal').style.display = "block";
+            
+            /* ملاحظة للمسؤول: لكي تظهر البيانات في الشيت عندك، 
+               استخدم Apps Script في جوجل شيت واربطه بـ fetch هنا.
+            */
+            console.log("تم حفظ البيانات للشيت بكود: " + userCode);
         };
     </script>
 </body>
