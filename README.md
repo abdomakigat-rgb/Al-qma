@@ -169,6 +169,19 @@
             background: rgba(255,255,255,0.95); color: #333;
         }
 
+        /* تنبيه رقم الدفع */
+        .payment-notice {
+            background: rgba(251, 191, 36, 0.15);
+            border-right: 4px solid var(--gold);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            color: #fff;
+            text-align: center;
+        }
+        .payment-notice strong { color: var(--gold); font-size: 1.1rem; }
+
         .price-display {
             background: var(--gold); color: var(--main-dark); padding: 12px;
             border-radius: 8px; margin-bottom: 15px; text-align: center;
@@ -256,6 +269,12 @@
         <center><h2>استمارة التسجيل والحجز</h2></center>
         
         <form id="studentForm">
+            <div class="payment-notice">
+                <i class="fas fa-info-circle" style="color: var(--gold);"></i>
+                برجاء تحويل المبلغ على رقم فودافون كاش: <br>
+                <strong>01152956200</strong>
+            </div>
+
             <div class="form-group">
                 <label>بيانات الطالب</label>
                 <input type="text" name="name" placeholder="اسم الطالب بالكامل" required>
@@ -370,6 +389,7 @@
             const priceBox = document.getElementById('priceBox');
             let price = "";
 
+            // تحديد السعر بناءً على المرحلة
             if (grade.includes('s3')) price = "150 جنيه";
             else if (grade.includes('s2') || grade.includes('s1')) price = "140 جنيه";
             else if (grade.startsWith('m')) price = "80 جنيه";
