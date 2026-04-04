@@ -80,6 +80,17 @@
             font-family: 'Reem Kufi', sans-serif;
             color: var(--gold);
             font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 2px solid var(--gold);
+            object-fit: cover;
         }
 
         /* تنسيق الساعة الجديد */
@@ -183,6 +194,16 @@
         
         input[type="file"] { background: transparent; color: white; border: 1px dashed var(--gold); }
 
+        /* معاينة الصورة */
+        #screenshot-preview {
+            display: none;
+            width: 100%;
+            max-width: 200px;
+            margin: 10px auto;
+            border-radius: 10px;
+            border: 2px solid var(--gold);
+        }
+
         .price-display {
             background: var(--gold); color: var(--main-dark); padding: 10px;
             border-radius: 8px; margin-bottom: 15px; text-align: center;
@@ -220,7 +241,10 @@
 
     <header id="main-header">
         <div class="logo-box">
-            <div class="logo"><i class="fas fa-star"></i> سنتر القمة</div>
+            <div class="logo">
+                <img src="https://ibb.co/Gf63XzLz" alt="اللوجو" onerror="this.src='https://ui-avatars.com/api/?name=القمة&background=fbbf24&color=0f172a'">
+                سنتر القمة
+            </div>
             <div class="live-clock">
                 <span id="clock-time">00:00:00</span>
                 <span id="clock-date">اليوم - التاريخ</span>
@@ -376,7 +400,8 @@
                 </select>
                 <input type="tel" name="payment_number" placeholder="الرقم الذي تم التحويل منه">
                 <label style="margin-top: 10px;">رفع إسكرينة الدفع (صورة التحويل)</label>
-                <input type="file" name="screenshot" accept="image/*">
+                <input type="file" name="screenshot" id="screenshotInput" accept="image/*" onchange="previewImage(event)">
+                <center><img id="screenshot-preview" src="#" alt="معاينة الصورة"></center>
             </div>
 
             <button type="submit" class="submit-btn" id="submitBtn">تأكيد الحجز في القمة</button>
@@ -398,8 +423,23 @@
     </footer>
 
     <script>
-        // الرابط الخاص بك
         const scriptURL = 'https://script.google.com/macros/s/AKfycbwR30Ou-ohpjth0Ipmpbh8u3imG2J40T24R3SD5nISKo4NWlxAj4L-cwXwrPgvbR9FV7g/exec';
+
+        // وظيفة معاينة الصورة
+        function previewImage(event) {
+            const preview = document.getElementById('screenshot-preview');
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function() {
+                preview.src = reader.result;
+                preview.style.display = 'block';
+            }
+
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        }
 
         // 1. نظام الساعة والتاريخ
         function updateLiveClock() {
@@ -453,20 +493,16 @@
         const form = document.getElementById('studentForm');
         form.onsubmit = (e) => {
             e.preventDefault();
-            
-            // تغيير نص الزر للتوضيح
             const btn = document.getElementById('submitBtn');
             btn.innerText = "جاري الإرسال...";
             btn.disabled = true;
 
-            // توليد الكود العشوائي
             const randomID = Math.floor(1000 + Math.random() * 9000);
             const userCodeForAdmin = "TOP-" + randomID;
 
             const formData = new FormData(form);
             formData.append('student_secret_code', userCodeForAdmin);
 
-            // إرسال البيانات عبر Fetch
             fetch(scriptURL, { method: 'POST', body: formData})
             .then(response => {
                 document.getElementById('success-modal').style.display = "block";
