@@ -379,7 +379,7 @@
                 <input type="file" name="screenshot" accept="image/*">
             </div>
 
-            <button type="submit" class="submit-btn">تأكيد الحجز في القمة</button>
+            <button type="submit" class="submit-btn" id="submitBtn">تأكيد الحجز في القمة</button>
         </form>
     </section>
 
@@ -398,6 +398,9 @@
     </footer>
 
     <script>
+        // الرابط الخاص بك
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbwR30Ou-ohpjth0Ipmpbh8u3imG2J40T24R3SD5nISKo4NWlxAj4L-cwXwrPgvbR9FV7g/exec';
+
         // 1. نظام الساعة والتاريخ
         function updateLiveClock() {
             const now = new Date();
@@ -427,7 +430,6 @@
         // 3. نظام فتح المكتبة
         function unlockLibrary() {
             const codeInput = document.getElementById('student-code').value;
-            // هنا تضع الأكواد التي تريدها أن تعمل يدوياً (أو تربطها بقاعدة بيانات لاحقاً)
             if(codeInput === "TOP-ADMIN-2026") { 
                 document.getElementById('lock-box').style.display = "none";
                 document.getElementById('video-display').style.display = "block";
@@ -447,29 +449,35 @@
             else { priceBox.style.display = "none"; }
         }
 
-        // 4. نظام إرسال البيانات للشيت "بدون إظهار الكود للطالب"
+        // 4. نظام إرسال البيانات الفعلي لشيت جوجل
         const form = document.getElementById('studentForm');
         form.onsubmit = (e) => {
             e.preventDefault();
             
-            // الموقع يُنشئ كود عشوائي للطالب داخلياً فقط
+            // تغيير نص الزر للتوضيح
+            const btn = document.getElementById('submitBtn');
+            btn.innerText = "جاري الإرسال...";
+            btn.disabled = true;
+
+            // توليد الكود العشوائي
             const randomID = Math.floor(1000 + Math.random() * 9000);
             const userCodeForAdmin = "TOP-" + randomID;
 
-            // تجهيز البيانات للإرسال
             const formData = new FormData(form);
-            formData.append('student_secret_code', userCodeForAdmin); // هذا الكود سيذهب للشيت عندك فقط
+            formData.append('student_secret_code', userCodeForAdmin);
 
-            // إظهار رسالة النجاح للطالب "بدون الكود"
-            document.getElementById('success-modal').style.display = "block";
-            
-            // هنا يتم الربط بـ Google Apps Script ليرسل البيانات للشيت
-            console.log("تم إرسال البيانات للإدارة. الكود المُنشأ للمراجعة: " + userCodeForAdmin);
-            
-            /* ملاحظة لمكي: 
-               لكي تصلك هذه البيانات في جوجل شيت فعلياً، 
-               تحتاج لاستخدام Fetch API مع رابط Web App من Apps Script.
-            */
+            // إرسال البيانات عبر Fetch
+            fetch(scriptURL, { method: 'POST', body: formData})
+            .then(response => {
+                document.getElementById('success-modal').style.display = "block";
+                console.log("تم الحفظ بنجاح!");
+            })
+            .catch(error => {
+                alert("حدث خطأ أثناء الإرسال، يرجى المحاولة لاحقاً.");
+                btn.innerText = "تأكيد الحجز في القمة";
+                btn.disabled = false;
+                console.error('Error!', error.message);
+            });
         };
     </script>
 </body>
