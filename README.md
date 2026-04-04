@@ -17,7 +17,6 @@
             --glass: rgba(255, 255, 255, 0.1);
         }
 
-        /* ميزة تبديل المظهر */
         body.mobile-view {
             max-width: 450px;
             margin: 0 auto;
@@ -58,13 +57,11 @@
             transition: all 0.5s ease;
         }
 
-        /* حركات الأنيميشن */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* الهيدر الزجاجي المطور */
         header {
             background: rgba(15, 23, 42, 0.9);
             backdrop-filter: blur(10px);
@@ -93,7 +90,6 @@
             object-fit: cover;
         }
 
-        /* تنسيق الساعة الجديد */
         .live-clock {
             color: white;
             background: rgba(255,255,255,0.05);
@@ -114,7 +110,6 @@
         }
         .nav-links a:hover { color: var(--gold); }
 
-        /* قسم البطل (Hero) */
         .hero {
             height: 100vh;
             background: linear-gradient(45deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.8)), 
@@ -130,7 +125,6 @@
             animation: fadeIn 1s ease-out;
         }
 
-        /* قسم المكتبة الرقمية (جديد) */
         .library-section { padding: 80px 8%; background: #f1f5f9; text-align: center; }
         .lock-container {
             max-width: 500px; margin: 30px auto; background: white;
@@ -149,7 +143,6 @@
         }
         .btn-gold:hover { transform: scale(1.1); background: var(--gold-dark); }
 
-        /* كروت المدرسين */
         .teachers-section { padding: 100px 8%; background: #fff; }
         .grid {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -175,7 +168,6 @@
             display: inline-block; margin-bottom: 10px;
         }
 
-        /* فورم التسجيل */
         .reg-section { padding: 80px 8%; background: var(--main-dark); color: white; }
         form {
             max-width: 650px; margin: 40px auto; background: var(--glass);
@@ -194,14 +186,14 @@
         
         input[type="file"] { background: transparent; color: white; border: 1px dashed var(--gold); }
 
-        /* معاينة الصورة */
         #screenshot-preview {
             display: none;
             width: 100%;
             max-width: 200px;
-            margin: 10px auto;
+            margin: 15px auto;
             border-radius: 10px;
-            border: 2px solid var(--gold);
+            border: 3px solid var(--gold);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
 
         .price-display {
@@ -225,7 +217,6 @@
 
         footer { text-align: center; padding: 40px; background: #070b14; color: #fff; }
 
-        /* استايل رسالة الكود الفريد المعدل لعدم إظهار الكود */
         #success-modal {
             display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
             background: white; color: var(--main-dark); padding: 30px; border-radius: 20px;
@@ -242,7 +233,7 @@
     <header id="main-header">
         <div class="logo-box">
             <div class="logo">
-                <img src="https://ibb.co/Gf63XzLz" alt="اللوجو" onerror="this.src='https://ui-avatars.com/api/?name=القمة&background=fbbf24&color=0f172a'">
+                <img src="https://i.ibb.co/Gf63XzLz/logo.jpg" alt="سنتر القمة" onerror="this.src='https://ui-avatars.com/api/?name=القمة&background=fbbf24&color=0f172a'">
                 سنتر القمة
             </div>
             <div class="live-clock">
@@ -399,9 +390,13 @@
                     <option value="offline">الدفع في السنتر (الحضور)</option>
                 </select>
                 <input type="tel" name="payment_number" placeholder="الرقم الذي تم التحويل منه">
+                
                 <label style="margin-top: 10px;">رفع إسكرينة الدفع (صورة التحويل)</label>
                 <input type="file" name="screenshot" id="screenshotInput" accept="image/*" onchange="previewImage(event)">
-                <center><img id="screenshot-preview" src="#" alt="معاينة الصورة"></center>
+                
+                <center>
+                    <img id="screenshot-preview" src="#" alt="إسكرينة الدفع">
+                </center>
             </div>
 
             <button type="submit" class="submit-btn" id="submitBtn">تأكيد الحجز في القمة</button>
@@ -425,7 +420,7 @@
     <script>
         const scriptURL = 'https://script.google.com/macros/s/AKfycbwR30Ou-ohpjth0Ipmpbh8u3imG2J40T24R3SD5nISKo4NWlxAj4L-cwXwrPgvbR9FV7g/exec';
 
-        // وظيفة معاينة الصورة
+        // وظيفة إظهار معاينة الصورة فور اختيارها
         function previewImage(event) {
             const preview = document.getElementById('screenshot-preview');
             const file = event.target.files[0];
@@ -441,7 +436,6 @@
             }
         }
 
-        // 1. نظام الساعة والتاريخ
         function updateLiveClock() {
             const now = new Date();
             const days = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
@@ -452,7 +446,6 @@
         setInterval(updateLiveClock, 1000);
         updateLiveClock();
 
-        // 2. ميزة تبديل المظهر PC/Mobile
         function toggleView() {
             document.body.classList.toggle('mobile-view');
             const header = document.getElementById('main-header');
@@ -467,7 +460,6 @@
             }
         }
 
-        // 3. نظام فتح المكتبة
         function unlockLibrary() {
             const codeInput = document.getElementById('student-code').value;
             if(codeInput === "TOP-ADMIN-2026") { 
@@ -489,7 +481,6 @@
             else { priceBox.style.display = "none"; }
         }
 
-        // 4. نظام إرسال البيانات الفعلي لشيت جوجل
         const form = document.getElementById('studentForm');
         form.onsubmit = (e) => {
             e.preventDefault();
@@ -503,16 +494,20 @@
             const formData = new FormData(form);
             formData.append('student_secret_code', userCodeForAdmin);
 
-            fetch(scriptURL, { method: 'POST', body: formData})
-            .then(response => {
+            // تحسين عملية الإرسال لتقليل الأخطاء
+            fetch(scriptURL, { 
+                method: 'POST', 
+                body: formData,
+                mode: 'no-cors' // حل لمشاكل الـ CORS في بعض المتصفحات
+            })
+            .then(() => {
                 document.getElementById('success-modal').style.display = "block";
-                console.log("تم الحفظ بنجاح!");
+                btn.innerText = "تم الإرسال بنجاح";
             })
             .catch(error => {
-                alert("حدث خطأ أثناء الإرسال، يرجى المحاولة لاحقاً.");
+                alert("عذراً، حدث خطأ. تأكد من اتصال الإنترنت أو رابط السكربت.");
                 btn.innerText = "تأكيد الحجز في القمة";
                 btn.disabled = false;
-                console.error('Error!', error.message);
             });
         };
     </script>
