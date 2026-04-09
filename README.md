@@ -423,9 +423,28 @@
                 <label>المرحلة الدراسية</label>
                 <select name="grade" id="gradeSelect" required onchange="updatePrice()">
                     <option value="">اختر الصف الدراسي</option>
-                    <option value="s">المرحلة الثانوية</option>
-                    <option value="m">المرحلة الإعدادية</option>
-                    <option value="p">المرحلة الابتدائية</option>
+                    <optgroup label="مرحلة الحضانة">
+                        <option value="p">أولى حضانة (KG1)</option>
+                        <option value="p">تانية حضانة (KG2)</option>
+                    </optgroup>
+                    <optgroup label="المرحلة الابتدائية">
+                        <option value="p">الصف الأول الابتدائي</option>
+                        <option value="p">الصف الثاني الابتدائي</option>
+                        <option value="p">الصف الثالث الابتدائي</option>
+                        <option value="p">الصف الرابع الابتدائي</option>
+                        <option value="p">الصف الخامس الابتدائي</option>
+                        <option value="p">الصف السادس الابتدائي</option>
+                    </optgroup>
+                    <optgroup label="المرحلة الإعدادية">
+                        <option value="m">الصف الأول الإعدادي</option>
+                        <option value="m">الصف الثاني الإعدادي</option>
+                        <option value="m">الصف الثالث الإعدادي</option>
+                    </optgroup>
+                    <optgroup label="المرحلة الثانوية">
+                        <option value="s">الصف الأول الثانوي</option>
+                        <option value="s">الصف الثاني الثانوي</option>
+                        <option value="s">الصف الثالث الثانوي</option>
+                    </optgroup>
                 </select>
                 <div id="priceBox" class="price-display"></div>
             </div>
@@ -475,9 +494,17 @@
         function updatePrice() {
             const grade = document.getElementById('gradeSelect').value;
             const priceBox = document.getElementById('priceBox');
-            let price = grade === 's' ? "150 جنيه" : "50 جنيه";
-            priceBox.innerText = "سعر الشهر: " + price;
-            priceBox.style.display = "block";
+            let price = "";
+            if(grade === 's') price = "150 جنيه";
+            else if(grade === 'm') price = "50 جنيه";
+            else if(grade === 'p') price = "30 جنيه";
+            
+            if(price !== "") {
+                priceBox.innerText = "سعر الشهر: " + price;
+                priceBox.style.display = "block";
+            } else {
+                priceBox.style.display = "none";
+            }
         }
 
         const form = document.getElementById('studentForm');
