@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>سنتر القمة التعليمي النموذجي | القمة مكانك</title>
-    
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Reem+Kufi:wght@700&display=swap" rel="stylesheet">
 
     <style>
+        /* المتغيرات العامة */
         :root {
             --main-dark: #0f172a;
             --gold: #fbbf24;
@@ -17,7 +18,23 @@
             --glass: rgba(255, 255, 255, 0.1);
         }
 
-        /* ميزة تبديل المظهر */
+        /* الإعدادات الأساسية */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--soft-white);
+            color: var(--main-dark);
+            overflow-x: hidden;
+            transition: all 0.5s ease;
+        }
+
+        /* ميزة تبديل المظهر المحاكي للموبايل */
         body.mobile-view {
             max-width: 450px;
             margin: 0 auto;
@@ -45,40 +62,39 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
 
-        * {
-            margin: 0; padding: 0; box-sizing: border-box;
-            font-family: 'Cairo', sans-serif;
-            scroll-behavior: smooth;
-        }
-
-        body {
-            background-color: var(--soft-white);
-            color: var(--main-dark);
-            overflow-x: hidden;
-            transition: all 0.5s ease;
-        }
-
-        /* الهيدر المطور (لوجو وساعة ومنيو) */
+        /* الهيدر المطور */
         header {
             background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(10px);
             padding: 10px 5%;
-            position: fixed; width: 100%; top: 0; z-index: 1000;
-            display: flex; justify-content: space-between; align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             border-bottom: 2px solid var(--gold);
         }
 
-        .logo-box { display: flex; align-items: center; gap: 15px; }
+        .logo-box {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
 
-        /* تعديل مقاس اللوجو للظهور الكامل */
         .logo img {
-            height: 60px; /* مقاس واضح وكامل للوجو */
+            height: 60px;
             width: auto;
             border-radius: 8px;
             object-fit: contain;
         }
 
-        .header-left { display: flex; align-items: center; gap: 20px; }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
 
         /* المنيو الجانبي */
         .menu-btn {
@@ -90,8 +106,10 @@
 
         .side-nav {
             position: fixed;
-            top: 0; right: -300px;
-            width: 280px; height: 100%;
+            top: 0;
+            right: -300px;
+            width: 280px;
+            height: 100%;
             background: var(--main-dark);
             z-index: 2000;
             transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -99,7 +117,9 @@
             box-shadow: -5px 0 30px rgba(0,0,0,0.5);
         }
 
-        .side-nav.active { right: 0; }
+        .side-nav.active {
+            right: 0;
+        }
 
         .side-nav a {
             display: block;
@@ -113,13 +133,21 @@
             transition: 0.3s;
         }
 
-        .side-nav a:hover { background: var(--gold); color: var(--main-dark); }
-
-        .close-nav {
-            position: absolute; top: 20px; left: 20px;
-            color: white; font-size: 2rem; cursor: pointer;
+        .side-nav a:hover {
+            background: var(--gold);
+            color: var(--main-dark);
         }
 
+        .close-nav {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        /* الساعة الحية */
         .live-clock {
             color: white;
             background: rgba(255,255,255,0.05);
@@ -128,55 +156,191 @@
             border: 1px solid rgba(251, 191, 36, 0.2);
             text-align: center;
         }
-        #clock-time { color: var(--gold); font-weight: 900; font-size: 1.2rem; display: block; }
-        #clock-date { font-size: 0.75rem; opacity: 0.8; }
 
-        /* قسم البطل */
+        #clock-time {
+            color: var(--gold);
+            font-weight: 900;
+            font-size: 1.2rem;
+            display: block;
+        }
+
+        #clock-date {
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+
+        /* قسم البطل (Hero Section) */
         .hero {
             height: 100vh;
             background: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.85)), 
                         url('https://images.unsplash.com/photo-1513258496099-48168024aec0?auto=format&fit=crop&w=1350&q=80');
-            background-size: cover; background-position: center;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            text-align: center; color: white; padding: 20px;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 20px;
         }
 
-        .hero h1 { font-size: clamp(2rem, 6vw, 4.5rem); font-weight: 900; margin-bottom: 20px; }
+        .hero h1 {
+            font-size: clamp(2rem, 6vw, 4.5rem);
+            font-weight: 900;
+            margin-bottom: 20px;
+        }
 
         /* كروت المدرسين */
-        .teachers-section { padding: 100px 8%; background: #fff; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 50px; }
-        .card {
-            background: white; border-radius: 20px; padding: 30px;
-            text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            transition: 0.4s; border: 1px solid #eee;
+        .teachers-section {
+            padding: 100px 8%;
+            background: #fff;
         }
-        .card:hover { transform: translateY(-10px); border-color: var(--gold); }
-        .card img { width: 110px; height: 110px; border-radius: 50%; border: 3px solid var(--gold); margin-bottom: 15px; object-fit: cover; }
-        .subject { background: var(--main-dark); color: var(--gold); padding: 4px 12px; border-radius: 8px; font-size: 0.85rem; margin-bottom: 10px; display: inline-block; }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: 0.4s;
+            border: 1px solid #eee;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: var(--gold);
+        }
+
+        .card img {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            border: 3px solid var(--gold);
+            margin-bottom: 15px;
+            object-fit: cover;
+        }
+
+        .subject {
+            background: var(--main-dark);
+            color: var(--gold);
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
 
         /* فورم التسجيل */
-        .reg-section { padding: 80px 8%; background: var(--main-dark); color: white; }
-        form { max-width: 650px; margin: 40px auto; background: var(--glass); padding: 35px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); }
-        .form-group { margin-bottom: 18px; text-align: right; }
-        label { display: block; margin-bottom: 8px; color: var(--gold); font-weight: bold; }
-        input, select { width: 100%; padding: 12px; border-radius: 8px; border: none; background: rgba(255,255,255,0.95); color: #333; }
-
-        .price-display { background: var(--gold); color: var(--main-dark); padding: 12px; border-radius: 8px; margin-bottom: 20px; text-align: center; font-weight: 900; display: none; }
-        .submit-btn { background: var(--gold); width: 100%; padding: 16px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; font-size: 1.1rem; transition: 0.3s; }
-        .submit-btn:hover { background: var(--gold-dark); transform: scale(1.02); }
-
-        footer { text-align: center; padding: 40px; background: #070b14; color: #fff; }
-        
-        #success-modal {
-            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: white; color: var(--main-dark); padding: 40px; border-radius: 20px;
-            z-index: 3000; border: 3px solid var(--gold); text-align: center;
+        .reg-section {
+            padding: 80px 8%;
+            background: var(--main-dark);
+            color: white;
         }
 
-        /* تنسيق المكتبة */
-        .library-section { padding: 80px 8%; background: #f1f5f9; text-align: center; }
-        .lock-container { max-width: 500px; margin: 30px auto; background: white; padding: 40px; border-radius: 20px; border: 2px solid var(--gold); }
+        form {
+            max-width: 650px;
+            margin: 40px auto;
+            background: var(--glass);
+            padding: 35px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+            text-align: right;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--gold);
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            background: rgba(255,255,255,0.95);
+            color: #333;
+        }
+
+        .price-display {
+            background: var(--gold);
+            color: var(--main-dark);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 900;
+            display: none;
+        }
+
+        .submit-btn {
+            background: var(--gold);
+            width: 100%;
+            padding: 16px;
+            border-radius: 8px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: var(--gold-dark);
+            transform: scale(1.02);
+        }
+
+        /* المكتبة الرقمية */
+        .library-section {
+            padding: 80px 8%;
+            background: #f1f5f9;
+            text-align: center;
+        }
+
+        .lock-container {
+            max-width: 500px;
+            margin: 30px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid var(--gold);
+        }
+
+        /* فوتر ومودال النجاح */
+        footer {
+            text-align: center;
+            padding: 40px;
+            background: #070b14;
+            color: #fff;
+        }
+        
+        #success-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            color: var(--main-dark);
+            padding: 40px;
+            border-radius: 20px;
+            z-index: 3000;
+            border: 3px solid var(--gold);
+            text-align: center;
+        }
     </style>
 </head>
 <body>
