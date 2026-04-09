@@ -7,6 +7,7 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Reem+Kufi:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
     <style>
         /* المتغيرات العامة */
@@ -16,6 +17,7 @@
             --gold-dark: #d97706;
             --soft-white: #f8fafc;
             --glass: rgba(255, 255, 255, 0.1);
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         /* الإعدادات الأساسية */
@@ -31,42 +33,43 @@
             background-color: var(--soft-white);
             color: var(--main-dark);
             overflow-x: hidden;
-            transition: all 0.5s ease;
+            transition: var(--transition);
         }
 
-        /* ميزة تبديل المظهر المحاكي للموبايل */
+        /* تحسين ميزة تبديل المظهر */
         body.mobile-view {
             max-width: 450px;
-            margin: 0 auto;
-            border: 8px solid #333;
-            border-radius: 30px;
-            height: 90vh;
+            margin: 40px auto;
+            border: 12px solid #1e293b;
+            border-radius: 40px;
+            height: 850px;
             overflow-y: auto;
-            margin-top: 20px;
             position: relative;
-            box-shadow: 0 0 50px rgba(0,0,0,0.3);
+            box-shadow: 0 0 100px rgba(0,0,0,0.5);
         }
 
         .view-switcher {
             position: fixed;
-            bottom: 20px;
-            left: 20px;
+            bottom: 30px;
+            left: 30px;
             z-index: 9999;
-            background: var(--main-dark);
+            background: linear-gradient(135deg, var(--main-dark), #1e293b);
             color: var(--gold);
             border: 2px solid var(--gold);
-            padding: 10px 20px;
+            padding: 12px 24px;
             border-radius: 50px;
             cursor: pointer;
             font-weight: bold;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            transition: var(--transition);
         }
+        .view-switcher:hover { transform: scale(1.1); background: var(--gold); color: var(--main-dark); }
 
         /* الهيدر المطور */
         header {
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 10px 5%;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(15px);
+            padding: 15px 6%;
             position: fixed;
             width: 100%;
             top: 0;
@@ -74,108 +77,84 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid var(--gold);
+            border-bottom: 3px solid var(--gold);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.1);
         }
 
-        .logo-box {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .logo img {
-            height: 60px;
+        .logo-box img {
+            height: 65px;
             width: auto;
-            border-radius: 8px;
-            object-fit: contain;
+            filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.3));
+            transition: 0.5s;
         }
+        .logo-box img:hover { transform: rotate(-5deg) scale(1.05); }
 
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
+        .header-left { display: flex; align-items: center; gap: 25px; }
 
         /* المنيو الجانبي */
         .menu-btn {
             color: var(--gold);
-            font-size: 1.8rem;
+            font-size: 2rem;
             cursor: pointer;
-            transition: 0.3s;
+            transition: var(--transition);
         }
+        .menu-btn:hover { transform: scale(1.2); color: white; }
 
         .side-nav {
             position: fixed;
             top: 0;
-            right: -300px;
-            width: 280px;
+            right: -320px;
+            width: 300px;
             height: 100%;
-            background: var(--main-dark);
+            background: linear-gradient(180deg, var(--main-dark) 0%, #1e293b 100%);
             z-index: 2000;
-            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            padding: 80px 20px;
-            box-shadow: -5px 0 30px rgba(0,0,0,0.5);
+            transition: 0.5s cubic-bezier(0.7, 0, 0.3, 1);
+            padding: 100px 25px;
+            box-shadow: -10px 0 40px rgba(0,0,0,0.6);
         }
 
-        .side-nav.active {
-            right: 0;
-        }
+        .side-nav.active { right: 0; }
 
         .side-nav a {
-            display: block;
+            display: flex;
+            align-items: center;
+            gap: 15px;
             color: white;
             text-decoration: none;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            font-weight: bold;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            transition: 0.3s;
+            padding: 18px;
+            margin-bottom: 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            background: rgba(255,255,255,0.03);
+            transition: var(--transition);
         }
 
-        .side-nav a:hover {
-            background: var(--gold);
-            color: var(--main-dark);
-        }
+        .side-nav a:hover { background: var(--gold); color: var(--main-dark); padding-right: 30px; }
 
         .close-nav {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            color: white;
-            font-size: 2rem;
-            cursor: pointer;
+            position: absolute; top: 30px; left: 30px;
+            color: var(--gold); font-size: 2.2rem; cursor: pointer;
         }
 
         /* الساعة الحية */
         .live-clock {
             color: white;
-            background: rgba(255,255,255,0.05);
-            padding: 5px 15px;
-            border-radius: 8px;
-            border: 1px solid rgba(251, 191, 36, 0.2);
+            background: rgba(255,255,255,0.08);
+            padding: 8px 18px;
+            border-radius: 12px;
+            border-right: 4px solid var(--gold);
             text-align: center;
         }
-
-        #clock-time {
-            color: var(--gold);
-            font-weight: 900;
-            font-size: 1.2rem;
-            display: block;
-        }
-
-        #clock-date {
-            font-size: 0.75rem;
-            opacity: 0.8;
-        }
+        #clock-time { color: var(--gold); font-weight: 900; font-size: 1.3rem; }
 
         /* قسم البطل (Hero Section) */
         .hero {
             height: 100vh;
-            background: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.85)), 
-                        url('https://images.unsplash.com/photo-1513258496099-48168024aec0?auto=format&fit=crop&w=1350&q=80');
+            background: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.8)), 
+                        url('https://images.unsplash.com/photo-1523050853051-be991f85a6ad?auto=format&fit=crop&w=1350&q=80');
             background-size: cover;
             background-position: center;
+            background-attachment: fixed;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -186,167 +165,139 @@
         }
 
         .hero h1 {
-            font-size: clamp(2rem, 6vw, 4.5rem);
+            font-size: clamp(2.5rem, 8vw, 5rem);
             font-weight: 900;
-            margin-bottom: 20px;
+            text-shadow: 0 10px 20px rgba(0,0,0,0.4);
+            margin-bottom: 25px;
+            line-height: 1.2;
         }
 
-        /* كروت المدرسين */
-        .teachers-section {
-            padding: 100px 8%;
-            background: #fff;
+        /* قسم المميزات - إضافة جديدة للتطوير */
+        .features {
+            display: flex;
+            gap: 20px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            margin-top: 50px;
-        }
-
-        .card {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            transition: 0.4s;
-            border: 1px solid #eee;
-        }
-
-        .card:hover {
-            transform: translateY(-10px);
-            border-color: var(--gold);
-        }
-
-        .card img {
-            width: 110px;
-            height: 110px;
-            border-radius: 50%;
-            border: 3px solid var(--gold);
-            margin-bottom: 15px;
-            object-fit: cover;
-        }
-
-        .subject {
-            background: var(--main-dark);
-            color: var(--gold);
-            padding: 4px 12px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            margin-bottom: 10px;
-            display: inline-block;
-        }
-
-        /* فورم التسجيل */
-        .reg-section {
-            padding: 80px 8%;
-            background: var(--main-dark);
-            color: white;
-        }
-
-        form {
-            max-width: 650px;
-            margin: 40px auto;
+        .feat-card {
             background: var(--glass);
-            padding: 35px;
-            border-radius: 20px;
+            padding: 15px 25px;
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
             border: 1px solid rgba(255,255,255,0.1);
         }
 
-        .form-group {
-            margin-bottom: 18px;
-            text-align: right;
+        /* كروت المدرسين */
+        .teachers-section { padding: 100px 8%; background: #fff; position: relative; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin-top: 60px; }
+        
+        .card {
+            background: white; border-radius: 25px; padding: 40px;
+            text-align: center; box-shadow: 0 20px 40px rgba(15,23,42,0.05);
+            transition: var(--transition); border: 1px solid #f1f5f9;
+            position: relative; overflow: hidden;
+        }
+        .card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px;
+            background: var(--gold); transform: scaleX(0); transition: 0.4s;
+        }
+        .card:hover { transform: translateY(-15px); box-shadow: 0 30px 60px rgba(15,23,42,0.12); }
+        .card:hover::before { transform: scaleX(1); }
+        
+        .card img {
+            width: 130px; height: 130px; border-radius: 50%; 
+            border: 4px solid var(--gold); margin-bottom: 20px; 
+            object-fit: cover; transition: 0.5s;
+        }
+        .card:hover img { transform: scale(1.1) rotate(5deg); }
+
+        .subject {
+            background: #f1f5f9; color: var(--main-dark); 
+            padding: 6px 16px; border-radius: 50px; 
+            font-size: 0.9rem; font-weight: 700; margin-bottom: 15px; display: inline-block;
         }
 
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--gold);
-            font-weight: bold;
+        /* فورم التسجيل المطور */
+        .reg-section { padding: 100px 8%; background: var(--main-dark); color: white; position: relative; }
+        .reg-section::after {
+            content: 'TOP'; position: absolute; top: 50px; right: 50px; font-size: 10rem;
+            font-weight: 900; color: rgba(255,255,255,0.03); z-index: 0;
         }
 
+        form {
+            max-width: 700px; margin: 0 auto; background: rgba(30, 41, 59, 0.7);
+            padding: 50px; border-radius: 30px; border: 1px solid rgba(251, 191, 36, 0.2);
+            backdrop-filter: blur(10px); position: relative; z-index: 1;
+        }
+
+        .form-group { margin-bottom: 25px; }
         input, select {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: none;
-            background: rgba(255,255,255,0.95);
-            color: #333;
+            width: 100%; padding: 15px; border-radius: 12px; border: 2px solid transparent;
+            background: rgba(255,255,255,0.05); color: white; transition: 0.3s;
         }
+        input:focus, select:focus {
+            border-color: var(--gold); background: rgba(255,255,255,0.1); outline: none;
+        }
+        input::placeholder { color: rgba(255,255,255,0.4); }
+        select option { background: var(--main-dark); color: white; }
 
         .price-display {
-            background: var(--gold);
-            color: var(--main-dark);
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            text-align: center;
-            font-weight: 900;
-            display: none;
+            background: linear-gradient(90deg, var(--gold), var(--gold-dark));
+            color: var(--main-dark); padding: 15px; border-radius: 12px;
+            margin-bottom: 25px; text-align: center; font-weight: 900; 
+            font-size: 1.2rem; display: none; animation: pulse 2s infinite;
         }
 
         .submit-btn {
-            background: var(--gold);
-            width: 100%;
-            padding: 16px;
-            border-radius: 8px;
-            border: none;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 1.1rem;
-            transition: 0.3s;
+            background: var(--gold); width: 100%; padding: 20px; border-radius: 12px;
+            border: none; font-weight: 900; cursor: pointer; font-size: 1.2rem;
+            color: var(--main-dark); transition: var(--transition);
+            box-shadow: 0 10px 20px rgba(251, 191, 36, 0.2);
         }
-
-        .submit-btn:hover {
-            background: var(--gold-dark);
-            transform: scale(1.02);
-        }
+        .submit-btn:hover { background: white; transform: translateY(-3px); box-shadow: 0 15px 30px rgba(251, 191, 36, 0.4); }
 
         /* المكتبة الرقمية */
-        .library-section {
-            padding: 80px 8%;
-            background: #f1f5f9;
-            text-align: center;
-        }
-
+        .library-section { padding: 100px 8%; background: #f8fafc; text-align: center; }
         .lock-container {
-            max-width: 500px;
-            margin: 30px auto;
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            border: 2px solid var(--gold);
+            max-width: 550px; margin: 40px auto; background: white; padding: 60px;
+            border-radius: 30px; box-shadow: 0 30px 60px rgba(0,0,0,0.05);
+            border-bottom: 8px solid var(--gold);
         }
 
-        /* فوتر ومودال النجاح */
+        /* فوتر */
         footer {
-            text-align: center;
-            padding: 40px;
-            background: #070b14;
-            color: #fff;
+            text-align: center; padding: 60px; background: #020617; color: #fff;
+            border-top: 1px solid rgba(255,255,255,0.05);
         }
-        
+
+        /* مودال النجاح */
         #success-modal {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            color: var(--main-dark);
-            padding: 40px;
-            border-radius: 20px;
-            z-index: 3000;
-            border: 3px solid var(--gold);
-            text-align: center;
+            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: white; color: var(--main-dark); padding: 50px; border-radius: 30px;
+            z-index: 3000; border: 4px solid var(--gold); text-align: center;
+            box-shadow: 0 0 100px rgba(0,0,0,0.5); width: 90%; max-width: 500px;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        /* تحسينات الشاشات الصغيرة */
+        @media (max-width: 768px) {
+            header { padding: 10px 4%; }
+            .logo-box img { height: 50px; }
+            .live-clock { display: none; }
+            form { padding: 30px 20px; }
         }
     </style>
 </head>
 <body>
 
     <button class="view-switcher" onclick="toggleView()">
-        <i class="fas fa-desktop"></i> تبديل المظهر (PC/Mobile)
+        <i class="fas fa-mobile-alt"></i> وضع العرض المتطور
     </button>
 
     <header id="main-header">
@@ -360,67 +311,79 @@
                 <span id="clock-date">جاري التحميل...</span>
             </div>
             <div class="menu-btn" onclick="toggleSideNav()">
-                <i class="fas fa-bars"></i>
+                <i class="fas fa-th-large"></i>
             </div>
         </div>
     </header>
 
     <div class="side-nav" id="sideNav">
         <i class="fas fa-times close-nav" onclick="toggleSideNav()"></i>
-        <a href="#" onclick="toggleSideNav()">الرئيسية</a>
-        <a href="#library" onclick="toggleSideNav()">المكتبة الرقمية</a>
-        <a href="#teachers" onclick="toggleSideNav()">عمالقة القمة</a>
-        <a href="#register" onclick="toggleSideNav()">تسجيل طالب جديد</a>
+        <a href="#" onclick="toggleSideNav()"><i class="fas fa-home"></i> الرئيسية</a>
+        <a href="#library" onclick="toggleSideNav()"><i class="fas fa-book"></i> المكتبة الرقمية</a>
+        <a href="#teachers" onclick="toggleSideNav()"><i class="fas fa-user-tie"></i> عمالقة القمة</a>
+        <a href="#register" onclick="toggleSideNav()"><i class="fas fa-user-plus"></i> تسجيل طالب جديد</a>
     </div>
 
     <section class="hero">
-        <h1>اصنع مستقبلك في القمة</h1>
-        <p>النموذج المثالي للتعليم الحديث مع أقوى نخبة من مدرسي الجمهورية.</p>
-        <a href="#register" style="text-decoration:none; display:inline-block; width:auto; padding: 15px 40px;" class="submit-btn">احجز مكانك الآن</a>
+        <h1 class="animate__animated animate__fadeInDown">اصنع مستقبلك في القمة</h1>
+        <p class="animate__animated animate__fadeInUp">النموذج المثالي للتعليم الحديث مع أقوى نخبة من مدرسي الجمهورية.</p>
+        
+        <div class="features animate__animated animate__fadeInUp animate__delay-1s">
+            <div class="feat-card"><i class="fas fa-star color-gold"></i> جودة تعليمية</div>
+            <div class="feat-card"><i class="fas fa-laptop"></i> حصص أونلاين</div>
+            <div class="feat-card"><i class="fas fa-check-double"></i> متابعة دورية</div>
+        </div>
+
+        <a href="#register" style="text-decoration:none; margin-top: 40px;" class="submit-btn animate__animated animate__zoomIn animate__delay-2s">احجز مكانك الآن</a>
     </section>
 
     <section class="library-section" id="library">
-        <center><h2><i class="fas fa-play-circle"></i> المكتبة الرقمية</h2></center>
+        <center><h2 style="font-size: 2.5rem; margin-bottom: 20px;"><i class="fas fa-play-circle" style="color:var(--gold)"></i> المكتبة الرقمية</h2></center>
         <div class="lock-container">
-            <i class="fas fa-lock" style="font-size: 3rem; color: #cbd5e1; margin-bottom: 20px; display: block;"></i>
+            <i class="fas fa-lock animate__animated animate__bounceIn" style="font-size: 4rem; color: #cbd5e1; margin-bottom: 25px; display: block;"></i>
             <h3>المحتوى مخصص للطلاب</h3>
-            <p>سجل بياناتك الآن للحصول على كود تفعيل المحتوى</p>
+            <p>سجل بياناتك الآن للحصول على كود تفعيل المحتوى والدخول للمنصة</p>
         </div>
     </section>
 
     <section class="teachers-section" id="teachers">
-        <center><h2 style="font-size: 2.5rem;">عمالقة القمة</h2></center>
+        <center><h2 style="font-size: 3rem; font-weight: 900;">عمالقة القمة</h2><p style="color: #64748b;">نخبة من أفضل المعلمين في مختلف التخصصات</p></center>
         <div class="grid">
             <div class="card">
                 <img src="https://ui-avatars.com/api/?name=محمد+العدلي&background=0f172a&color=fbbf24" alt="">
                 <br><span class="subject">المشرف العام</span>
                 <h3>أ/ محمد العدلي</h3>
+                <p style="font-size: 0.9rem; color: #64748b; margin-top: 10px;">خبرة أكثر من 15 عاماً في الإدارة التعليمية.</p>
             </div>
             <div class="card">
                 <img src="https://ui-avatars.com/api/?name=عبد+الرحمن&background=0f172a&color=fbbf24" alt="">
                 <br><span class="subject">اللغة الإنجليزية</span>
                 <h3>أ/ عبد الرحمن</h3>
+                <p style="font-size: 0.9rem; color: #64748b; margin-top: 10px;">خبير المناهج الدولية واللغات.</p>
             </div>
             <div class="card">
                 <img src="https://ui-avatars.com/api/?name=وليد+الضوي&background=0f172a&color=fbbf24" alt="">
                 <br><span class="subject">اللغة العربية</span>
                 <h3>أ/ وليد الضوي</h3>
+                <p style="font-size: 0.9rem; color: #64748b; margin-top: 10px;">سيد البلاغة والنحو للمرحلة الثانوية.</p>
             </div>
         </div>
     </section>
 
     <section class="reg-section" id="register">
-        <center><h2>استمارة التسجيل والحجز</h2></center>
+        <center><h2 style="font-size: 2.5rem; margin-bottom: 40px;">استمارة التسجيل والحجز</h2></center>
         <form id="studentForm">
             <div class="form-group">
-                <label>بيانات الطالب</label>
+                <label><i class="fas fa-user"></i> بيانات الطالب</label>
                 <input type="text" name="name" placeholder="اسم الطالب بالكامل" required>
-                <input type="tel" name="phone" placeholder="رقم الموبايل" required>
-                <input type="text" name="address" placeholder="العنوان" required>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+                    <input type="tel" name="phone" placeholder="رقم الموبايل" required>
+                    <input type="text" name="address" placeholder="العنوان" required>
+                </div>
             </div>
 
             <div class="form-group">
-                <label>المرحلة الدراسية</label>
+                <label><i class="fas fa-graduation-cap"></i> المرحلة الدراسية</label>
                 <select name="grade" id="gradeSelect" required onchange="updatePrice()">
                     <option value="">اختر الصف الدراسي</option>
                     <optgroup label="مرحلة الحضانة">
@@ -450,26 +413,31 @@
             </div>
 
             <div class="form-group">
-                <label>تحويل فودافون كاش (01152956200)</label>
+                <label><i class="fas fa-wallet"></i> تحويل فودافون كاش (01152956200)</label>
                 <input type="tel" name="payment_number" placeholder="الرقم الذي تم التحويل منه">
-                <label style="margin-top:10px;">ارفق صورة التحويل</label>
-                <input type="file" name="screenshot" accept="image/*">
+                <label style="margin-top:15px;"><i class="fas fa-image"></i> ارفق صورة التحويل (لقطة شاشة)</label>
+                <input type="file" name="screenshot" accept="image/*" style="padding: 10px;">
             </div>
 
-            <button type="submit" class="submit-btn" id="submitBtn">تأكيد الحجز</button>
+            <button type="submit" class="submit-btn" id="submitBtn">تأكيد الحجز الآن</button>
         </form>
     </section>
 
     <div id="success-modal">
-        <i class="fas fa-check-circle" style="font-size: 4rem; color: #10b981;"></i>
-        <h2>تم بنجاح!</h2>
-        <p>سيتم التواصل معك لتأكيد الحجز وإرسال كود المكتبة.</p>
-        <button class="submit-btn" style="margin-top:20px;" onclick="location.reload()">إغلاق</button>
+        <i class="fas fa-check-circle" style="font-size: 5rem; color: #10b981; margin-bottom: 20px; display: block;"></i>
+        <h2 style="font-weight: 900;">تم استلام طلبك بنجاح!</h2>
+        <p style="margin: 15px 0; color: #64748b;">فريق القمة سيقوم بمراجعة الطلب والتواصل معك خلال 24 ساعة لتسليمك كود المكتبة.</p>
+        <button class="submit-btn" onclick="location.reload()">العودة للرئيسية</button>
     </div>
 
     <footer>
+        <div style="margin-bottom: 30px;">
+            <i class="fab fa-facebook fa-2x" style="margin: 0 15px; color: var(--gold); cursor: pointer;"></i>
+            <i class="fab fa-whatsapp fa-2x" style="margin: 0 15px; color: var(--gold); cursor: pointer;"></i>
+            <i class="fab fa-youtube fa-2x" style="margin: 0 15px; color: var(--gold); cursor: pointer;"></i>
+        </div>
         <p>جميع الحقوق محفوظة &copy; سنتر القمة التعليمي النموذجي 2026</p>
-        <p style="color: var(--gold); margin-top: 10px; font-weight: bold;">إدارة أبو سيف | تطوير عبدو مكي</p>
+        <p style="color: var(--gold); margin-top: 15px; font-weight: bold; letter-spacing: 1px;">إدارة أبو سيف | تطوير عبدو مكي</p>
     </footer>
 
     <script>
@@ -481,11 +449,15 @@
 
         function toggleView() {
             document.body.classList.toggle('mobile-view');
+            const btn = document.querySelector('.view-switcher');
+            btn.innerHTML = document.body.classList.contains('mobile-view') ? 
+                '<i class="fas fa-desktop"></i> العرض الكامل' : '<i class="fas fa-mobile-alt"></i> وضع العرض المتطور';
         }
 
         function updateLiveClock() {
             const now = new Date();
-            document.getElementById('clock-time').innerText = now.toLocaleTimeString('ar-EG');
+            const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+            document.getElementById('clock-time').innerText = now.toLocaleTimeString('ar-EG', timeOptions);
             document.getElementById('clock-date').innerText = now.toLocaleDateString('ar-EG', {weekday:'long', day:'numeric', month:'long'});
         }
         setInterval(updateLiveClock, 1000);
@@ -500,8 +472,9 @@
             else if(grade === 'p') price = "30 جنيه";
             
             if(price !== "") {
-                priceBox.innerText = "سعر الشهر: " + price;
+                priceBox.innerText = "قيمة الاشتراك الشهري: " + price;
                 priceBox.style.display = "block";
+                priceBox.classList.add('animate__animated', 'animate__fadeIn');
             } else {
                 priceBox.style.display = "none";
             }
@@ -511,18 +484,19 @@
         form.onsubmit = (e) => {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
-            btn.innerText = "جاري الإرسال...";
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري معالجة طلبك...';
             btn.disabled = true;
 
             const formData = new FormData(form);
             fetch(scriptURL, { method: 'POST', body: formData, mode: 'no-cors' })
             .then(() => {
                 document.getElementById('success-modal').style.display = "block";
+                window.scrollTo({top: 0, behavior: 'smooth'});
             })
             .catch(() => {
-                alert("خطأ في الإرسال");
+                alert("عذراً، حدث خطأ أثناء الإرسال. يرجى المحاولة مرة أخرى.");
                 btn.disabled = false;
-                btn.innerText = "تأكيد الحجز";
+                btn.innerText = "تأكيد الحجز الآن";
             });
         };
     </script>
