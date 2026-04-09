@@ -10,13 +10,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
     <style>
-        /* المتغيرات العامة */
+        /* المتغيرات العامة المحدثة لألوان أكثر احترافية */
         :root {
             --main-dark: #0f172a;
+            --deep-blue: #1e293b;
             --gold: #fbbf24;
-            --gold-dark: #d97706;
+            --gold-glow: #fcd34d;
             --soft-white: #f8fafc;
-            --glass: rgba(255, 255, 255, 0.1);
+            --glass: rgba(255, 255, 255, 0.05);
             --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -36,7 +37,7 @@
             transition: var(--transition);
         }
 
-        /* شاشة التحميل (إضافة جديدة) */
+        /* شاشة التحميل */
         #loader {
             position: fixed;
             width: 100%;
@@ -49,9 +50,9 @@
             transition: 0.5s;
         }
         .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid var(--glass);
+            width: 60px;
+            height: 60px;
+            border: 6px solid var(--glass);
             border-top-color: var(--gold);
             border-radius: 50%;
             animation: spin 1s linear infinite;
@@ -75,21 +76,21 @@
             bottom: 30px;
             left: 30px;
             z-index: 9999;
-            background: linear-gradient(135deg, var(--main-dark), #1e293b);
+            background: linear-gradient(135deg, var(--main-dark), var(--deep-blue));
             color: var(--gold);
             border: 2px solid var(--gold);
             padding: 12px 24px;
             border-radius: 50px;
             cursor: pointer;
             font-weight: bold;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
             transition: var(--transition);
         }
         .view-switcher:hover { transform: scale(1.1); background: var(--gold); color: var(--main-dark); }
 
         /* الهيدر المطور */
         header {
-            background: rgba(15, 23, 42, 0.9);
+            background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(15px);
             padding: 15px 6%;
             position: fixed;
@@ -99,17 +100,16 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 3px solid var(--gold);
-            box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+            border-bottom: 2px solid var(--gold);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.2);
         }
 
         .logo-box img {
             height: 65px;
             width: auto;
-            filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.3));
+            filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.4));
             transition: 0.5s;
         }
-        .logo-box img:hover { transform: rotate(-5deg) scale(1.05); }
 
         .header-left { display: flex; align-items: center; gap: 25px; }
 
@@ -120,7 +120,6 @@
             cursor: pointer;
             transition: var(--transition);
         }
-        .menu-btn:hover { transform: scale(1.2); color: white; }
 
         .side-nav {
             position: fixed;
@@ -128,7 +127,7 @@
             right: -320px;
             width: 300px;
             height: 100%;
-            background: linear-gradient(180deg, var(--main-dark) 0%, #1e293b 100%);
+            background: linear-gradient(180deg, var(--main-dark) 0%, var(--deep-blue) 100%);
             z-index: 2000;
             transition: 0.5s cubic-bezier(0.7, 0, 0.3, 1);
             padding: 100px 25px;
@@ -151,7 +150,7 @@
             transition: var(--transition);
         }
 
-        .side-nav a:hover { background: var(--gold); color: var(--main-dark); padding-right: 30px; }
+        .side-nav a:hover { background: var(--gold); color: var(--main-dark); }
 
         .close-nav {
             position: absolute; top: 30px; left: 30px;
@@ -172,8 +171,8 @@
         /* قسم البطل (Hero Section) */
         .hero {
             height: 100vh;
-            background: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.8)), 
-                        url('https://images.unsplash.com/photo-1523050853051-be991f85a6ad?auto=format&fit=crop&w=1350&q=80');
+            background: linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.85)), 
+                        url('https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1350&q=80');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -189,12 +188,10 @@
         .hero h1 {
             font-size: clamp(2.5rem, 8vw, 5rem);
             font-weight: 900;
-            text-shadow: 0 10px 20px rgba(0,0,0,0.4);
+            text-shadow: 0 10px 30px rgba(0,0,0,0.5);
             margin-bottom: 25px;
-            line-height: 1.2;
         }
 
-        /* قسم المميزات - إضافة جديدة للتطوير */
         .features {
             display: flex;
             gap: 20px;
@@ -206,116 +203,87 @@
             background: var(--glass);
             padding: 15px 25px;
             border-radius: 15px;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,0.1);
+            color: var(--gold);
+            font-weight: bold;
         }
 
         /* كروت المدرسين */
-        .teachers-section { padding: 100px 8%; background: #fff; position: relative; }
+        .teachers-section { padding: 100px 8%; background: #fff; }
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin-top: 60px; }
         
         .card {
             background: white; border-radius: 25px; padding: 40px;
-            text-align: center; box-shadow: 0 20px 40px rgba(15,23,42,0.05);
+            text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.05);
             transition: var(--transition); border: 1px solid #f1f5f9;
-            position: relative; overflow: hidden;
         }
-        .card::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px;
-            background: var(--gold); transform: scaleX(0); transition: 0.4s;
-        }
-        .card:hover { transform: translateY(-15px); box-shadow: 0 30px 60px rgba(15,23,42,0.12); }
-        .card:hover::before { transform: scaleX(1); }
+        .card:hover { transform: translateY(-10px); box-shadow: 0 30px 60px rgba(0,0,0,0.1); border-color: var(--gold); }
         
         .card img {
-            width: 130px; height: 130px; border-radius: 50%; 
+            width: 140px; height: 140px; border-radius: 50%; 
             border: 4px solid var(--gold); margin-bottom: 20px; 
-            object-fit: cover; transition: 0.5s;
+            object-fit: cover;
         }
-        .card:hover img { transform: scale(1.1) rotate(5deg); }
 
         .subject {
-            background: #f1f5f9; color: var(--main-dark); 
+            background: var(--main-dark); color: var(--gold); 
             padding: 6px 16px; border-radius: 50px; 
-            font-size: 0.9rem; font-weight: 700; margin-bottom: 15px; display: inline-block;
+            font-size: 0.9rem; font-weight: 700; display: inline-block; margin-bottom: 15px;
         }
 
-        /* فورم التسجيل المطور */
-        .reg-section { padding: 100px 8%; background: var(--main-dark); color: white; position: relative; }
-        .reg-section::after {
-            content: 'TOP'; position: absolute; top: 50px; right: 50px; font-size: 10rem;
-            font-weight: 900; color: rgba(255,255,255,0.03); z-index: 0;
-        }
-
+        /* فورم التسجيل المطور بألوان جذابة */
+        .reg-section { padding: 100px 8%; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: white; position: relative; }
+        
         form {
-            max-width: 700px; margin: 0 auto; background: rgba(30, 41, 59, 0.7);
-            padding: 50px; border-radius: 30px; border: 1px solid rgba(251, 191, 36, 0.2);
-            backdrop-filter: blur(10px); position: relative; z-index: 1;
+            max-width: 800px; margin: 0 auto; background: rgba(255, 255, 255, 0.03);
+            padding: 60px; border-radius: 40px; border: 1px solid rgba(251, 191, 36, 0.2);
+            backdrop-filter: blur(20px); position: relative; z-index: 1;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.4);
         }
 
-        .form-group { margin-bottom: 25px; }
+        .form-group { margin-bottom: 30px; }
+        .form-group label { display: block; margin-bottom: 12px; font-weight: 700; color: var(--gold); font-size: 1.1rem; }
+        
         input, select, textarea {
-            width: 100%; padding: 15px; border-radius: 12px; border: 2px solid transparent;
-            background: rgba(255,255,255,0.05); color: white; transition: 0.3s;
+            width: 100%; padding: 18px; border-radius: 15px; border: 2px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05); color: white; transition: 0.3s; font-size: 1rem;
         }
         input:focus, select:focus, textarea:focus {
-            border-color: var(--gold); background: rgba(255,255,255,0.1); outline: none;
+            border-color: var(--gold); background: rgba(255,255,255,0.1); outline: none; box-shadow: 0 0 15px rgba(251, 191, 36, 0.2);
         }
-        input::placeholder { color: rgba(255,255,255,0.4); }
-        select option { background: var(--main-dark); color: white; }
 
-        /* تحسينات إضافية للفورم */
-        .secondary-fields { display: none; margin-top: 15px; animation: fadeIn 0.5s; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-
-        .price-display {
-            background: linear-gradient(90deg, var(--gold), var(--gold-dark));
-            color: var(--main-dark); padding: 15px; border-radius: 12px;
-            margin-bottom: 25px; text-align: center; font-weight: 900; 
-            font-size: 1.2rem; display: none; animation: pulse 2s infinite;
+        .dynamic-info {
+            display: none; background: rgba(251, 191, 36, 0.1);
+            border: 2px dashed var(--gold); border-radius: 15px;
+            padding: 20px; margin-top: 20px; text-align: center;
+            animation: fadeInDown 0.5s;
         }
+
+        .price-tag { font-size: 1.8rem; font-weight: 900; color: var(--gold); display: block; margin-top: 10px; }
+        .teacher-tag { font-size: 1.2rem; font-weight: 700; color: #fff; }
 
         .submit-btn {
-            background: var(--gold); width: 100%; padding: 20px; border-radius: 12px;
-            border: none; font-weight: 900; cursor: pointer; font-size: 1.2rem;
+            background: var(--gold); width: 100%; padding: 22px; border-radius: 15px;
+            border: none; font-weight: 900; cursor: pointer; font-size: 1.3rem;
             color: var(--main-dark); transition: var(--transition);
-            box-shadow: 0 10px 20px rgba(251, 191, 36, 0.2);
+            box-shadow: 0 15px 30px rgba(251, 191, 36, 0.3);
         }
-        .submit-btn:hover { background: white; transform: translateY(-3px); box-shadow: 0 15px 30px rgba(251, 191, 36, 0.4); }
-
-        /* المكتبة الرقمية */
-        .library-section { padding: 100px 8%; background: #f8fafc; text-align: center; }
-        .lock-container {
-            max-width: 550px; margin: 40px auto; background: white; padding: 60px;
-            border-radius: 30px; box-shadow: 0 30px 60px rgba(0,0,0,0.05);
-            border-bottom: 8px solid var(--gold);
-        }
+        .submit-btn:hover { background: white; transform: translateY(-5px); }
 
         /* فوتر */
         footer {
             text-align: center; padding: 60px; background: #020617; color: #fff;
-            border-top: 1px solid rgba(255,255,255,0.05);
+            border-top: 3px solid var(--gold);
         }
 
-        /* مودال النجاح */
         #success-modal {
             display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
             background: white; color: var(--main-dark); padding: 50px; border-radius: 30px;
-            z-index: 3000; border: 4px solid var(--gold); text-align: center;
-            box-shadow: 0 0 100px rgba(0,0,0,0.5); width: 90%; max-width: 500px;
+            z-index: 3000; border: 4px solid var(--gold); text-align: center; width: 90%; max-width: 500px;
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-            100% { transform: scale(1); }
-        }
-
-        /* تحسينات الشاشات الصغيرة */
         @media (max-width: 768px) {
-            header { padding: 10px 4%; }
-            .logo-box img { height: 50px; }
-            .live-clock { display: none; }
             form { padding: 30px 20px; }
             .form-row { grid-template-columns: 1fr; }
         }
@@ -340,7 +308,7 @@
                 <span id="clock-date">جاري التحميل...</span>
             </div>
             <div class="menu-btn" onclick="toggleSideNav()">
-                <i class="fas fa-th-large"></i>
+                <i class="fas fa-bars"></i>
             </div>
         </div>
     </header>
@@ -348,126 +316,102 @@
     <div class="side-nav" id="sideNav">
         <i class="fas fa-times close-nav" onclick="toggleSideNav()"></i>
         <a href="#" onclick="toggleSideNav()"><i class="fas fa-home"></i> الرئيسية</a>
-        <a href="#library" onclick="toggleSideNav()"><i class="fas fa-book"></i> المكتبة الرقمية</a>
         <a href="#teachers" onclick="toggleSideNav()"><i class="fas fa-user-tie"></i> عمالقة القمة</a>
         <a href="#register" onclick="toggleSideNav()"><i class="fas fa-user-plus"></i> تسجيل طالب جديد</a>
     </div>
 
     <section class="hero">
         <h1 class="animate__animated animate__fadeInDown">اصنع مستقبلك في القمة</h1>
-        <p class="animate__animated animate__fadeInUp">النموذج المثالي للتعليم الحديث مع أقوى نخبة من مدرسي الجمهورية.</p>
+        <p class="animate__animated animate__fadeInUp">النموذج المثالي للتعليم الحديث تحت إشراف عمالقة الجمهورية.</p>
         
         <div class="features animate__animated animate__fadeInUp animate__delay-1s">
-            <div class="feat-card"><i class="fas fa-star" style="color:var(--gold)"></i> جودة تعليمية</div>
-            <div class="feat-card"><i class="fas fa-laptop"></i> حصص أونلاين</div>
-            <div class="feat-card"><i class="fas fa-check-double"></i> متابعة دورية</div>
+            <div class="feat-card"><i class="fas fa-award"></i> تعليم أزهري وعام</div>
+            <div class="feat-card"><i class="fas fa-microchip"></i> أنظمة حديثة</div>
+            <div class="feat-card"><i class="fas fa-users"></i> عمالقة التدريس</div>
         </div>
 
         <a href="#register" style="text-decoration:none; margin-top: 40px;" class="submit-btn animate__animated animate__zoomIn animate__delay-2s">احجز مكانك الآن</a>
     </section>
 
-    <section class="library-section" id="library">
-        <center><h2 style="font-size: 2.5rem; margin-bottom: 20px;"><i class="fas fa-play-circle" style="color:var(--gold)"></i> المكتبة الرقمية</h2></center>
-        <div class="lock-container">
-            <i class="fas fa-lock animate__animated animate__bounceIn" style="font-size: 4rem; color: #cbd5e1; margin-bottom: 25px; display: block;"></i>
-            <h3>المحتوى مخصص للطلاب</h3>
-            <p>سجل بياناتك الآن للحصول على كود تفعيل المحتوى والدخول للمنصة</p>
-        </div>
-    </section>
-
     <section class="teachers-section" id="teachers">
-        <center><h2 style="font-size: 3rem; font-weight: 900;">عمالقة القمة</h2><p style="color: #64748b;">نخبة من أفضل المعلمين في مختلف التخصصات</p></center>
+        <center><h2 style="font-size: 3rem; font-weight: 900; color: var(--main-dark);">عمالقة القمة</h2></center>
         <div class="grid">
             <div class="card">
                 <img src="https://ui-avatars.com/api/?name=محمد+العدلي&background=0f172a&color=fbbf24" alt="">
-                <br><span class="subject">المشرف العام</span>
-                <h3>أ/ محمد العدلي</h3>
-                <p style="font-size: 0.9rem; color: #64748b; margin-top: 10px;">خبرة أكثر من 15 عاماً في الإدارة التعليمية.</p>
-            </div>
-            <div class="card">
-                <img src="https://ui-avatars.com/api/?name=عبد+الرحمن&background=0f172a&color=fbbf24" alt="">
                 <br><span class="subject">اللغة الإنجليزية</span>
-                <h3>أ/ عبد الرحمن</h3>
-                <p style="font-size: 0.9rem; color: #64748b; margin-top: 10px;">خبير المناهج الدولية واللغات.</p>
+                <h3>أ/ محمد العدلي</h3>
+                <p style="color: #64748b; margin-top: 10px;">خبير اللغة الإنجليزية للمرحلتين العامة والأزهرية.</p>
             </div>
             <div class="card">
                 <img src="https://ui-avatars.com/api/?name=وليد+الضوي&background=0f172a&color=fbbf24" alt="">
                 <br><span class="subject">اللغة العربية</span>
                 <h3>أ/ وليد الضوي</h3>
-                <p style="font-size: 0.9rem; color: #64748b; margin-top: 10px;">سيد البلاغة والنحو للمرحلة الثانوية.</p>
+                <p style="color: #64748b; margin-top: 10px;">سيد البلاغة والنحو في الوطن العربي.</p>
+            </div>
+            <div class="card">
+                <img src="https://ui-avatars.com/api/?name=عبد+الرحمن&background=0f172a&color=fbbf24" alt="">
+                <br><span class="subject">تأسيس لغات</span>
+                <h3>أ/ عبد الرحمن</h3>
+                <p style="color: #64748b; margin-top: 10px;">متخصص المناهج الحديثة واللغات.</p>
             </div>
         </div>
     </section>
 
     <section class="reg-section" id="register">
-        <center><h2 style="font-size: 2.5rem; margin-bottom: 40px;">استمارة التسجيل والحجز</h2></center>
+        <center><h2 style="font-size: 2.5rem; margin-bottom: 40px;">استمارة التسجيل الذكية</h2></center>
         <form id="studentForm">
             <div class="form-group">
-                <label><i class="fas fa-user-graduate"></i> بيانات الطالب الشخصية</label>
-                <input type="text" name="name" placeholder="اسم الطالب بالكامل كما هو في الشهادة" required>
-                <div class="form-row" style="margin-top: 15px;">
-                    <input type="tel" name="phone" placeholder="رقم موبايل الطالب" required>
+                <label><i class="fas fa-user-circle"></i> المعلومات الشخصية</label>
+                <input type="text" name="name" placeholder="اسم الطالب بالكامل" required>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+                    <input type="tel" name="phone" placeholder="رقم الهاتف" required>
                     <input type="tel" name="parent_phone" placeholder="رقم ولي الأمر" required>
                 </div>
             </div>
 
             <div class="form-group">
-                <label><i class="fas fa-graduation-cap"></i> المرحلة والمستوى الدراسي</label>
-                <select name="grade" id="gradeSelect" required onchange="handleGradeChange()">
-                    <option value="">اختر الصف الدراسي</option>
-                    <optgroup label="مرحلة الحضانة">
-                        <option value="p">أولى حضانة (KG1)</option>
-                        <option value="p">تانية حضانة (KG2)</option>
-                    </optgroup>
-                    <optgroup label="المرحلة الابتدائية">
-                        <option value="p">الصف الأول الابتدائي</option>
-                        <option value="p">الصف الثاني الابتدائي</option>
-                        <option value="p">الصف الثالث الابتدائي</option>
-                        <option value="p">الصف الرابع الابتدائي</option>
-                        <option value="p">الصف الخامس الابتدائي</option>
-                        <option value="p">الصف السادس الابتدائي</option>
-                    </optgroup>
-                    <optgroup label="المرحلة الإعدادية">
-                        <option value="m">الصف الأول الإعدادي</option>
-                        <option value="m">الصف الثاني الإعدادي</option>
-                        <option value="m">الصف الثالث الإعدادي</option>
-                    </optgroup>
-                    <optgroup label="المرحلة الثانوية">
-                        <option value="s">الصف الأول الثانوي</option>
-                        <option value="s">الصف الثاني الثانوي</option>
-                        <option value="s">الصف الثالث الثانوي</option>
-                    </optgroup>
+                <label><i class="fas fa-university"></i> نوع التعليم والصف</label>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                    <select name="edu_type" required>
+                        <option value="عام">ثانوي عام</option>
+                        <option value="أزهر">ثانوي أزهري</option>
+                    </select>
+                    <select name="grade" id="gradeSelect" required onchange="updateSystem()">
+                        <option value="">اختر الصف الدراسي</option>
+                        <optgroup label="المرحلة الابتدائية">
+                            <option value="p1">الصف الأول الابتدائي</option>
+                            <option value="p6">الصف السادس الابتدائي</option>
+                        </optgroup>
+                        <optgroup label="المرحلة الإعدادية">
+                            <option value="m1">الصف الأول الإعدادي</option>
+                            <option value="m3">الصف الثالث الإعدادي</option>
+                        </optgroup>
+                        <optgroup label="المرحلة الثانوية">
+                            <option value="s1">الصف الأول الثانوي</option>
+                            <option value="s2">الصف الثاني الثانوي</option>
+                            <option value="s3">الصف الثالث الثانوي</option>
+                        </optgroup>
+                    </select>
+                </div>
+                
+                <label><i class="fas fa-book-open"></i> المادة المطلوبة</label>
+                <select name="subject" id="subjectSelect" required onchange="updateSystem()">
+                    <option value="">اختر المادة</option>
+                    <option value="english">اللغة الإنجليزية</option>
+                    <option value="arabic">اللغة العربية</option>
+                    <option value="math">الرياضيات</option>
                 </select>
 
-                <div id="secondaryFields" class="secondary-fields">
-                    <div class="form-row">
-                        <select name="branch">
-                            <option value="">اختر الشعبة</option>
-                            <option value="علمي">علمي (علوم/رياضة)</option>
-                            <option value="أدبي">أدبي</option>
-                            <option value="عام">عام (أولى ثانوي)</option>
-                        </select>
-                        <select name="language">
-                            <option value="">اللغة الثانية</option>
-                            <option value="فرنساوي">فرنساوي</option>
-                            <option value="ألماني">ألماني</option>
-                            <option value="إيطالي">إيطالي</option>
-                        </select>
-                    </div>
+                <div id="infoBox" class="dynamic-info">
+                    <div class="teacher-tag"><i class="fas fa-chalkboard-teacher"></i> المدرس المختص: <span id="teacherName">---</span></div>
+                    <div class="price-tag" id="classPrice">00 جنيه</div>
                 </div>
-                <div id="priceBox" class="price-display"></div>
             </div>
 
             <div class="form-group">
-                <label><i class="fas fa-map-marker-alt"></i> العنوان بالتفصيل</label>
-                <textarea name="address" rows="2" placeholder="القرية/المدينة - اسم الشارع - علامة مميزة" required></textarea>
-            </div>
-
-            <div class="form-group">
-                <label><i class="fas fa-wallet"></i> تحويل فودافون كاش (01152956200)</label>
-                <input type="tel" name="payment_number" placeholder="رقم المحفظة المحول منها">
-                <label style="margin-top:15px;"><i class="fas fa-camera"></i> إثبات الدفع (Screenshot)</label>
-                <input type="file" name="screenshot" accept="image/*" style="padding: 10px;">
+                <label><i class="fas fa-wallet"></i> بيانات الدفع (فودافون كاش: 01152956200)</label>
+                <input type="tel" name="payment_number" placeholder="رقم المحفظة التي حولت منها">
+                <input type="file" name="screenshot" accept="image/*" style="margin-top:15px; background: none; border: 1px dashed var(--gold);">
             </div>
 
             <button type="submit" class="submit-btn" id="submitBtn">تأكيد الحجز والإرسال</button>
@@ -476,30 +420,22 @@
 
     <div id="success-modal">
         <i class="fas fa-check-circle" style="font-size: 5rem; color: #10b981; margin-bottom: 20px; display: block;"></i>
-        <h2 style="font-weight: 900;">تم استلام طلبك بنجاح!</h2>
-        <p style="margin: 15px 0; color: #64748b;">عزيزي الطالب، فريق القمة سيراجع بياناتك وسنتواصل معك خلال 24 ساعة لتسليمك كود الدخول للمنصة.</p>
-        <button class="submit-btn" onclick="location.reload()">العودة للرئيسية</button>
+        <h2>تم الإرسال بنجاح!</h2>
+        <p>فريق القمة سيتواصل معك خلال ساعات.</p>
+        <button class="submit-btn" onclick="location.reload()" style="margin-top:20px;">حسناً</button>
     </div>
 
     <footer>
-        <div style="margin-bottom: 30px;">
-            <i class="fab fa-facebook fa-2x" style="margin: 0 15px; color: var(--gold); cursor: pointer;"></i>
-            <i class="fab fa-whatsapp fa-2x" style="margin: 0 15px; color: var(--gold); cursor: pointer;"></i>
-            <i class="fab fa-youtube fa-2x" style="margin: 0 15px; color: var(--gold); cursor: pointer;"></i>
-        </div>
         <p>جميع الحقوق محفوظة &copy; سنتر القمة التعليمي النموذجي 2026</p>
-        <p style="color: var(--gold); margin-top: 15px; font-weight: bold; letter-spacing: 1px;">إدارة أبو سيف | تطوير عبدو مكي</p>
+        <p style="color: var(--gold); margin-top: 15px; font-weight: bold;">إدارة أبو سيف | تطوير عبدو مكي</p>
     </footer>
 
     <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbwR30Ou-ohpjth0Ipmpbh8u3imG2J40T24R3SD5nISKo4NWlxAj4L-cwXwrPgvbR9FV7g/exec';
+        // رابط جوجل شيت الجديد
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbwg8T6DboOUEZ7Ro6uOxZPb46E27GOrkPUmxxd36JPvlGMZpGh47P03GGCneYoiYKTaMA/exec';
 
-        // دالة إخفاء شاشة التحميل
         function hideLoader() {
-            setTimeout(() => {
-                document.getElementById('loader').style.opacity = '0';
-                setTimeout(() => { document.getElementById('loader').style.display = 'none'; }, 500);
-            }, 1000);
+            setTimeout(() => { document.getElementById('loader').style.display = 'none'; }, 1000);
         }
 
         function toggleSideNav() {
@@ -508,63 +444,52 @@
 
         function toggleView() {
             document.body.classList.toggle('mobile-view');
-            const btn = document.querySelector('.view-switcher');
-            btn.innerHTML = document.body.classList.contains('mobile-view') ? 
-                '<i class="fas fa-desktop"></i> العرض الكامل' : '<i class="fas fa-mobile-alt"></i> وضع العرض المتطور';
+        }
+
+        // نظام تحديث المدرس والسعر تلقائياً
+        function updateSystem() {
+            const grade = document.getElementById('gradeSelect').value;
+            const subject = document.getElementById('subjectSelect').value;
+            const infoBox = document.getElementById('infoBox');
+            const teacherName = document.getElementById('teacherName');
+            const classPrice = document.getElementById('classPrice');
+
+            if(grade && subject) {
+                infoBox.style.display = 'block';
+                
+                // تحديد المدرس بناءً على المادة
+                if(subject === 'english') teacherName.innerText = "أ/ محمد العدلي";
+                else if(subject === 'arabic') teacherName.innerText = "أ/ وليد الضوي";
+                else teacherName.innerText = "نخبة من خبراء القمة";
+
+                // تحديد السعر بناءً على المرحلة
+                if(grade.startsWith('s')) classPrice.innerText = "180 جنيه";
+                else if(grade.startsWith('m')) classPrice.innerText = "120 جنيه";
+                else classPrice.innerText = "80 جنيه";
+            }
         }
 
         function updateLiveClock() {
             const now = new Date();
-            const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
-            document.getElementById('clock-time').innerText = now.toLocaleTimeString('ar-EG', timeOptions);
+            document.getElementById('clock-time').innerText = now.toLocaleTimeString('ar-EG');
             document.getElementById('clock-date').innerText = now.toLocaleDateString('ar-EG', {weekday:'long', day:'numeric', month:'long'});
         }
         setInterval(updateLiveClock, 1000);
-        updateLiveClock();
-
-        // معالجة تغيير الصف الدراسي وإظهار الحقول الإضافية
-        function handleGradeChange() {
-            const grade = document.getElementById('gradeSelect').value;
-            const secFields = document.getElementById('secondaryFields');
-            const priceBox = document.getElementById('priceBox');
-            
-            // إظهار حقول الثانوي
-            if(grade === 's') {
-                secFields.style.display = 'block';
-            } else {
-                secFields.style.display = 'none';
-            }
-
-            // تحديث السعر
-            let price = "";
-            if(grade === 's') price = "150 جنيه";
-            else if(grade === 'm') price = "50 جنيه";
-            else if(grade === 'p') price = "30 جنيه";
-            
-            if(price !== "") {
-                priceBox.innerText = "قيمة الاشتراك الشهري: " + price;
-                priceBox.style.display = "block";
-                priceBox.classList.add('animate__animated', 'animate__fadeIn');
-            } else {
-                priceBox.style.display = "none";
-            }
-        }
 
         const form = document.getElementById('studentForm');
         form.onsubmit = (e) => {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري معالجة بياناتك بنجاح...';
+            btn.innerHTML = '<i class="fas fa-sync fa-spin"></i> جاري الإرسال...';
             btn.disabled = true;
 
             const formData = new FormData(form);
             fetch(scriptURL, { method: 'POST', body: formData, mode: 'no-cors' })
             .then(() => {
                 document.getElementById('success-modal').style.display = "block";
-                window.scrollTo({top: 0, behavior: 'smooth'});
             })
             .catch(() => {
-                alert("عذراً، حدث خطأ أثناء الإرسال. يرجى مراجعة الاتصال بالإنترنت.");
+                alert("حدث خطأ، حاول مرة أخرى.");
                 btn.disabled = false;
                 btn.innerText = "تأكيد الحجز والإرسال";
             });
