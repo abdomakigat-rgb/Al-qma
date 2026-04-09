@@ -36,6 +36,28 @@
             transition: var(--transition);
         }
 
+        /* شاشة التحميل (إضافة جديدة) */
+        #loader {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: var(--main-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: 0.5s;
+        }
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--glass);
+            border-top-color: var(--gold);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
         /* تحسين ميزة تبديل المظهر */
         body.mobile-view {
             max-width: 450px;
@@ -232,15 +254,19 @@
         }
 
         .form-group { margin-bottom: 25px; }
-        input, select {
+        input, select, textarea {
             width: 100%; padding: 15px; border-radius: 12px; border: 2px solid transparent;
             background: rgba(255,255,255,0.05); color: white; transition: 0.3s;
         }
-        input:focus, select:focus {
+        input:focus, select:focus, textarea:focus {
             border-color: var(--gold); background: rgba(255,255,255,0.1); outline: none;
         }
         input::placeholder { color: rgba(255,255,255,0.4); }
         select option { background: var(--main-dark); color: white; }
+
+        /* تحسينات إضافية للفورم */
+        .secondary-fields { display: none; margin-top: 15px; animation: fadeIn 0.5s; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 
         .price-display {
             background: linear-gradient(90deg, var(--gold), var(--gold-dark));
@@ -291,10 +317,13 @@
             .logo-box img { height: 50px; }
             .live-clock { display: none; }
             form { padding: 30px 20px; }
+            .form-row { grid-template-columns: 1fr; }
         }
     </style>
 </head>
-<body>
+<body onload="hideLoader()">
+
+    <div id="loader"><div class="spinner"></div></div>
 
     <button class="view-switcher" onclick="toggleView()">
         <i class="fas fa-mobile-alt"></i> وضع العرض المتطور
@@ -329,7 +358,7 @@
         <p class="animate__animated animate__fadeInUp">النموذج المثالي للتعليم الحديث مع أقوى نخبة من مدرسي الجمهورية.</p>
         
         <div class="features animate__animated animate__fadeInUp animate__delay-1s">
-            <div class="feat-card"><i class="fas fa-star color-gold"></i> جودة تعليمية</div>
+            <div class="feat-card"><i class="fas fa-star" style="color:var(--gold)"></i> جودة تعليمية</div>
             <div class="feat-card"><i class="fas fa-laptop"></i> حصص أونلاين</div>
             <div class="feat-card"><i class="fas fa-check-double"></i> متابعة دورية</div>
         </div>
@@ -374,17 +403,17 @@
         <center><h2 style="font-size: 2.5rem; margin-bottom: 40px;">استمارة التسجيل والحجز</h2></center>
         <form id="studentForm">
             <div class="form-group">
-                <label><i class="fas fa-user"></i> بيانات الطالب</label>
-                <input type="text" name="name" placeholder="اسم الطالب بالكامل" required>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
-                    <input type="tel" name="phone" placeholder="رقم الموبايل" required>
-                    <input type="text" name="address" placeholder="العنوان" required>
+                <label><i class="fas fa-user-graduate"></i> بيانات الطالب الشخصية</label>
+                <input type="text" name="name" placeholder="اسم الطالب بالكامل كما هو في الشهادة" required>
+                <div class="form-row" style="margin-top: 15px;">
+                    <input type="tel" name="phone" placeholder="رقم موبايل الطالب" required>
+                    <input type="tel" name="parent_phone" placeholder="رقم ولي الأمر" required>
                 </div>
             </div>
 
             <div class="form-group">
-                <label><i class="fas fa-graduation-cap"></i> المرحلة الدراسية</label>
-                <select name="grade" id="gradeSelect" required onchange="updatePrice()">
+                <label><i class="fas fa-graduation-cap"></i> المرحلة والمستوى الدراسي</label>
+                <select name="grade" id="gradeSelect" required onchange="handleGradeChange()">
                     <option value="">اختر الصف الدراسي</option>
                     <optgroup label="مرحلة الحضانة">
                         <option value="p">أولى حضانة (KG1)</option>
@@ -409,24 +438,46 @@
                         <option value="s">الصف الثالث الثانوي</option>
                     </optgroup>
                 </select>
+
+                <div id="secondaryFields" class="secondary-fields">
+                    <div class="form-row">
+                        <select name="branch">
+                            <option value="">اختر الشعبة</option>
+                            <option value="علمي">علمي (علوم/رياضة)</option>
+                            <option value="أدبي">أدبي</option>
+                            <option value="عام">عام (أولى ثانوي)</option>
+                        </select>
+                        <select name="language">
+                            <option value="">اللغة الثانية</option>
+                            <option value="فرنساوي">فرنساوي</option>
+                            <option value="ألماني">ألماني</option>
+                            <option value="إيطالي">إيطالي</option>
+                        </select>
+                    </div>
+                </div>
                 <div id="priceBox" class="price-display"></div>
             </div>
 
             <div class="form-group">
+                <label><i class="fas fa-map-marker-alt"></i> العنوان بالتفصيل</label>
+                <textarea name="address" rows="2" placeholder="القرية/المدينة - اسم الشارع - علامة مميزة" required></textarea>
+            </div>
+
+            <div class="form-group">
                 <label><i class="fas fa-wallet"></i> تحويل فودافون كاش (01152956200)</label>
-                <input type="tel" name="payment_number" placeholder="الرقم الذي تم التحويل منه">
-                <label style="margin-top:15px;"><i class="fas fa-image"></i> ارفق صورة التحويل (لقطة شاشة)</label>
+                <input type="tel" name="payment_number" placeholder="رقم المحفظة المحول منها">
+                <label style="margin-top:15px;"><i class="fas fa-camera"></i> إثبات الدفع (Screenshot)</label>
                 <input type="file" name="screenshot" accept="image/*" style="padding: 10px;">
             </div>
 
-            <button type="submit" class="submit-btn" id="submitBtn">تأكيد الحجز الآن</button>
+            <button type="submit" class="submit-btn" id="submitBtn">تأكيد الحجز والإرسال</button>
         </form>
     </section>
 
     <div id="success-modal">
         <i class="fas fa-check-circle" style="font-size: 5rem; color: #10b981; margin-bottom: 20px; display: block;"></i>
         <h2 style="font-weight: 900;">تم استلام طلبك بنجاح!</h2>
-        <p style="margin: 15px 0; color: #64748b;">فريق القمة سيقوم بمراجعة الطلب والتواصل معك خلال 24 ساعة لتسليمك كود المكتبة.</p>
+        <p style="margin: 15px 0; color: #64748b;">عزيزي الطالب، فريق القمة سيراجع بياناتك وسنتواصل معك خلال 24 ساعة لتسليمك كود الدخول للمنصة.</p>
         <button class="submit-btn" onclick="location.reload()">العودة للرئيسية</button>
     </div>
 
@@ -442,6 +493,14 @@
 
     <script>
         const scriptURL = 'https://script.google.com/macros/s/AKfycbwR30Ou-ohpjth0Ipmpbh8u3imG2J40T24R3SD5nISKo4NWlxAj4L-cwXwrPgvbR9FV7g/exec';
+
+        // دالة إخفاء شاشة التحميل
+        function hideLoader() {
+            setTimeout(() => {
+                document.getElementById('loader').style.opacity = '0';
+                setTimeout(() => { document.getElementById('loader').style.display = 'none'; }, 500);
+            }, 1000);
+        }
 
         function toggleSideNav() {
             document.getElementById('sideNav').classList.toggle('active');
@@ -463,9 +522,20 @@
         setInterval(updateLiveClock, 1000);
         updateLiveClock();
 
-        function updatePrice() {
+        // معالجة تغيير الصف الدراسي وإظهار الحقول الإضافية
+        function handleGradeChange() {
             const grade = document.getElementById('gradeSelect').value;
+            const secFields = document.getElementById('secondaryFields');
             const priceBox = document.getElementById('priceBox');
+            
+            // إظهار حقول الثانوي
+            if(grade === 's') {
+                secFields.style.display = 'block';
+            } else {
+                secFields.style.display = 'none';
+            }
+
+            // تحديث السعر
             let price = "";
             if(grade === 's') price = "150 جنيه";
             else if(grade === 'm') price = "50 جنيه";
@@ -484,7 +554,7 @@
         form.onsubmit = (e) => {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري معالجة طلبك...';
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري معالجة بياناتك بنجاح...';
             btn.disabled = true;
 
             const formData = new FormData(form);
@@ -494,9 +564,9 @@
                 window.scrollTo({top: 0, behavior: 'smooth'});
             })
             .catch(() => {
-                alert("عذراً، حدث خطأ أثناء الإرسال. يرجى المحاولة مرة أخرى.");
+                alert("عذراً، حدث خطأ أثناء الإرسال. يرجى مراجعة الاتصال بالإنترنت.");
                 btn.disabled = false;
-                btn.innerText = "تأكيد الحجز الآن";
+                btn.innerText = "تأكيد الحجز والإرسال";
             });
         };
     </script>
