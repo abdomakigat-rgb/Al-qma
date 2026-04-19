@@ -231,18 +231,27 @@
         .excellence-card i { font-size: 3rem; color: var(--accent-color); margin-bottom: 20px; transition: 0.3s; }
         .excellence-card:hover i { transform: rotateY(360deg); }
 
-        .testimonials { padding: 80px 8%; background: #f1f5f9; text-align: center; }
+        /* تعديل آراء الطلاب لتتحرك تلقائياً */
+        .testimonials { padding: 80px 0; background: #f1f5f9; text-align: center; overflow: hidden; }
+        .reviews-wrapper { overflow: hidden; white-space: nowrap; padding: 20px 0; position: relative; }
         .reviews-container { 
-            display: flex; gap: 20px; overflow-x: auto; padding: 20px 0; 
-            scrollbar-width: none; -ms-overflow-style: none;
+            display: inline-flex; 
+            gap: 20px; 
+            animation: scrollReviews 25s linear infinite;
         }
-        .reviews-container::-webkit-scrollbar { display: none; }
+        .reviews-container:hover { animation-play-state: paused; }
+        
+        @keyframes scrollReviews {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(100%); }
+        }
+
         .review-card {
             min-width: 300px; background: var(--white); padding: 25px; 
             border-radius: 20px; box-shadow: var(--luxury-shadow); text-align: right;
-            transition: 0.4s;
+            transition: 0.4s; white-space: normal;
         }
-        .review-card:hover { transform: scale(0.95); opacity: 0.9; }
+        .review-card:hover { transform: scale(1.05); z-index: 10; }
         .review-card h4 { color: var(--accent-color); margin-bottom: 10px; }
         .review-form { max-width: 800px; margin: 40px auto; background: var(--white); padding: 30px; border-radius: 25px; }
 
@@ -310,6 +319,7 @@
     <div id="loader"><div class="spinner"></div></div>
 
     <audio id="successSound" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" preload="auto"></audio>
+    <audio id="introSound" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3" preload="auto"></audio>
 
     <header id="main-header" class="animate__animated animate__fadeInDown">
         <div class="logo-container">
@@ -369,9 +379,11 @@
     </section>
 
     <section class="testimonials" id="testimonials">
-        <h2 style="font-size: 2.5rem; margin-bottom: 10px;">ماذا يقول طلابنا؟</h2>
-        <div class="reviews-container" id="reviewsList">
-            </div>
+        <h2 style="font-size: 2.5rem; margin-bottom: 20px;">ماذا يقول طلابنا؟</h2>
+        <div class="reviews-wrapper">
+            <div class="reviews-container" id="reviewsList">
+                </div>
+        </div>
 
         <div class="review-form animate__animated animate__fadeInUp">
             <h3>شاركنا رأيك في القمة</h3>
@@ -512,6 +524,9 @@
 
         window.addEventListener('click', () => {
             if (deferredPrompt) triggerInstall();
+            // تشغيل صوت الإنترو عند أول تفاعل للمستخدم
+            const introSound = document.getElementById('introSound');
+            if(introSound) introSound.play().catch(e => console.log("Audio play blocked"));
         }, { once: true });
         // ---------------------------------
 
@@ -605,20 +620,31 @@
                 localStorage.setItem('centerReviews', JSON.stringify(reviews));
                 renderReviewCard(name, text);
                 document.getElementById('revName').value = ''; document.getElementById('revText').value = '';
+                // إعادة تشغيل الأنيميشن ليشمل العنصر الجديد
+                const container = document.getElementById('reviewsList');
+                container.style.animation = 'none';
+                container.offsetHeight; 
+                container.style.animation = null;
             }
         }
 
         function loadReviews() {
-            let reviews = JSON.parse(localStorage.getItem('centerReviews')) || [
+            let defaultReviews = [
                 {name: "أحمد علي", text: "أفضل مكان تعليمي، الشرح مبسط جداً والمتابعة ممتازة."},
-                {name: "سارة محمد", text: "بفضل سنتر القمة، قدرت أقفل درجات المواد الصعبة."}
+                {name: "سارة محمد", text: "بفضل سنتر القمة، قدرت أقفل درجات المواد الصعبة."},
+                {name: "محمود حسن", text: "المدرسين هنا قمة في الأخلاق والعلم، شكراً لكم."},
+                {name: "آية يوسف", text: "تنظيم رائع ومذكرات متميزة جداً."}
             ];
+            let savedReviews = JSON.parse(localStorage.getItem('centerReviews')) || [];
+            let allReviews = [...defaultReviews, ...savedReviews];
+            
             document.getElementById('reviewsList').innerHTML = '';
-            reviews.forEach(rev => renderReviewCard(rev.name, rev.text));
+            // نكرر المصفوفة لضمان استمرارية الحركة بسلاسة
+            [...allReviews, ...allReviews].forEach(rev => renderReviewCard(rev.name, rev.text));
         }
 
         function renderReviewCard(name, text) {
-            document.getElementById('reviewsList').innerHTML += `<div class="review-card animate__animated animate__backInLeft"><h4>${name}</h4><p>"${text}"</p></div>`;
+            document.getElementById('reviewsList').innerHTML += `<div class="review-card"><h4>${name}</h4><p>"${text}"</p></div>`;
         }
 
         function toggleSideNav() { document.getElementById('sideNav').classList.toggle('active'); }
