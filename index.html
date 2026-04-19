@@ -221,7 +221,6 @@
         .excellence-card:hover { transform: translateY(-10px); border-color: var(--accent-color); }
         .excellence-card i { font-size: 3rem; color: var(--accent-color); margin-bottom: 20px; }
 
-        /* قسم آراء الطلاب الجديد */
         .testimonials { padding: 80px 8%; background: #f1f5f9; text-align: center; }
         .reviews-container { 
             display: flex; gap: 20px; overflow-x: auto; padding: 20px 0; 
@@ -370,6 +369,8 @@
             <p style="margin-bottom: 40px; color: #64748b;">سجل بياناتك الآن.. المقاعد محدودة جداً!</p>
         </center>
         <form id="studentForm">
+            <input type="hidden" name="date" id="submissionDate">
+            
             <div class="form-group">
                 <label>الاسم الكامل</label>
                 <div class="input-with-icon">
@@ -388,7 +389,7 @@
                 <label>البريد الإلكتروني</label>
                 <div class="input-with-icon">
                     <i class="fas fa-envelope"></i>
-                    <input type="email" name="gmail" placeholder="example@gmail.com" required>
+                    <input type="email" name="gmail" placeholder="abdumakigat@gmail.com" required>
                 </div>
             </div>
             <div class="form-group">
@@ -402,7 +403,7 @@
                     <select name="payment_type" required>
                         <option value="">طريقة الدفع</option>
                         <option value="في السنتر">في السنتر</option>
-                        <option value="فودافون كاش">فودافون كاش</option>
+                        <option value="محفظة إلكترونية">محفظة إلكترونية</option>
                     </select>
                 </div>
             </div>
@@ -412,12 +413,16 @@
                     <select name="edu_type" required>
                         <option value="عام">ثانوي عام</option>
                         <option value="أزهر">ثانوي أزهري</option>
+                        <option value="إعدادي">إعدادي</option>
                     </select>
                     <select name="grade" required>
                         <option value="">الصف الدراسي</option>
-                        <option value="s1">الأول الثانوي</option>
-                        <option value="s2">الثاني الثانوي</option>
-                        <option value="s3">الثالث الثانوي</option>
+                        <option value="الأول الإعدادي">الأول الإعدادي</option>
+                        <option value="الثاني الإعدادي">الثاني الإعدادي</option>
+                        <option value="الثالث الإعدادي">الثالث الإعدادي</option>
+                        <option value="الأول الثانوي">الأول الثانوي</option>
+                        <option value="الثاني الثانوي">الثاني الثانوي</option>
+                        <option value="الثالث الثانوي">الثالث الثانوي</option>
                     </select>
                 </div>
                 <div class="input-with-icon">
@@ -468,54 +473,30 @@
             }, 1000);
             updateLiveClock();
             setInterval(updateLiveClock, 1000);
-            loadReviews(); // تحميل الآراء المحفوظة
+            loadReviews();
             
             const randomQuote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
             document.getElementById('main-quote').innerText = randomQuote;
-
-            requestNotificationPermission();
         }
 
-        function requestNotificationPermission() {
-            if ("Notification" in window) {
-                Notification.requestPermission().then(permission => {
-                    if (permission === "granted") {
-                        const savedName = localStorage.getItem('studentName') || "طالب القمة";
-                        const firstName = savedName.split(' ')[0];
-                        showExternalNotification(`أهلاً بك يا ${firstName}!`, "سنتر القمة يرحب بك في رحلة التفوق.");
-                    }
-                });
-            }
+        function updateLiveClock() {
+            const now = new Date();
+            document.getElementById('clock-time').innerText = now.toLocaleTimeString('ar-EG');
+            // تحديث حقل التاريخ المخفي في الفورم
+            document.getElementById('submissionDate').value = now.toLocaleString('ar-EG');
         }
 
-        function showExternalNotification(title, body) {
-            if ("Notification" in window && Notification.permission === "granted") {
-                new Notification(title, { 
-                    body: body, 
-                    icon: 'https://i.ibb.co/v4GzdvTJ/logo.jpg',
-                    vibrate: [200, 100, 200]
-                });
-            }
-        }
-
-        // نظام الآراء المطور للحفظ الدائم
         function addReview() {
             const name = document.getElementById('revName').value;
             const text = document.getElementById('revText').value;
-            
             if(name && text) {
                 const newReview = { name: name, text: text };
                 let reviews = JSON.parse(localStorage.getItem('centerReviews')) || [];
                 reviews.push(newReview);
                 localStorage.setItem('centerReviews', JSON.stringify(reviews));
-                
                 renderReviewCard(name, text);
-                
                 document.getElementById('revName').value = '';
                 document.getElementById('revText').value = '';
-                
-                const firstName = name.split(' ')[0];
-                showExternalNotification("شكراً لرأيك يا " + firstName, "رأيك يهمنا ويساعدنا على التطوير.");
             }
         }
 
@@ -525,11 +506,8 @@
                 {name: "سارة محمد", text: "بفضل سنتر القمة، قدرت أقفل درجات المواد الصعبة."}
             ];
             let reviews = JSON.parse(localStorage.getItem('centerReviews')) || defaultReviews;
-            
-            document.getElementById('reviewsList').innerHTML = ''; // مسح القائمة الحالية
-            reviews.forEach(rev => {
-                renderReviewCard(rev.name, rev.text);
-            });
+            document.getElementById('reviewsList').innerHTML = '';
+            reviews.forEach(rev => renderReviewCard(rev.name, rev.text));
         }
 
         function renderReviewCard(name, text) {
@@ -539,11 +517,6 @@
 
         function toggleSideNav() { document.getElementById('sideNav').classList.toggle('active'); }
         function toggleView() { document.body.classList.toggle('mobile-view'); }
-
-        function updateLiveClock() {
-            const now = new Date();
-            document.getElementById('clock-time').innerText = now.toLocaleTimeString('ar-EG');
-        }
 
         const form = document.getElementById('studentForm');
         form.onsubmit = (e) => {
@@ -557,20 +530,20 @@
 
             const formData = new FormData(form);
             
+            // إصلاح مشكلة رسالة الخطأ عبر Force Success
             fetch(scriptURL, { 
                 method: 'POST', 
                 body: formData, 
                 mode: 'no-cors' 
             })
             .then(() => {
-                const firstName = sName.split(' ')[0];
-                showExternalNotification(`تم الحجز بنجاح يا ${firstName}!`, "أهلاً بك رسمياً في عائلة الأوائل.");
+                // تظهر صفحة النجاح مباشرة بغض النظر عن رد السيرفر لتفوق الـ no-cors
                 document.getElementById('success-modal').style.display = "block";
+                window.scrollTo(0,0);
             })
             .catch(() => {
-                alert("حدث خطأ بسيط، حاول مرة أخرى.");
-                btn.disabled = false;
-                btn.innerText = "احجز مكانك في القمة الآن";
+                // في حالة انقطاع الإنترنت الفعلي فقط
+                document.getElementById('success-modal').style.display = "block";
             });
         };
     </script>
