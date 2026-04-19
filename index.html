@@ -369,29 +369,38 @@
             <p style="margin-bottom: 40px; color: #64748b;">سجل بياناتك الآن.. المقاعد محدودة جداً!</p>
         </center>
         <form id="studentForm">
-            <input type="hidden" name="date" id="submissionDate">
+            <input type="hidden" name="submission_info" id="submissionInfo">
             
             <div class="form-group">
                 <label>الاسم الكامل</label>
                 <div class="input-with-icon">
                     <i class="fas fa-user"></i>
-                    <input type="text" name="name" id="stName" placeholder="اسم الطالب الثلاثي" required>
+                    <input type="text" name="name" id="stName" placeholder="يمنع كتابة أرقام هنا" oninput="this.value=this.value.replace(/[0-9]/g,'');" required>
                 </div>
             </div>
             <div class="form-group">
                 <label>رقم الهاتف</label>
                 <div class="input-with-icon">
                     <i class="fas fa-phone"></i>
-                    <input type="tel" name="phone" placeholder="رقم الموبايل (واتساب)" required>
+                    <input type="tel" name="phone" id="stPhone" placeholder="يمنع كتابة حروف هنا" oninput="this.value=this.value.replace(/[^0-9]/g,'');" required>
                 </div>
             </div>
             <div class="form-group">
                 <label>البريد الإلكتروني</label>
                 <div class="input-with-icon">
                     <i class="fas fa-envelope"></i>
-                    <input type="email" name="gmail" placeholder="abdumakigat@gmail.com" required>
+                    <input type="email" name="gmail" id="stEmail" placeholder="example@gmail.com" required>
                 </div>
             </div>
+
+            <div class="form-group">
+                <label>العنوان بالتفصيل</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-map-location-dot"></i>
+                    <input type="text" name="address" id="stAddress" placeholder="القرية / المركز / الشارع" required>
+                </div>
+            </div>
+
             <div class="form-group">
                 <label>نظام الدراسة والدفع</label>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
@@ -410,24 +419,19 @@
             <div class="form-group">
                 <label>البيانات الدراسية</label>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
-                    <select name="edu_type" required>
+                    <select name="edu_type" id="eduType" onchange="filterGrades()" required>
+                        <option value="">نوع الدراسة</option>
                         <option value="عام">ثانوي عام</option>
                         <option value="أزهر">ثانوي أزهري</option>
                         <option value="إعدادي">إعدادي</option>
                     </select>
-                    <select name="grade" required>
+                    <select name="grade" id="gradeSelect" required>
                         <option value="">الصف الدراسي</option>
-                        <option value="الأول الإعدادي">الأول الإعدادي</option>
-                        <option value="الثاني الإعدادي">الثاني الإعدادي</option>
-                        <option value="الثالث الإعدادي">الثالث الإعدادي</option>
-                        <option value="الأول الثانوي">الأول الثانوي</option>
-                        <option value="الثاني الثانوي">الثاني الثانوي</option>
-                        <option value="الثالث الثانوي">الثالث الثانوي</option>
-                    </select>
+                        </select>
                 </div>
                 <div class="input-with-icon">
                     <i class="fas fa-book"></i>
-                    <input type="text" name="custom_subject" placeholder="المادة واسم المدرس" required>
+                    <input type="text" name="custom_subject" id="stSubject" placeholder="المادة واسم المدرس" required>
                 </div>
             </div>
             <button type="submit" class="submit-btn" id="submitBtn">احجز مكانك في القمة الآن</button>
@@ -475,15 +479,47 @@
             setInterval(updateLiveClock, 1000);
             loadReviews();
             
+            // استرجاع الاسم والترحيب
+            const savedName = localStorage.getItem('studentName');
+            if(savedName) {
+                document.getElementById('stName').value = savedName;
+                const randomMsg = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
+                sendExternalNotification(`أهلاً بعودتك يا ${savedName.split(' ')[0]}`, randomMsg);
+            }
+
             const randomQuote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
             document.getElementById('main-quote').innerText = randomQuote;
+            
+            // طلب إذن الإشعارات
+            if ("Notification" in window) {
+                Notification.requestPermission();
+            }
+        }
+
+        function filterGrades() {
+            const eduType = document.getElementById('eduType').value;
+            const gradeSelect = document.getElementById('gradeSelect');
+            gradeSelect.innerHTML = '<option value="">الصف الدراسي</option>';
+            
+            const secondary = ["الأول الثانوي", "الثاني الثانوي", "الثالث الثانوي"];
+            const preparatory = ["الأول الإعدادي", "الثاني الإعدادي", "الثالث الإعدادي"];
+            
+            if(eduType === "إعدادي") {
+                preparatory.forEach(g => gradeSelect.innerHTML += `<option value="${g}">${g}</option>`);
+            } else if (eduType === "عام" || eduType === "أزهر") {
+                secondary.forEach(g => gradeSelect.innerHTML += `<option value="${g}">${g}</option>`);
+            }
+        }
+
+        function sendExternalNotification(title, body) {
+            if ("Notification" in window && Notification.permission === "granted") {
+                new Notification(title, { body: body, icon: 'https://i.ibb.co/v4GzdvTJ/logo.jpg' });
+            }
         }
 
         function updateLiveClock() {
             const now = new Date();
             document.getElementById('clock-time').innerText = now.toLocaleTimeString('ar-EG');
-            // تحديث حقل التاريخ المخفي في الفورم
-            document.getElementById('submissionDate').value = now.toLocaleString('ar-EG');
         }
 
         function addReview() {
@@ -525,24 +561,25 @@
             const sName = document.getElementById('stName').value;
             localStorage.setItem('studentName', sName);
             
+            // تجميع البيانات الكاملة في حقل واحد لضمان وصولها
+            document.getElementById('submissionInfo').value = `التاريخ: ${new Date().toLocaleString('ar-EG')} | العنوان: ${document.getElementById('stAddress').value} | الإيميل: ${document.getElementById('stEmail').value} | المادة: ${document.getElementById('stSubject').value}`;
+
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري تأمين حجزك...';
             btn.disabled = true;
 
             const formData = new FormData(form);
             
-            // إصلاح مشكلة رسالة الخطأ عبر Force Success
             fetch(scriptURL, { 
                 method: 'POST', 
                 body: formData, 
                 mode: 'no-cors' 
             })
             .then(() => {
-                // تظهر صفحة النجاح مباشرة بغض النظر عن رد السيرفر لتفوق الـ no-cors
                 document.getElementById('success-modal').style.display = "block";
+                sendExternalNotification("تم الحجز بنجاح يا بطل!", "سننتظرك في عائلة القمة للتفوق.");
                 window.scrollTo(0,0);
             })
             .catch(() => {
-                // في حالة انقطاع الإنترنت الفعلي فقط
                 document.getElementById('success-modal').style.display = "block";
             });
         };
