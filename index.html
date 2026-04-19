@@ -309,6 +309,8 @@
 
     <div id="loader"><div class="spinner"></div></div>
 
+    <audio id="successSound" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" preload="auto"></audio>
+
     <header id="main-header" class="animate__animated animate__fadeInDown">
         <div class="logo-container">
             <div class="logo-box">
@@ -474,7 +476,7 @@
     <footer>
         <p>جميع الحقوق محفوظة &copy; سنتر القمة التعليمي النموذجي 2026</p>
         <p style="font-weight: 700; margin-top: 5px; color: var(--deep-text);">إدارة أبو سيف</p>
-        <div class="dev-credit">تطوير: عبده مكي</div>
+        <div class="dev-credit">بلمسة المبدع: عبده مكي</div>
     </footer>
 
     <script>
@@ -496,26 +498,18 @@
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            
-            // محاولة إظهار التثبيت تلقائياً بعد 5 ثواني
-            setTimeout(() => {
-                triggerInstall();
-            }, 5000);
+            setTimeout(() => { triggerInstall(); }, 5000);
         });
 
         function triggerInstall() {
             if (deferredPrompt) {
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        console.log('User accepted install');
-                    }
                     deferredPrompt = null;
                 });
             }
         }
 
-        // إظهار التثبيت عند أول ضغطة للطالب لضمان التفاعل
         window.addEventListener('click', () => {
             if (deferredPrompt) triggerInstall();
         }, { once: true });
@@ -563,7 +557,6 @@
                 `يا ${studentName}، القمة محتاجة طلاب مجتهدين زيك.`,
                 `${studentName}.. تذكر أن النجاح يليق بك.`
             ];
-
             setTimeout(() => {
                 sendExternalNotification(`رسالة خاصة لك يا ${studentName}`, studentQuotes[Math.floor(Math.random() * studentQuotes.length)]);
             }, 3000);
@@ -573,9 +566,7 @@
             const cards = document.querySelectorAll('.excellence-card');
             cards.forEach(card => {
                 const cardTop = card.getBoundingClientRect().top;
-                if(cardTop < window.innerHeight - 100) {
-                    card.classList.add('reveal');
-                }
+                if(cardTop < window.innerHeight - 100) card.classList.add('reveal');
             });
         }
 
@@ -583,15 +574,10 @@
             const eduType = document.getElementById('eduType').value;
             const gradeSelect = document.getElementById('gradeSelect');
             gradeSelect.innerHTML = '<option value="">الصف الدراسي</option>';
-            
             const secondary = ["الأول الثانوي", "الثاني الثانوي", "الثالث الثانوي"];
             const preparatory = ["الأول الإعدادي", "الثاني الإعدادي", "الثالث الإعدادي"];
-            
-            if(eduType === "إعدادي") {
-                preparatory.forEach(g => gradeSelect.innerHTML += `<option value="${g}">${g}</option>`);
-            } else if (eduType === "عام" || eduType === "أزهر") {
-                secondary.forEach(g => gradeSelect.innerHTML += `<option value="${g}">${g}</option>`);
-            }
+            if(eduType === "إعدادي") preparatory.forEach(g => gradeSelect.innerHTML += `<option value="${g}">${g}</option>`);
+            else if (eduType === "عام" || eduType === "أزهر") secondary.forEach(g => gradeSelect.innerHTML += `<option value="${g}">${g}</option>`);
         }
 
         function sendExternalNotification(title, body) {
@@ -614,29 +600,25 @@
             const name = document.getElementById('revName').value;
             const text = document.getElementById('revText').value;
             if(name && text) {
-                const newReview = { name: name, text: text };
                 let reviews = JSON.parse(localStorage.getItem('centerReviews')) || [];
-                reviews.push(newReview);
+                reviews.push({ name: name, text: text });
                 localStorage.setItem('centerReviews', JSON.stringify(reviews));
                 renderReviewCard(name, text);
-                document.getElementById('revName').value = '';
-                document.getElementById('revText').value = '';
+                document.getElementById('revName').value = ''; document.getElementById('revText').value = '';
             }
         }
 
         function loadReviews() {
-            const defaultReviews = [
+            let reviews = JSON.parse(localStorage.getItem('centerReviews')) || [
                 {name: "أحمد علي", text: "أفضل مكان تعليمي، الشرح مبسط جداً والمتابعة ممتازة."},
                 {name: "سارة محمد", text: "بفضل سنتر القمة، قدرت أقفل درجات المواد الصعبة."}
             ];
-            let reviews = JSON.parse(localStorage.getItem('centerReviews')) || defaultReviews;
             document.getElementById('reviewsList').innerHTML = '';
             reviews.forEach(rev => renderReviewCard(rev.name, rev.text));
         }
 
         function renderReviewCard(name, text) {
-            const card = `<div class="review-card animate__animated animate__backInLeft"><h4>${name}</h4><p>"${text}"</p></div>`;
-            document.getElementById('reviewsList').innerHTML += card;
+            document.getElementById('reviewsList').innerHTML += `<div class="review-card animate__animated animate__backInLeft"><h4>${name}</h4><p>"${text}"</p></div>`;
         }
 
         function toggleSideNav() { document.getElementById('sideNav').classList.toggle('active'); }
@@ -646,25 +628,21 @@
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
             const sName = document.getElementById('stName').value;
+            const sound = document.getElementById('successSound');
             localStorage.setItem('studentName', sName);
-            
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري تأمين حجزك...';
             btn.disabled = true;
 
-            const formData = new FormData(form);
-            
-            fetch(scriptURL, { 
-                method: 'POST', 
-                body: formData, 
-                mode: 'no-cors' 
-            })
+            fetch(scriptURL, { method: 'POST', body: new FormData(form), mode: 'no-cors' })
             .then(() => {
+                if(sound) sound.play();
                 document.getElementById('success-modal').style.display = "block";
                 const firstName = sName.trim().split(' ')[0];
                 sendExternalNotification(`تم الحجز بنجاح يا ${firstName}!`, "سننتظرك في عائلة القمة للتفوق.");
                 window.scrollTo(0,0);
             })
             .catch(() => {
+                if(sound) sound.play();
                 document.getElementById('success-modal').style.display = "block";
             });
         };
