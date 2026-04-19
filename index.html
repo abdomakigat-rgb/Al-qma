@@ -5,10 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>سنتر القمة التعليمي النموذجي | القمة مكانك</title>
 
-    <meta name="theme-color" content="#f8fafc">
+    <meta name="theme-color" content="#0ea5e9">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogInNlbnRlci1hbHFlbW1hIiwKICAic2hvcnRfbmFtZSI6ICJhbHFlbW1hIiwKICAic3RhcnRfdXJsIjogIi4iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiNmOGZhZmMiCn0=">
+    <meta name="apple-mobile-web-app-title" content="القمة">
+    <link rel="apple-touch-icon" href="https://i.ibb.co/v4GzdvTJ/logo.jpg">
+    
+    <link rel="manifest" href="manifest.json">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Reem+Kufi:wght@700&display=swap" rel="stylesheet">
@@ -471,7 +474,7 @@
     <footer>
         <p>جميع الحقوق محفوظة &copy; سنتر القمة التعليمي النموذجي 2026</p>
         <p style="font-weight: 700; margin-top: 5px; color: var(--deep-text);">إدارة أبو سيف</p>
-        <div class="dev-credit">تطوير:عبده مكي</div>
+        <div class="dev-credit">تطوير: عبده مكي</div>
     </footer>
 
     <script>
@@ -486,6 +489,45 @@
             "مكانك في القمة محجوز.. فقط ابدأ!",
             "كل ناجح في العالم بدأ بخطوة جريئة مثلك الآن."
         ];
+
+        // --- نظام التثبيت التلقائي (PWA) ---
+        let deferredPrompt;
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // محاولة إظهار التثبيت تلقائياً بعد 5 ثواني
+            setTimeout(() => {
+                triggerInstall();
+            }, 5000);
+        });
+
+        function triggerInstall() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted install');
+                    }
+                    deferredPrompt = null;
+                });
+            }
+        }
+
+        // إظهار التثبيت عند أول ضغطة للطالب لضمان التفاعل
+        window.addEventListener('click', () => {
+            if (deferredPrompt) triggerInstall();
+        }, { once: true });
+        // ---------------------------------
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').then(reg => {
+                    console.log('PWA: سنتر القمة جاهز للتثبيت');
+                }).catch(err => console.log('PWA Error', err));
+            });
+        }
 
         function initApp() {
             setTimeout(() => { 
@@ -503,8 +545,7 @@
                 document.getElementById('stName').value = savedName;
                 const firstName = savedName.trim().split(' ')[0];
                 document.getElementById('hero-title').innerHTML = `أهلاً بك يا <span>${firstName}</span> في القمة`;
-                const randomMsg = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
-                sendExternalNotification(`أهلاً بعودتك يا ${firstName}`, randomMsg);
+                startSmartMotivation(firstName);
             }
 
             const randomQuote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
@@ -513,6 +554,19 @@
             if ("Notification" in window) {
                 Notification.requestPermission();
             }
+        }
+
+        function startSmartMotivation(studentName) {
+            const studentQuotes = [
+                `يا ${studentName}، مستقبلك في القمة بيبدأ دلوقتي!`,
+                `عاش يا ${studentName}، كمل ومستنيين نشوفك من الأوائل.`,
+                `يا ${studentName}، القمة محتاجة طلاب مجتهدين زيك.`,
+                `${studentName}.. تذكر أن النجاح يليق بك.`
+            ];
+
+            setTimeout(() => {
+                sendExternalNotification(`رسالة خاصة لك يا ${studentName}`, studentQuotes[Math.floor(Math.random() * studentQuotes.length)]);
+            }, 3000);
         }
 
         function revealElements() {
@@ -542,7 +596,11 @@
 
         function sendExternalNotification(title, body) {
             if ("Notification" in window && Notification.permission === "granted") {
-                new Notification(title, { body: body, icon: 'https://i.ibb.co/v4GzdvTJ/logo.jpg' });
+                new Notification(title, { 
+                    body: body, 
+                    icon: 'https://i.ibb.co/v4GzdvTJ/logo.jpg',
+                    badge: 'https://i.ibb.co/v4GzdvTJ/logo.jpg'
+                });
             }
         }
 
@@ -602,7 +660,8 @@
             })
             .then(() => {
                 document.getElementById('success-modal').style.display = "block";
-                sendExternalNotification("تم الحجز بنجاح يا بطل!", "سننتظرك في عائلة القمة للتفوق.");
+                const firstName = sName.trim().split(' ')[0];
+                sendExternalNotification(`تم الحجز بنجاح يا ${firstName}!`, "سننتظرك في عائلة القمة للتفوق.");
                 window.scrollTo(0,0);
             })
             .catch(() => {
