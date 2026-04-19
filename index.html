@@ -186,6 +186,23 @@
 
         .hero p { font-size: 1.2rem; max-width: 650px; color: #64748b; margin-bottom: 30px; }
 
+        /* قسم الإحصائيات لتبدو كمنصة ضخمة */
+        .platform-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .stat-card {
+            background: var(--white);
+            padding: 15px 25px;
+            border-radius: 20px;
+            box-shadow: var(--luxury-shadow);
+            text-align: center;
+        }
+        .stat-card h4 { color: var(--accent-color); font-size: 1.5rem; }
+
         .motivation-banner {
             background: var(--accent-color);
             color: white;
@@ -194,6 +211,8 @@
             font-weight: 700;
             box-shadow: 0 10px 20px rgba(14, 165, 233, 0.2);
             animation: pulse 2.5s infinite;
+            max-width: 80%;
+            margin-top: 20px;
         }
 
         @keyframes pulse {
@@ -267,6 +286,24 @@
             box-shadow: 0 30px 70px rgba(0,0,0,0.1);
         }
 
+        /* نظام الإشعارات اليومي المخصص */
+        #daily-notify {
+            position: fixed;
+            top: 85px;
+            left: 20px;
+            background: var(--white);
+            border-right: 5px solid var(--accent-color);
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            z-index: 9999;
+            display: none;
+            max-width: 300px;
+            animation: slideInLeft 0.5s ease-out;
+        }
+
+        @keyframes slideInLeft { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
         #sub-alert {
             position: fixed; bottom: 30px; right: 30px; 
             background: #fee2e2; color: #b91c1c; padding: 15px 25px; 
@@ -283,6 +320,14 @@
 <body onload="initApp()">
 
     <div id="loader"><div class="spinner"></div></div>
+
+    <div id="daily-notify">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:5px;">
+            <i class="fas fa-bell-quote" style="color:var(--accent-color)"></i>
+            <strong id="user-greeting">أهلاً بك يا بطل!</strong>
+        </div>
+        <p id="daily-quote-text" style="font-size:0.85rem; color:#64748b;"></p>
+    </div>
 
     <div id="sub-alert">
         <i class="fas fa-exclamation-circle"></i> <span id="sub-message">يرجى التجديد قريباً.</span>
@@ -316,13 +361,20 @@
 
     <section class="hero">
         <h1 class="animate__animated animate__fadeInDown">سنتر <span>القمة</span> التعليمي</h1>
-        <p class="animate__animated animate__fadeInUp">أقوى صرح تعليمي لبناء جيل متميز ومبدع بأحدث الوسائل التعليمية المتطورة.</p>
-        <div class="motivation-banner">طريقك نحو التفوق يبدأ هنا</div>
-        <a href="#register" style="text-decoration:none; margin-top: 30px;" class="submit-btn">احجز مكانك الآن</a>
+        <p class="animate__animated animate__fadeInUp">أضخم منصة تعليمية في العديسات لبناء جيل متميز ومبدع بأحدث الوسائل.</p>
+        
+        <div class="platform-stats animate__animated animate__fadeInUp">
+            <div class="stat-card"><h4>+1500</h4><p>طالب</p></div>
+            <div class="stat-card"><h4>+20</h4><p>معلم خبير</p></div>
+            <div class="stat-card"><h4>99%</h4><p>نسبة النجاح</p></div>
+        </div>
+
+        <div class="motivation-banner" id="hero-quote">النجاح ليس صدفة، بل هو قرار!</div>
+        <a href="#register" style="text-decoration:none; margin-top: 30px;" class="submit-btn">سجل اسمك وانطلق للقمة</a>
     </section>
 
     <section class="excellence-section">
-        <h2 style="font-size: 2.5rem; color: var(--deep-text);">مميزاتنا</h2>
+        <h2 style="font-size: 2.5rem; color: var(--deep-text);">لماذا تختار منصة القمة؟</h2>
         <div class="excellence-grid">
             <div class="excellence-card">
                 <i class="fas fa-graduation-cap"></i>
@@ -345,14 +397,14 @@
     <section class="reg-section" id="register">
         <center>
             <h2 style="font-size: 2.5rem; margin-bottom: 10px;">استمارة الحجز</h2>
-            <p style="margin-bottom: 40px; color: #64748b;">سجل بياناتك للانضمام إلينا</p>
+            <p style="margin-bottom: 40px; color: #64748b;">سجل بياناتك الآن لتصلك إشعاراتنا اليومية</p>
         </center>
         <form id="studentForm">
             <div class="form-group">
                 <label>الاسم الكامل</label>
                 <div class="input-with-icon">
                     <i class="fas fa-user"></i>
-                    <input type="text" name="name" placeholder="اسم الطالب الثلاثي" required>
+                    <input type="text" name="name" id="userNameInput" placeholder="اكتب اسمك الثلاثي" required>
                 </div>
             </div>
 
@@ -414,13 +466,14 @@
 
     <section id="location" style="padding: 80px 8%; text-align: center;">
         <h2 style="margin-bottom: 20px; font-size: 2.5rem;"><i class="fas fa-map-location-dot" style="color: var(--accent-color);"></i> عنواننا</h2>
-        <p style="font-size: 1.3rem; font-weight: 700;">المحلة الكبرى - شارع القمة - أمام مدرسة القمة</p>
+        <p style="font-size: 1.3rem; font-weight: 700; color:var(--deep-text);">العديسات قبلي - نجع علوان</p>
+        <p style="font-size: 1.1rem; color:#64748b;">أمام معرض العمدة للأجهزة الكهربائية</p>
     </section>
 
     <div id="success-modal">
         <i class="fas fa-check-circle" style="font-size: 4rem; color: var(--accent-color); margin-bottom: 20px; display: block;"></i>
         <h2>تم التسجيل بنجاح!</h2>
-        <p>سيتم التواصل معك قريباً لتأكيد المواعيد.</p>
+        <p>مرحباً بك في عائلة القمة، سيتم التواصل معك قريباً.</p>
         <button class="submit-btn" onclick="location.reload()" style="margin-top:20px;">شكراً لك</button>
     </div>
 
@@ -432,6 +485,15 @@
 
     <script>
         const scriptURL = 'https://script.google.com/macros/s/AKfycbwg8T6DboOUEZ7Ro6uOxZPb46E27GOrkPUmxxd36JPvlGMZpGh47P03GGCneYoiYKTaMA/exec';
+        
+        // مصفوفة التحفيز اليومي
+        const quotes = [
+            "النجاح هو مجموع محاولات صغيرة تتكرر كل يوم.",
+            "لا تتوقف عندما تتعب، توقف عندما تنتهي.",
+            "أنت أقوى مما تعتقد، القمة بانتظارك يا بطل.",
+            "اجعل اليوم هو الخطوة الأولى نحو حلمك الكبير.",
+            "المستقبل ينتمي لأولئك الذين يؤمنون بجمال أحلامهم."
+        ];
 
         function initApp() {
             setTimeout(() => { 
@@ -440,6 +502,34 @@
             }, 1000);
             updateLiveClock();
             setInterval(updateLiveClock, 1000);
+            
+            checkUserAndShowNotification();
+        }
+
+        // دالة لعرض إشعار يومي وتحفيزي حسب الاسم
+        function checkUserAndShowNotification() {
+            const savedName = localStorage.getItem('studentName');
+            const notifyDiv = document.getElementById('daily-notify');
+            const quoteText = document.getElementById('daily-quote-text');
+            const greeting = document.getElementById('user-greeting');
+            
+            // اختيار مقولة عشوائية بناءً على اليوم
+            const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
+            const dailyQuote = quotes[dayOfYear % quotes.length];
+            
+            if(savedName) {
+                greeting.innerText = `أهلاً يا ${savedName.split(' ')[0]}!`;
+            }
+            
+            quoteText.innerText = dailyQuote;
+            document.getElementById('hero-quote').innerText = dailyQuote;
+
+            // إظهار الإشعار بعد ثانيتين من الفتح
+            setTimeout(() => {
+                notifyDiv.style.display = 'block';
+                // إخفاء بعد 7 ثواني
+                setTimeout(() => { notifyDiv.style.opacity = '0'; }, 7000);
+            }, 2000);
         }
 
         function toggleSideNav() { document.getElementById('sideNav').classList.toggle('active'); }
@@ -454,7 +544,12 @@
         form.onsubmit = (e) => {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
+            const name = document.getElementById('userNameInput').value;
+            
+            // حفظ الاسم في المتصفح لاستخدامه لاحقاً في الإشعارات
+            localStorage.setItem('studentName', name);
+
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري ربطك بالمنصة...';
             btn.disabled = true;
 
             const formData = new FormData(form);
