@@ -17,7 +17,7 @@
     <style>
         :root {
             --main-bg: #f8fafc; 
-            --accent-color: #0ea5e9; /* لبني مبهج */
+            --accent-color: #0ea5e9; 
             --deep-text: #0f172a;
             --soft-blue: #e0f2fe;
             --white: #ffffff;
@@ -186,23 +186,6 @@
 
         .hero p { font-size: 1.2rem; max-width: 650px; color: #64748b; margin-bottom: 30px; }
 
-        /* قسم الإحصائيات لتبدو كمنصة ضخمة */
-        .platform-stats {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-        .stat-card {
-            background: var(--white);
-            padding: 15px 25px;
-            border-radius: 20px;
-            box-shadow: var(--luxury-shadow);
-            text-align: center;
-        }
-        .stat-card h4 { color: var(--accent-color); font-size: 1.5rem; }
-
         .motivation-banner {
             background: var(--accent-color);
             color: white;
@@ -211,8 +194,6 @@
             font-weight: 700;
             box-shadow: 0 10px 20px rgba(14, 165, 233, 0.2);
             animation: pulse 2.5s infinite;
-            max-width: 80%;
-            margin-top: 20px;
         }
 
         @keyframes pulse {
@@ -240,6 +221,20 @@
         .excellence-card:hover { transform: translateY(-10px); border-color: var(--accent-color); }
         .excellence-card i { font-size: 3rem; color: var(--accent-color); margin-bottom: 20px; }
 
+        /* قسم آراء الطلاب الجديد */
+        .testimonials { padding: 80px 8%; background: #f1f5f9; text-align: center; }
+        .reviews-container { 
+            display: flex; gap: 20px; overflow-x: auto; padding: 20px 0; 
+            scrollbar-width: none; -ms-overflow-style: none;
+        }
+        .reviews-container::-webkit-scrollbar { display: none; }
+        .review-card {
+            min-width: 300px; background: var(--white); padding: 25px; 
+            border-radius: 20px; box-shadow: var(--luxury-shadow); text-align: right;
+        }
+        .review-card h4 { color: var(--accent-color); margin-bottom: 10px; }
+        .review-form { max-width: 800px; margin: 40px auto; background: var(--white); padding: 30px; border-radius: 25px; }
+
         .reg-section { padding: 100px 8%; background: var(--soft-blue); }
         
         form {
@@ -253,13 +248,13 @@
         
         .input-with-icon { position: relative; }
         .input-with-icon i { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--accent-color); }
-        .input-with-icon input, .input-with-icon select { padding-right: 45px; }
+        .input-with-icon input, .input-with-icon select, .input-with-icon textarea { padding-right: 45px; }
 
-        input, select {
+        input, select, textarea {
             width: 100%; padding: 15px; border-radius: 12px; border: 2px solid #e2e8f0;
             background: #f8fafc; color: var(--deep-text); transition: 0.3s;
         }
-        input:focus, select:focus { border-color: var(--accent-color); outline: none; background: #fff; }
+        input:focus, select:focus, textarea:focus { border-color: var(--accent-color); outline: none; background: #fff; }
 
         .submit-btn {
             background: var(--accent-color); width: 100%; padding: 20px; border-radius: 15px;
@@ -286,30 +281,6 @@
             box-shadow: 0 30px 70px rgba(0,0,0,0.1);
         }
 
-        /* نظام الإشعارات اليومي المخصص */
-        #daily-notify {
-            position: fixed;
-            top: 85px;
-            left: 20px;
-            background: var(--white);
-            border-right: 5px solid var(--accent-color);
-            padding: 15px 20px;
-            border-radius: 10px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            z-index: 9999;
-            display: none;
-            max-width: 300px;
-            animation: slideInLeft 0.5s ease-out;
-        }
-
-        @keyframes slideInLeft { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-
-        #sub-alert {
-            position: fixed; bottom: 30px; right: 30px; 
-            background: #fee2e2; color: #b91c1c; padding: 15px 25px; 
-            border-radius: 15px; display: none; z-index: 5000; border: 1px solid #fecaca;
-        }
-
         @media (max-width: 768px) {
             header { padding: 10px 4%; }
             form { padding: 30px 20px; }
@@ -320,18 +291,6 @@
 <body onload="initApp()">
 
     <div id="loader"><div class="spinner"></div></div>
-
-    <div id="daily-notify">
-        <div style="display:flex; align-items:center; gap:10px; margin-bottom:5px;">
-            <i class="fas fa-bell-quote" style="color:var(--accent-color)"></i>
-            <strong id="user-greeting">أهلاً بك يا بطل!</strong>
-        </div>
-        <p id="daily-quote-text" style="font-size:0.85rem; color:#64748b;"></p>
-    </div>
-
-    <div id="sub-alert">
-        <i class="fas fa-exclamation-circle"></i> <span id="sub-message">يرجى التجديد قريباً.</span>
-    </div>
 
     <button class="view-switcher" onclick="toggleView()">
         <i class="fas fa-mobile-alt"></i> وضع الجوال
@@ -356,58 +315,76 @@
         <i class="fas fa-times close-nav" onclick="toggleSideNav()"></i>
         <a href="#"><i class="fas fa-home"></i> الرئيسية</a>
         <a href="#register"><i class="fas fa-pen-to-square"></i> تسجيل الحجز</a>
+        <a href="#testimonials"><i class="fas fa-star"></i> آراء الطلاب</a>
         <a href="#location"><i class="fas fa-map-marker-alt"></i> عنواننا</a>
     </div>
 
     <section class="hero">
         <h1 class="animate__animated animate__fadeInDown">سنتر <span>القمة</span> التعليمي</h1>
-        <p class="animate__animated animate__fadeInUp">أضخم منصة تعليمية في العديسات لبناء جيل متميز ومبدع بأحدث الوسائل.</p>
-        
-        <div class="platform-stats animate__animated animate__fadeInUp">
-            <div class="stat-card"><h4>+1500</h4><p>طالب</p></div>
-            <div class="stat-card"><h4>+20</h4><p>معلم خبير</p></div>
-            <div class="stat-card"><h4>99%</h4><p>نسبة النجاح</p></div>
-        </div>
-
-        <div class="motivation-banner" id="hero-quote">النجاح ليس صدفة، بل هو قرار!</div>
-        <a href="#register" style="text-decoration:none; margin-top: 30px;" class="submit-btn">سجل اسمك وانطلق للقمة</a>
+        <p class="animate__animated animate__fadeInUp">أضخم منصة تعليمية بمعايير عالمية لبناء جيل متميز ومبدع.</p>
+        <div class="motivation-banner" id="main-quote">النجاح يبدأ بخطوة في القمة</div>
+        <a href="#register" style="text-decoration:none; margin-top: 30px;" class="submit-btn">سجل الآن واضمن تفوقك</a>
     </section>
 
     <section class="excellence-section">
-        <h2 style="font-size: 2.5rem; color: var(--deep-text);">لماذا تختار منصة القمة؟</h2>
+        <h2 style="font-size: 2.5rem; color: var(--deep-text);">لماذا نحن القمة؟</h2>
         <div class="excellence-grid">
             <div class="excellence-card">
-                <i class="fas fa-graduation-cap"></i>
-                <h3>تعليم احترافي</h3>
-                <p>نخبة من أفضل المعلمين في كافة التخصصات التعليمية.</p>
+                <i class="fas fa-shield-halved"></i>
+                <h3>بيئة آمنة</h3>
+                <p>توفير أعلى درجات الأمان والراحة لطلابنا في العديسات.</p>
             </div>
             <div class="excellence-card">
-                <i class="fas fa-laptop-code"></i>
-                <h3>تطور مستمر</h3>
-                <p>استخدام أحدث الوسائل التكنولوجية في الشرح والمتابعة.</p>
+                <i class="fas fa-rocket"></i>
+                <h3>طرق تدريس حديثة</h3>
+                <p>نستخدم الذكاء الاصطناعي والوسائل التفاعلية لتبسيط المعلومة.</p>
             </div>
             <div class="excellence-card">
-                <i class="fas fa-check-double"></i>
-                <h3>متابعة دورية</h3>
-                <p>تقارير دورية لمستوى الطالب لضمان الوصول لأفضل النتائج.</p>
+                <i class="fas fa-award"></i>
+                <h3>شهادات تقدير</h3>
+                <p>تكريم دوري للمتفوقين لتحفيزهم على الاستمرار في النجاح.</p>
             </div>
+        </div>
+    </section>
+
+    <section class="testimonials" id="testimonials">
+        <h2 style="font-size: 2.5rem; margin-bottom: 10px;">ماذا يقول طلابنا؟</h2>
+        <div class="reviews-container" id="reviewsList">
+            <div class="review-card">
+                <h4>أحمد علي</h4>
+                <p>"أفضل مكان تعليمي، الشرح مبسط جداً والمتابعة ممتازة."</p>
+            </div>
+            <div class="review-card">
+                <h4>سارة محمد</h4>
+                <p>"بفضل سنتر القمة، قدرت أقفل درجات المواد الصعبة."</p>
+            </div>
+        </div>
+
+        <div class="review-form">
+            <h3>شاركنا رأيك في القمة</h3>
+            <div class="form-group" style="margin-top: 15px;">
+                <input type="text" id="revName" placeholder="اسمك">
+            </div>
+            <div class="form-group">
+                <textarea id="revText" rows="3" placeholder="اكتب رأيك هنا..."></textarea>
+            </div>
+            <button class="submit-btn" style="padding: 10px;" onclick="addReview()">إضافة الرأي</button>
         </div>
     </section>
 
     <section class="reg-section" id="register">
         <center>
             <h2 style="font-size: 2.5rem; margin-bottom: 10px;">استمارة الحجز</h2>
-            <p style="margin-bottom: 40px; color: #64748b;">سجل بياناتك الآن لتصلك إشعاراتنا اليومية</p>
+            <p style="margin-bottom: 40px; color: #64748b;">سجل بياناتك للانضمام إلينا</p>
         </center>
         <form id="studentForm">
             <div class="form-group">
                 <label>الاسم الكامل</label>
                 <div class="input-with-icon">
                     <i class="fas fa-user"></i>
-                    <input type="text" name="name" id="userNameInput" placeholder="اكتب اسمك الثلاثي" required>
+                    <input type="text" name="name" id="stName" placeholder="اسم الطالب الثلاثي" required>
                 </div>
             </div>
-
             <div class="form-group">
                 <label>رقم الهاتف</label>
                 <div class="input-with-icon">
@@ -415,7 +392,6 @@
                     <input type="tel" name="phone" placeholder="رقم الموبايل" required>
                 </div>
             </div>
-
             <div class="form-group">
                 <label>البريد الإلكتروني</label>
                 <div class="input-with-icon">
@@ -423,7 +399,6 @@
                     <input type="email" name="gmail" placeholder="example@gmail.com" required>
                 </div>
             </div>
-
             <div class="form-group">
                 <label>نظام الدراسة والدفع</label>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
@@ -439,7 +414,6 @@
                     </select>
                 </div>
             </div>
-
             <div class="form-group">
                 <label>البيانات الدراسية</label>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
@@ -459,21 +433,20 @@
                     <input type="text" name="custom_subject" placeholder="المادة واسم المدرس" required>
                 </div>
             </div>
-
             <button type="submit" class="submit-btn" id="submitBtn">تأكيد الحجز الآن</button>
         </form>
     </section>
 
     <section id="location" style="padding: 80px 8%; text-align: center;">
         <h2 style="margin-bottom: 20px; font-size: 2.5rem;"><i class="fas fa-map-location-dot" style="color: var(--accent-color);"></i> عنواننا</h2>
-        <p style="font-size: 1.3rem; font-weight: 700; color:var(--deep-text);">العديسات قبلي - نجع علوان</p>
-        <p style="font-size: 1.1rem; color:#64748b;">أمام معرض العمدة للأجهزة الكهربائية</p>
+        <p style="font-size: 1.3rem; font-weight: 700;">العديسات قبلي - نجع علوان</p>
+        <p style="font-size: 1.1rem; color: #64748b;">أمام معرض العمدة للأجهزة الكهربائية</p>
     </section>
 
     <div id="success-modal">
         <i class="fas fa-check-circle" style="font-size: 4rem; color: var(--accent-color); margin-bottom: 20px; display: block;"></i>
         <h2>تم التسجيل بنجاح!</h2>
-        <p>مرحباً بك في عائلة القمة، سيتم التواصل معك قريباً.</p>
+        <p>سيتم التواصل معك قريباً لتأكيد المواعيد.</p>
         <button class="submit-btn" onclick="location.reload()" style="margin-top:20px;">شكراً لك</button>
     </div>
 
@@ -485,14 +458,11 @@
 
     <script>
         const scriptURL = 'https://script.google.com/macros/s/AKfycbwg8T6DboOUEZ7Ro6uOxZPb46E27GOrkPUmxxd36JPvlGMZpGh47P03GGCneYoiYKTaMA/exec';
-        
-        // مصفوفة التحفيز اليومي
-        const quotes = [
-            "النجاح هو مجموع محاولات صغيرة تتكرر كل يوم.",
-            "لا تتوقف عندما تتعب، توقف عندما تنتهي.",
-            "أنت أقوى مما تعتقد، القمة بانتظارك يا بطل.",
-            "اجعل اليوم هو الخطوة الأولى نحو حلمك الكبير.",
-            "المستقبل ينتمي لأولئك الذين يؤمنون بجمال أحلامهم."
+        const motivationalQuotes = [
+            "أنت بطل قصتك، والقمة بانتظارك!",
+            "النجاح يتطلب شجاعة للاستمرار.",
+            "اجعل يومك اليوم خطوة نحو حلمك.",
+            "المستحيل هو مجرد كلمة في قاموس الضعفاء."
         ];
 
         function initApp() {
@@ -503,33 +473,49 @@
             updateLiveClock();
             setInterval(updateLiveClock, 1000);
             
-            checkUserAndShowNotification();
+            // تفعيل نظام الإشعارات الخارجية
+            requestNotificationPermission();
+            scheduleDailyNotification();
         }
 
-        // دالة لعرض إشعار يومي وتحفيزي حسب الاسم
-        function checkUserAndShowNotification() {
-            const savedName = localStorage.getItem('studentName');
-            const notifyDiv = document.getElementById('daily-notify');
-            const quoteText = document.getElementById('daily-quote-text');
-            const greeting = document.getElementById('user-greeting');
-            
-            // اختيار مقولة عشوائية بناءً على اليوم
-            const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
-            const dailyQuote = quotes[dayOfYear % quotes.length];
-            
-            if(savedName) {
-                greeting.innerText = `أهلاً يا ${savedName.split(' ')[0]}!`;
+        // إشعارات النظام الخارجية
+        function requestNotificationPermission() {
+            if ("Notification" in window) {
+                Notification.requestPermission();
             }
-            
-            quoteText.innerText = dailyQuote;
-            document.getElementById('hero-quote').innerText = dailyQuote;
+        }
 
-            // إظهار الإشعار بعد ثانيتين من الفتح
-            setTimeout(() => {
-                notifyDiv.style.display = 'block';
-                // إخفاء بعد 7 ثواني
-                setTimeout(() => { notifyDiv.style.opacity = '0'; }, 7000);
-            }, 2000);
+        function showExternalNotification(title, body) {
+            if ("Notification" in window && Notification.permission === "granted") {
+                new Notification(title, { body: body, icon: 'https://i.ibb.co/Gf63XzLz/logo.jpg' });
+            }
+        }
+
+        function scheduleDailyNotification() {
+            const lastNotified = localStorage.getItem('lastNotifyDate');
+            const today = new Date().toDateString();
+            
+            if (lastNotified !== today) {
+                const quote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
+                const studentName = localStorage.getItem('studentName') || "طالب القمة";
+                
+                setTimeout(() => {
+                    showExternalNotification(`صباح الخير يا ${studentName.split(' ')[0]}`, quote);
+                    localStorage.setItem('lastNotifyDate', today);
+                }, 5000);
+            }
+        }
+
+        // نظام الآراء
+        function addReview() {
+            const name = document.getElementById('revName').value;
+            const text = document.getElementById('revText').value;
+            if(name && text) {
+                const card = `<div class="review-card animate__animated animate__fadeIn"><h4>${name}</h4><p>"${text}"</p></div>`;
+                document.getElementById('reviewsList').innerHTML += card;
+                document.getElementById('revName').value = '';
+                document.getElementById('revText').value = '';
+            }
         }
 
         function toggleSideNav() { document.getElementById('sideNav').classList.toggle('active'); }
@@ -544,17 +530,16 @@
         form.onsubmit = (e) => {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
-            const name = document.getElementById('userNameInput').value;
+            const sName = document.getElementById('stName').value;
+            localStorage.setItem('studentName', sName);
             
-            // حفظ الاسم في المتصفح لاستخدامه لاحقاً في الإشعارات
-            localStorage.setItem('studentName', name);
-
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري ربطك بالمنصة...';
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري إرسال بياناتك...';
             btn.disabled = true;
 
             const formData = new FormData(form);
             fetch(scriptURL, { method: 'POST', body: formData, mode: 'no-cors' })
             .then(() => {
+                showExternalNotification("تم الحجز بنجاح!", `أهلاً بك يا ${sName} في القمة.`);
                 document.getElementById('success-modal').style.display = "block";
             })
             .catch(() => {
