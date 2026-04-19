@@ -5,311 +5,176 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>سنتر القمة التعليمي النموذجي | القمة مكانك</title>
 
-    <meta name="theme-color" content="#0f172a">
+    <meta name="theme-color" content="#1e1b4b">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogInNlbnRlci1hbHFlbW1hIiwKICAic2hvcnRfbmFtZSI6ICJhbHFlbW1hIiwKICAic3RhcnRfdXJsIjogIi4iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMwZTE3MmEiCn0=">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Reem+Kufi:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
     <style>
         :root {
-            --main-dark: #020617; 
-            --deep-blue: #1e1b4b;
-            --gold: #22d3ee; 
-            --gold-glow: #06b6d4;
-            --soft-white: #f8fafc;
-            --glass: rgba(255, 255, 255, 0.03);
-            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            --luxury-shadow: 0 0 30px rgba(34, 211, 238, 0.2);
+            --primary: #8b5cf6; /* بنفسجي زاهي */
+            --secondary: #d946ef; /* فوشيا نيون */
+            --dark-bg: #030014; /* خلفية الفضاء العميق */
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --gold: #f59e0b;
+            --white: #ffffff;
+            --neon-glow: 0 0 20px rgba(139, 92, 246, 0.5);
+            --transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Cairo', sans-serif;
-            scroll-behavior: smooth;
+            margin: 0; padding: 0; box-sizing: border-box;
+            font-family: 'Cairo', sans-serif; scroll-behavior: smooth;
         }
 
         body {
-            background-color: var(--main-dark);
-            background-image: radial-gradient(circle at top right, #1e1b4b, #020617);
-            color: var(--soft-white);
+            background-color: var(--dark-bg);
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(139, 92, 246, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(217, 70, 239, 0.15) 0%, transparent 40%);
+            color: var(--white);
             overflow-x: hidden;
-            transition: var(--transition);
-            line-height: 1.6;
         }
 
+        /* Loading Screen Customization */
         #loader {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            background: var(--main-dark);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10000;
-            transition: 0.5s;
+            position: fixed; width: 100%; height: 100%;
+            background: var(--dark-bg); display: flex; justify-content: center;
+            align-items: center; z-index: 10000; transition: 0.6s ease-out;
         }
         .spinner {
-            width: 60px;
-            height: 60px;
-            border: 6px solid var(--glass);
-            border-top-color: var(--gold);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
+            width: 80px; height: 80px;
+            border: 4px solid var(--card-bg);
+            border-top: 4px solid var(--primary);
+            border-bottom: 4px solid var(--secondary);
+            border-radius: 50%; animation: spin 1s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+            filter: drop-shadow(var(--neon-glow));
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        body.mobile-view {
-            max-width: 450px;
-            margin: 40px auto;
-            border: 12px solid #1e293b;
-            border-radius: 40px;
-            height: 850px;
-            overflow-y: auto;
-            position: relative;
-            box-shadow: 0 0 100px rgba(0,0,0,0.5);
-        }
-
-        .view-switcher {
-            position: fixed;
-            bottom: 30px;
-            left: 30px;
-            z-index: 9999;
-            background: linear-gradient(135deg, var(--main-dark), var(--deep-blue));
-            color: var(--gold);
-            border: 2px solid var(--gold);
-            padding: 12px 24px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: bold;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-            transition: var(--transition);
-        }
-        .view-switcher:hover { transform: scale(1.1); background: var(--gold); color: var(--main-dark); }
-
+        /* Navigation Header */
         header {
-            background: rgba(2, 6, 23, 0.8);
-            backdrop-filter: blur(20px);
-            padding: 15px 6%;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--gold);
-            box-shadow: 0 4px 30px rgba(0,0,0,0.5);
+            background: rgba(3, 0, 20, 0.7);
+            backdrop-filter: blur(15px);
+            padding: 12px 6%;
+            position: fixed; width: 100%; top: 0; z-index: 1000;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid rgba(139, 92, 246, 0.3);
         }
 
         .logo-box img {
-            height: 65px;
-            filter: drop-shadow(0 0 8px var(--gold));
-            border-radius: 10px;
-        }
-
-        .header-left { display: flex; align-items: center; gap: 25px; }
-
-        .menu-btn {
-            color: var(--gold);
-            font-size: 2rem;
-            cursor: pointer;
+            height: 55px; border-radius: 12px;
+            filter: drop-shadow(0 0 10px var(--primary));
             transition: var(--transition);
         }
-
-        .side-nav {
-            position: fixed;
-            top: 0;
-            right: -320px;
-            width: 300px;
-            height: 100%;
-            background: linear-gradient(180deg, var(--main-dark) 0%, var(--deep-blue) 100%);
-            z-index: 2000;
-            transition: 0.5s cubic-bezier(0.7, 0, 0.3, 1);
-            padding: 100px 25px;
-            box-shadow: -10px 0 40px rgba(0,0,0,0.6);
-            border-left: 1px solid var(--gold);
-        }
-
-        .side-nav.active { right: 0; }
-        .side-nav a {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            color: white;
-            text-decoration: none;
-            padding: 18px;
-            margin-bottom: 12px;
-            border-radius: 12px;
-            font-weight: 700;
-            background: rgba(255,255,255,0.03);
-            transition: var(--transition);
-        }
-        .side-nav a:hover { background: var(--gold); color: var(--main-dark); }
-
-        .close-nav {
-            position: absolute; top: 30px; left: 30px;
-            color: var(--gold); font-size: 2.2rem; cursor: pointer;
-        }
+        .logo-box img:hover { transform: rotate(5deg) scale(1.1); }
 
         .live-clock {
-            color: white;
-            background: rgba(255,255,255,0.08);
-            padding: 8px 18px;
-            border-radius: 12px;
-            border-right: 4px solid var(--gold);
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            padding: 5px 15px; border-radius: 10px; font-weight: bold;
+            box-shadow: var(--neon-glow);
         }
-        #clock-time { color: var(--gold); font-weight: 900; font-size: 1.3rem; text-shadow: 0 0 10px var(--gold); }
 
+        /* Hero Section */
         .hero {
-            height: 100vh;
-            background: linear-gradient(rgba(2, 6, 23, 0.7), rgba(2, 6, 23, 0.9)), 
-                        url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1350&q=80');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            color: white;
-            padding: 20px;
+            height: 100vh; position: relative;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; overflow: hidden;
+        }
+        .hero::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+            opacity: 0.2; pointer-events: none;
         }
 
         .hero h1 {
-            font-size: clamp(2.5rem, 8vw, 5rem);
-            font-weight: 900;
-            margin-bottom: 10px;
-            background: linear-gradient(to bottom, #fff, var(--gold));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 20px rgba(34, 211, 238, 0.3);
+            font-size: clamp(2.5rem, 10vw, 6rem); font-weight: 900;
+            background: linear-gradient(to right, #fff, var(--primary), var(--secondary));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 20px; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5));
         }
 
-        .hero p { font-size: 1.2rem; max-width: 600px; opacity: 0.9; margin-bottom: 30px; }
-
         .motivation-banner {
-            background: var(--gold);
-            color: var(--main-dark);
-            padding: 15px 40px;
-            border-radius: 50px;
-            font-weight: 900;
-            font-size: 1.1rem;
-            margin-top: 20px;
-            box-shadow: 0 0 30px var(--gold);
+            background: var(--card-bg); border: 1px solid var(--primary);
+            padding: 12px 30px; border-radius: 50px; color: var(--primary);
+            font-weight: bold; letter-spacing: 1px;
             animation: pulse 2s infinite;
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); box-shadow: 0 0 20px var(--gold); }
-            50% { transform: scale(1.05); box-shadow: 0 0 40px var(--gold); }
-            100% { transform: scale(1); box-shadow: 0 0 20px var(--gold); }
-        }
-
-        .excellence-section {
-            padding: 80px 8%;
-            text-align: center;
-            background: transparent;
-        }
-
-        .excellence-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-            margin-top: 50px;
-        }
-
-        .excellence-card {
-            padding: 30px;
-            border-radius: 20px;
-            background: var(--glass);
+        /* Glass Cards */
+        .excellence-card, .card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255,255,255,0.1);
             backdrop-filter: blur(10px);
-            box-shadow: var(--luxury-shadow);
-            border: 1px solid rgba(34, 211, 238, 0.1);
-            transition: var(--transition);
+            border-radius: 24px;
+            padding: 30px; transition: var(--transition);
         }
-        .excellence-card:hover { transform: translateY(-10px); border-color: var(--gold); }
-
-        .excellence-card i { font-size: 2.5rem; color: var(--gold); margin-bottom: 15px; }
-
-        .teachers-section { padding: 100px 8%; background: transparent; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin-top: 60px; }
-        
-        .card {
-            background: var(--glass); border-radius: 25px; padding: 40px;
-            text-align: center; box-shadow: var(--luxury-shadow);
-            transition: var(--transition); border: 1px solid rgba(255,255,255,0.05);
-            backdrop-filter: blur(10px);
+        .excellence-card:hover, .card:hover {
+            transform: translateY(-15px) scale(1.02);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.2);
         }
-        .card:hover { transform: translateY(-10px); border-color: var(--gold); background: rgba(34, 211, 238, 0.05); }
-        .card img { width: 140px; height: 140px; border-radius: 50%; border: 4px solid var(--gold); margin-bottom: 20px; object-fit: cover; }
-        .subject { background: var(--gold); color: var(--main-dark); padding: 6px 16px; border-radius: 50px; font-size: 0.9rem; font-weight: 700; display: inline-block; margin-bottom: 15px; }
 
-        .reg-section { padding: 100px 8%; background: linear-gradient(135deg, #020617 0%, #1e1b4b 100%); color: white; }
-        
+        .excellence-card i {
+            font-size: 3rem; background: linear-gradient(var(--primary), var(--secondary));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        /* Advanced Form Styling */
+        .reg-section { padding: 100px 5%; }
         form {
-            max-width: 850px; margin: 0 auto; background: rgba(255, 255, 255, 0.02);
-            padding: 50px; border-radius: 40px; border: 1px solid rgba(34, 211, 238, 0.2);
-            backdrop-filter: blur(20px); box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+            max-width: 700px; margin: 0 auto;
+            background: rgba(10, 10, 30, 0.8);
+            border: 1px solid var(--primary);
+            padding: 40px; border-radius: 30px;
+            box-shadow: 0 0 50px rgba(139, 92, 246, 0.1);
         }
 
-        .form-group { margin-bottom: 25px; }
-        .form-group label { display: block; margin-bottom: 10px; font-weight: 700; color: var(--gold); }
+        .form-group label { color: var(--primary); font-size: 1.1rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
         
-        .input-with-icon { position: relative; }
-        .input-with-icon i { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--gold); opacity: 0.7; }
-        .input-with-icon input, .input-with-icon select { padding-right: 45px; }
-
+        .input-with-icon { position: relative; margin-bottom: 20px; }
+        .input-with-icon i { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--secondary); }
+        
         input, select {
-            width: 100%; padding: 16px; border-radius: 12px; border: 2px solid rgba(255,255,255,0.1);
-            background: rgba(255,255,255,0.05); color: white; transition: 0.3s;
+            width: 100%; padding: 15px 45px 15px 15px; border-radius: 15px;
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+            color: white; font-size: 1rem; transition: 0.3s;
         }
-        input:focus, select:focus { border-color: var(--gold); background: rgba(255,255,255,0.1); outline: none; box-shadow: 0 0 15px rgba(34, 211, 238, 0.3); }
+        input:focus, select:focus { border-color: var(--secondary); background: rgba(255,255,255,0.1); outline: none; box-shadow: 0 0 15px var(--secondary); }
 
         .submit-btn {
-            background: var(--gold); width: 100%; padding: 20px; border-radius: 15px;
-            border: none; font-weight: 900; cursor: pointer; font-size: 1.3rem;
-            color: var(--main-dark); transition: var(--transition);
-            box-shadow: 0 0 20px var(--gold);
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white; font-weight: 900; border: none; padding: 20px;
+            border-radius: 15px; cursor: pointer; font-size: 1.4rem;
+            width: 100%; transition: var(--transition); text-transform: uppercase;
         }
-        .submit-btn:hover { background: white; transform: translateY(-3px); box-shadow: 0 0 40px var(--gold); }
+        .submit-btn:hover { letter-spacing: 2px; transform: scale(1.02); filter: brightness(1.2); }
 
-        footer { text-align: center; padding: 60px; background: #000; color: #fff; border-top: 1px solid var(--gold); }
-
-        #success-modal {
-            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: var(--main-dark); color: white; padding: 50px; border-radius: 30px;
-            z-index: 3000; border: 2px solid var(--gold); text-align: center; width: 90%; max-width: 500px;
-            box-shadow: 0 0 100px rgba(34, 211, 238, 0.4);
-        }
-
-        /* إشعار انتهاء الاشتراك المطور */
+        /* Alert Box */
         #sub-alert {
-            position: fixed; 
-            bottom: 100px; 
-            right: 30px; 
-            background: linear-gradient(135deg, #ef4444, #b91c1c);
-            color: white; 
-            padding: 20px 30px; 
-            border-radius: 20px;
-            display: none; 
-            z-index: 5000; 
-            animation: bounceIn 1s;
-            box-shadow: 0 10px 40px rgba(239, 68, 68, 0.5); 
-            border: 2px solid rgba(255,255,255,0.2);
-            backdrop-filter: blur(10px);
+            position: fixed; bottom: 30px; left: 30px; right: 30px;
+            background: rgba(239, 68, 68, 0.95);
+            padding: 20px; border-radius: 20px; display: none;
+            z-index: 5000; border: 2px solid white; backdrop-filter: blur(10px);
+            animation: slideInUp 0.8s;
         }
+
+        .view-switcher {
+            position: fixed; bottom: 30px; left: 30px; z-index: 4000;
+            background: var(--primary); border: none; color: white; padding: 12px 20px; border-radius: 50px;
+        }
+
+        /* Mobile View Styles */
+        body.mobile-view { max-width: 450px; margin: 40px auto; border: 8px solid #333; border-radius: 40px; height: 850px; overflow-y: auto; }
 
         @media (max-width: 768px) {
-            form { padding: 30px 15px; }
-            .hero h1 { font-size: 2.8rem; }
-            #sub-alert { left: 20px; right: 20px; bottom: 80px; text-align: center; }
+            header { padding: 10px 4%; }
+            .hero h1 { font-size: 3rem; }
+            form { padding: 25px; }
         }
     </style>
 </head>
@@ -319,159 +184,166 @@
 
     <div id="sub-alert">
         <div style="display: flex; align-items: center; gap: 15px;">
-            <i class="fas fa-exclamation-triangle" style="font-size: 1.5rem;"></i>
+            <i class="fas fa-bell animate__animated animate__tada animate__infinite" style="font-size: 2rem;"></i>
             <div>
-                <strong style="display: block;">تنبيه الأبطال!</strong>
-                <span id="sub-message">يرجى التجديد قبل حلول موعد استحقاقك.</span>
+                <strong style="display: block; font-size: 1.2rem;">تنبيه التجديد!</strong>
+                <span id="sub-message">...</span>
             </div>
         </div>
     </div>
 
     <button class="view-switcher" onclick="toggleView()">
-        <i class="fas fa-mobile-alt"></i> وضع العرض المتطور
+        <i class="fas fa-mobile-alt"></i> تبديل العرض
     </button>
 
     <header id="main-header">
         <div class="logo-box">
-            <img src="https://i.ibb.co/Gf63XzLz/logo.jpg" alt="لوجو سنتر القمة">
+            <img src="https://i.ibb.co/Gf63XzLz/logo.jpg" alt="لوجو">
         </div>
-
-        <div class="header-left">
+        <div class="header-left" style="display: flex; align-items: center; gap: 15px;">
             <div class="live-clock">
-                <span id="clock-time">00:00:00</span>
-                <span id="clock-date">...</span>
+                <i class="far fa-clock"></i> <span id="clock-time">00:00</span>
             </div>
             <div class="menu-btn" onclick="toggleSideNav()">
-                <i class="fas fa-bars"></i>
+                <i class="fas fa-th-large" style="color: var(--primary);"></i>
             </div>
         </div>
     </header>
 
     <div class="side-nav" id="sideNav">
-        <i class="fas fa-times close-nav" onclick="toggleSideNav()"></i>
-        <a href="#"><i class="fas fa-home"></i> الرئيسية</a>
-        <a href="#teachers"><i class="fas fa-user-tie"></i> الفريق التعليمي</a>
-        <a href="#register"><i class="fas fa-user-plus"></i> انضم لجيش القمة</a>
+        <i class="fas fa-times close-nav" onclick="toggleSideNav()" style="position: absolute; top: 20px; left: 20px; font-size: 2rem; color: var(--secondary);"></i>
+        <div style="margin-top: 50px;">
+            <a href="#"><i class="fas fa-home"></i> الرئيسية</a>
+            <a href="#teachers"><i class="fas fa-user-graduate"></i> المدرسين</a>
+            <a href="#register"><i class="fas fa-plus-circle"></i> اشتراك جديد</a>
+        </div>
     </div>
 
     <section class="hero">
-        <h1 class="animate__animated animate__fadeInDown">القمة ليست مكاناً.. بل اختيار!</h1>
-        <p class="animate__animated animate__fadeInUp">نحن لا نصنع طلاباً فحسب، بل نصنع قادة المستقبل بأحدث الأساليب العلمية.</p>
-        <div class="motivation-banner animate__animated animate__pulse">القمة مكانك.. لأنك تستحق الأفضل!</div>
-        
-        <a href="#register" style="text-decoration:none; margin-top: 40px;" class="cta-btn submit-btn animate__animated animate__zoomIn animate__delay-1s">ابدأ رحلة النجاح الآن</a>
+        <h1 class="animate__animated animate__zoomIn">صناعة العباقرة</h1>
+        <p class="animate__animated animate__fadeInUp animate__delay-1s" style="font-size: 1.4rem; color: #cbd5e1;">بوابتك لتكون رقم 1 في مجالك التعليمي</p>
+        <div class="motivation-banner animate__animated animate__pulse animate__infinite">القمة خيارك الوحيد</div>
+        <a href="#register" class="submit-btn" style="width: auto; margin-top: 40px; padding: 15px 40px; text-decoration: none;">انضم الآن</a>
     </section>
 
     <section class="excellence-section">
-        <h2 style="font-size: 2.5rem; font-weight: 900; color: var(--gold);">لماذا سنتر القمة؟</h2>
-        <div class="excellence-grid">
+        <h2 style="text-align:center; font-size: 3rem; margin-bottom: 50px; color: var(--primary);">لماذا نحن؟</h2>
+        <div class="excellence-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; padding: 0 5%;">
+            <div class="excellence-card animate__animated animate__fadeInLeft">
+                <i class="fas fa-microchip"></i>
+                <h3 style="margin: 15px 0;">تكنولوجيا حديثة</h3>
+                <p>نظام متابعة ذكي لكل طالب ودرجاته أسبوعياً.</p>
+            </div>
             <div class="excellence-card animate__animated animate__fadeInUp">
-                <i class="fas fa-rocket"></i>
-                <h3>طموح بلا حدود</h3>
-                <p>نأخذ بيدك من البداية حتى الوصول لدرجة الاحتراف والتميز.</p>
+                <i class="fas fa-shield-alt"></i>
+                <h3 style="margin: 15px 0;">أمان تام</h3>
+                <p>بيئة تعليمية محفزة ومنظمة تضمن لك الهدوء والتركيز.</p>
             </div>
-            <div class="excellence-card animate__animated animate__fadeInUp animate__delay-1s">
-                <i class="fas fa-brain"></i>
-                <h3>فهم لا حفظ</h3>
-                <p>نعتمد خرائط ذهنية وأنظمة حديثة تجعل المعلومة تثبت في عقلك للأبد.</p>
-            </div>
-            <div class="excellence-card animate__animated animate__fadeInUp animate__delay-2s">
-                <i class="fas fa-fire"></i>
-                <h3>طاقة إيجابية</h3>
-                <p>بيئة تعليمية جبارة تشجعك على كسر المستحيل وتحقيق المستهدف.</p>
+            <div class="excellence-card animate__animated animate__fadeInRight">
+                <i class="fas fa-trophy"></i>
+                <h3 style="margin: 15px 0;">مركز الأوائل</h3>
+                <p>أكبر نسبة من أوائل المحافظة يخرجون من هنا.</p>
             </div>
         </div>
     </section>
 
     <section class="teachers-section" id="teachers">
-        <center><h2 style="font-size: 3rem; font-weight: 900; color: var(--gold);">الفريق التعليمي</h2></center>
-        <div class="grid">
-            <div class="card">
-                <img src="https://ui-avatars.com/api/?name=محمد+العدلي&background=020617&color=22d3ee" alt="">
-                <br><span class="subject">اللغة الإنجليزية</span>
+        <center><h2 style="font-size: 3rem; color: var(--secondary); margin-bottom: 50px;">نخبة القمة</h2></center>
+        <div class="grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; padding: 0 5%;">
+            <div class="card animate__animated animate__flipInX">
+                <img src="https://ui-avatars.com/api/?name=محمد+العدلي&background=8b5cf6&color=fff" alt="">
+                <br><span class="subject">الإنجليزية</span>
                 <h3>أ/ محمد العدلي</h3>
-                <p style="color: #94a3b8; margin-top: 10px;">أسطورة اللغة الإنجليزية وصانع الأوائل.</p>
             </div>
-            <div class="card">
-                <img src="https://ui-avatars.com/api/?name=وليد+الضوي&background=020617&color=22d3ee" alt="">
+            <div class="card animate__animated animate__flipInX animate__delay-1s">
+                <img src="https://ui-avatars.com/api/?name=وليد+الضوي&background=d946ef&color=fff" alt="">
                 <br><span class="subject">اللغة العربية</span>
                 <h3>أ/ وليد الضوي</h3>
-                <p style="color: #94a3b8; margin-top: 10px;">عميد اللغة العربية وسيد البلاغة والنحو.</p>
-            </div>
-            <div class="card">
-                <img src="https://ui-avatars.com/api/?name=عبد+الرحمن&background=020617&color=22d3ee" alt="">
-                <br><span class="subject">تأسيس لغات</span>
-                <h3>أ/ عبد الرحمن</h3>
-                <p style="color: #94a3b8; margin-top: 10px;">خبير تطوير المناهج واللغات الحديثة.</p>
             </div>
         </div>
     </section>
 
     <section class="reg-section" id="register">
         <center>
-            <h2 style="font-size: 2.8rem; margin-bottom: 10px; color: var(--gold);">استمارة الانضمام للقمة</h2>
-            <p style="margin-bottom: 40px; opacity: 0.8;">كن جزءاً من أقوى تجمع تعليمي في مصر</p>
+            <h2 style="font-size: 3rem; margin-bottom: 20px; color: var(--primary);">استمارة الانضمام</h2>
         </center>
-        <form id="studentForm">
+        <form id="studentForm" class="animate__animated animate__fadeIn">
             <div class="form-group">
-                <label><i class="fas fa-id-card"></i> البيانات الأساسية</label>
+                <label><i class="fas fa-user-circle"></i> الاسم الكامل</label>
                 <div class="input-with-icon">
                     <i class="fas fa-user"></i>
-                    <input type="text" name="name" placeholder="اسم الطالب الثلاثي" required>
-                </div>
-                
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
-                    <div class="input-with-icon">
-                        <i class="fas fa-phone-alt"></i>
-                        <input type="tel" name="phone" placeholder="رقم الموبايل" required>
-                    </div>
-                    <div class="input-with-icon">
-                        <i class="fas fa-envelope"></i>
-                        <input type="email" name="gmail" placeholder="البريد الإلكتروني (Gmail)" required>
-                    </div>
+                    <input type="text" name="name" placeholder="ادخل اسمك الثلاثي" required>
                 </div>
             </div>
 
             <div class="form-group">
-                <label><i class="fas fa-graduation-cap"></i> المسار التعليمي</label>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                <label><i class="fas fa-phone"></i> رقم الهاتف</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-mobile-alt"></i>
+                    <input type="tel" name="phone" placeholder="رقم الموبايل الشخصي" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-at"></i>
+                    <input type="email" name="gmail" placeholder="البريد الإلكتروني (Gmail)" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-school"></i> المسار والصف</label>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                     <select name="edu_type" required>
                         <option value="عام">ثانوي عام</option>
                         <option value="أزهر">ثانوي أزهري</option>
                     </select>
-                    <select name="grade" id="gradeSelect" required>
-                        <option value="">اختر الصف الدراسي</option>
-                        <option value="s1">الصف الأول الثانوي</option>
-                        <option value="s2">الصف الثاني الثانوي</option>
-                        <option value="s3">الصف الثالث الثانوي</option>
+                    <select name="grade" required>
+                        <option value="s1">1 ثانوي</option>
+                        <option value="s2">2 ثانوي</option>
+                        <option value="s3">3 ثانوي</option>
                     </select>
-                </div>
-                
-                <div class="input-with-icon">
-                    <i class="fas fa-book-open"></i>
-                    <input type="text" name="custom_subject" placeholder="اكتب اسم المادة واسم المدرس (مثال: كيمياء - أ/ عبده مكي)" required>
                 </div>
             </div>
 
             <div class="form-group">
-                <label><i class="fas fa-credit-card"></i> تأكيد الحجز (فودافون كاش: 01152956200)</label>
-                <input type="tel" name="payment_number" placeholder="رقم المحفظة التي تم التحويل منها">
+                <label><i class="fas fa-map-marker-alt"></i> مكان الحضور</label>
+                <select name="attendance_type" required>
+                    <option value="سنتر">الحضور في السنتر</option>
+                    <option value="اون لاين">أون لاين (منصة)</option>
+                </select>
             </div>
 
-            <button type="submit" class="submit-btn" id="submitBtn">تأكيد الانضمام للقمة</button>
+            <div class="form-group">
+                <label><i class="fas fa-wallet"></i> وسيلة الدفع</label>
+                <select name="payment_method" required>
+                    <option value="في السنتر">نقداً في السنتر</option>
+                    <option value="فودافون كاش">فودافون كاش / محفظة الكترونية</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-money-check-alt"></i> رقم المحول منه (لحجز الاون لاين)</label>
+                <input type="tel" name="payment_number" placeholder="ادخل رقم المحفظة">
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">إتمام التسجيل بالقمة</button>
         </form>
     </section>
 
     <div id="success-modal">
-        <i class="fas fa-medal" style="font-size: 5rem; color: var(--gold); margin-bottom: 20px; display: block;"></i>
-        <h2>مبارك عليك الخطوة الأولى!</h2>
-        <p>لقد اخترت الطريق الصحيح. سنتواصل معك فوراً لتأكيد حجزك.</p>
-        <button class="submit-btn" onclick="location.reload()" style="margin-top:20px;">حسناً يا بطل</button>
+        <i class="fas fa-check-circle" style="font-size: 5rem; color: var(--secondary); margin-bottom: 20px;"></i>
+        <h2>تم قبولك في القمة!</h2>
+        <p>جاري مراجعة طلبك وسنتواصل معك.</p>
+        <button class="submit-btn" onclick="location.reload()" style="margin-top: 20px;">حسناً</button>
     </div>
 
-    <footer>
-        <p>جميع الحقوق محفوظة &copy; سنتر القمة التعليمي النموذجي 2026</p>
-        <p style="color: var(--gold); margin-top: 10px; font-size: 0.8rem; opacity: 0.6;">إدارة أبو سيف | التطوير عبده مكي</p>
+    <footer style="background: #050510; padding: 40px 0; border-top: 2px solid var(--primary);">
+        <center>
+            <p>جميع الحقوق محفوظة &copy; سنتر القمة التعليمي 2026</p>
+            <p style="opacity: 0.5; font-size: 0.8rem; margin-top: 10px;">بواسطة: عبده مكي</p>
+        </center>
     </footer>
 
     <script>
@@ -480,90 +352,58 @@
         function initApp() {
             setTimeout(() => { 
                 document.getElementById('loader').style.opacity = '0'; 
-                setTimeout(()=> document.getElementById('loader').style.display='none', 500); 
-            }, 1000);
-            requestNotifications();
+                setTimeout(()=> document.getElementById('loader').style.display='none', 600); 
+            }, 1500);
+            updateLiveClock();
             checkSubscription();
         }
 
-        function requestNotifications() {
-            if ("Notification" in window) {
-                Notification.requestPermission();
-            }
-        }
-
-        function sendSuccessNotification() {
-            if (Notification.permission === "granted") {
-                new Notification("سنتر القمة", {
-                    body: "أهلاً بك يا بطل! تم استلام بياناتك بنجاح وجاري المراجعة.",
-                    icon: "https://i.ibb.co/Gf63XzLz/logo.jpg"
-                });
-            }
-        }
-
-        // منطق حساب مدة الاشتراك (30 يوم)
         function checkSubscription() {
             const today = new Date();
             let subDate = localStorage.getItem('qemma_sub_start');
-
-            // إذا لم يكن مسجلاً (أول مرة يدخل)، يتم تسجيل تاريخ اليوم كبداية اشتراك
             if (!subDate) {
                 localStorage.setItem('qemma_sub_start', today.toISOString());
                 return;
             }
-
             const startDate = new Date(subDate);
-            const diffTime = Math.abs(today - startDate);
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+            const diffDays = Math.ceil(Math.abs(today - startDate) / (1000 * 60 * 60 * 24)); 
 
-            // إذا مر 30 يوم أو أكثر يظهر التنبيه
             if (diffDays >= 30) {
                 const nextRenewal = new Date(startDate);
                 nextRenewal.setDate(startDate.getDate() + 30);
+                const renewalDateStr = nextRenewal.toLocaleDateString('ar-EG', {day:'numeric', month:'long'});
                 
-                const renewalDateStr = nextRenewal.toLocaleDateString('ar-EG', {day:'numeric', month:'long', year:'numeric'});
-                
-                document.getElementById('sub-message').innerText = `باقي أيام قليلة على انتهاء اشتراكك، يرجى التجديد خلال يوم ${renewalDateStr} لضمان استمرار الخدمة.`;
-                
-                setTimeout(() => {
-                    document.getElementById('sub-alert').style.display = 'block';
-                }, 3000);
+                document.getElementById('sub-message').innerText = `يرجى التجديد خلال يوم ${renewalDateStr} لضمان استمرار ميزاتك.`;
+                setTimeout(() => { document.getElementById('sub-alert').style.display = 'block'; }, 4000);
             }
         }
 
-        function toggleSideNav() { document.getElementById('sideNav').classList.toggle('active'); }
-        function toggleView() { document.body.classList.toggle('mobile-view'); }
-
         function updateLiveClock() {
             const now = new Date();
-            document.getElementById('clock-time').innerText = now.toLocaleTimeString('ar-EG');
-            document.getElementById('clock-date').innerText = now.toLocaleDateString('ar-EG', {weekday:'long', day:'numeric', month:'long'});
+            document.getElementById('clock-time').innerText = now.toLocaleTimeString('ar-EG', {hour: '2-digit', minute:'2-digit'});
         }
-        setInterval(updateLiveClock, 1000);
+        setInterval(updateLiveClock, 1000 * 60);
+
+        function toggleSideNav() { document.getElementById('sideNav').classList.toggle('active'); }
+        function toggleView() { document.body.classList.toggle('mobile-view'); }
 
         const form = document.getElementById('studentForm');
         form.onsubmit = (e) => {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
-            btn.innerHTML = '<i class="fas fa-sync fa-spin"></i> جاري إلحاقك بالقمة...';
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التسجيل...';
             btn.disabled = true;
 
-            const formData = new FormData(form);
-            fetch(scriptURL, { method: 'POST', body: formData, mode: 'no-cors' })
+            fetch(scriptURL, { method: 'POST', body: new FormData(form), mode: 'no-cors' })
             .then(() => {
                 document.getElementById('success-modal').style.display = "block";
-                sendSuccessNotification();
             })
             .catch(() => {
-                alert("حدث خطأ بسيط، حاول مرة أخرى يا بطل.");
+                alert("خطأ! حاول مجدداً");
                 btn.disabled = false;
-                btn.innerText = "تأكيد الانضمام للقمة";
+                btn.innerText = "إتمام التسجيل";
             });
         };
-
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-        });
     </script>
 </body>
 </html>
