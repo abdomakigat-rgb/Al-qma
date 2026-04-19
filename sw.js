@@ -5,7 +5,7 @@ const urlsToCache = [
   'https://i.ibb.co/v4GzdvTJ/logo.jpg'
 ];
 
-// تثبيت ملف الخدمة وتخزين الملفات الأساسية
+// تثبيت ملف الخدمة وتخزين الملفات
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
@@ -15,12 +15,30 @@ self.addEventListener('install', event => {
   );
 });
 
-// تفعيل ملف الخدمة
+// تفعيل ملف الخدمة والسيطرة فوراً
 self.addEventListener('activate', event => {
   event.waitUntil(self.clients.claim());
 });
 
-// التعامل مع الطلبات لضمان عمل التطبيق
+// محرك استقبال الإشعارات (هنا السر)
+self.addEventListener('push', function(event) {
+  const options = {
+    body: event.data ? event.data.text() : 'أهلاً بك في سنتر القمة التعليمي!',
+    icon: 'https://i.ibb.co/v4GzdvTJ/logo.jpg',
+    badge: 'https://i.ibb.co/v4GzdvTJ/logo.jpg',
+    vibrate: [100, 50, 100],
+    data: {
+      dateOfArrival: Date.now(),
+      primaryKey: '1'
+    }
+  };
+
+  event.waitUntil(
+    self.registration.showNotification('تنبيه من القمة 🚀', options)
+  );
+});
+
+// التعامل مع الطلبات لضمان عمل التطبيق أوفلاين
 self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request)
