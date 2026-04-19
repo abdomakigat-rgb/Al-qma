@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>سنتر القمة التعليمي النموذجي | القمة مكانك</title>
 
-    <meta name="theme-color" content="#0f172a">
+    <meta name="theme-color" content="#f8fafc">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogInNlbnRlci1hbHFlbW1hIiwKICAic2hvcnRfbmFtZSI6ICJhbHFlbW1hIiwKICAic3RhcnRfdXJsIjogIi4iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMwZTE3MmEiCn0=">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogInNlbnRlci1hbHFlbW1hIiwKICAic2hvcnRfbmFtZSI6ICJhbHFlbW1hIiwKICAic3RhcnRfdXJsIjogIi4iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiNmOGZhZmMiCn0=">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Reem+Kufi:wght@700&display=swap" rel="stylesheet">
@@ -16,14 +16,13 @@
 
     <style>
         :root {
-            --main-dark: #0f172a; 
-            --deep-blue: #1e293b;
-            --gold: #38bdf8; /* لون لبني مريح ومبهج */
-            --gold-glow: #0ea5e9;
-            --soft-white: #f8fafc;
-            --glass: rgba(255, 255, 255, 0.05);
+            --main-bg: #f8fafc; 
+            --accent-color: #0ea5e9; /* لبني مبهج */
+            --deep-text: #0f172a;
+            --soft-blue: #e0f2fe;
+            --white: #ffffff;
             --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            --luxury-shadow: 0 10px 30px rgba(56, 189, 248, 0.1);
+            --luxury-shadow: 0 10px 30px rgba(14, 165, 233, 0.1);
         }
 
         * {
@@ -35,9 +34,9 @@
         }
 
         body {
-            background-color: var(--main-dark);
-            background-image: radial-gradient(circle at top right, #1e293b, #0f172a);
-            color: var(--soft-white);
+            background-color: var(--main-bg);
+            background-image: radial-gradient(circle at top right, #f1f5f9, #f8fafc);
+            color: var(--deep-text);
             overflow-x: hidden;
             transition: var(--transition);
             line-height: 1.6;
@@ -47,7 +46,7 @@
             position: fixed;
             width: 100%;
             height: 100%;
-            background: var(--main-dark);
+            background: var(--white);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -57,8 +56,8 @@
         .spinner {
             width: 60px;
             height: 60px;
-            border: 6px solid var(--glass);
-            border-top-color: var(--gold);
+            border: 6px solid var(--soft-blue);
+            border-top-color: var(--accent-color);
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -67,12 +66,12 @@
         body.mobile-view {
             max-width: 450px;
             margin: 40px auto;
-            border: 12px solid #334155;
+            border: 12px solid #e2e8f0;
             border-radius: 40px;
             height: 850px;
             overflow-y: auto;
             position: relative;
-            box-shadow: 0 0 100px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
         }
 
         .view-switcher {
@@ -80,7 +79,7 @@
             bottom: 30px;
             left: 30px;
             z-index: 9999;
-            background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+            background: var(--accent-color);
             color: #fff;
             border: none;
             padding: 12px 24px;
@@ -90,12 +89,11 @@
             box-shadow: 0 10px 20px rgba(14, 165, 233, 0.3);
             transition: var(--transition);
         }
-        .view-switcher:hover { transform: scale(1.1); box-shadow: 0 15px 30px rgba(14, 165, 233, 0.5); }
 
         header {
-            background: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(20px);
-            padding: 15px 6%;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(15px);
+            padding: 12px 6%;
             position: fixed;
             width: 100%;
             top: 0;
@@ -103,23 +101,21 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(56, 189, 248, 0.2);
-            box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+            border-bottom: 2px solid var(--soft-blue);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
         }
 
         .logo-box img {
-            height: 65px;
-            filter: drop-shadow(0 0 8px var(--gold));
+            height: 60px;
             border-radius: 10px;
         }
 
-        .header-left { display: flex; align-items: center; gap: 25px; }
+        .header-left { display: flex; align-items: center; gap: 20px; }
 
         .menu-btn {
-            color: var(--gold);
-            font-size: 2rem;
+            color: var(--accent-color);
+            font-size: 1.8rem;
             cursor: pointer;
-            transition: var(--transition);
         }
 
         .side-nav {
@@ -128,12 +124,11 @@
             right: -320px;
             width: 300px;
             height: 100%;
-            background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+            background: var(--white);
             z-index: 2000;
             transition: 0.5s cubic-bezier(0.7, 0, 0.3, 1);
             padding: 100px 25px;
-            box-shadow: -10px 0 40px rgba(0,0,0,0.6);
-            border-left: 1px solid var(--gold);
+            box-shadow: -10px 0 40px rgba(0,0,0,0.05);
         }
 
         .side-nav.active { right: 0; }
@@ -141,174 +136,147 @@
             display: flex;
             align-items: center;
             gap: 15px;
-            color: white;
+            color: var(--deep-text);
             text-decoration: none;
-            padding: 18px;
-            margin-bottom: 12px;
+            padding: 15px;
+            margin-bottom: 10px;
             border-radius: 12px;
             font-weight: 700;
-            background: rgba(255,255,255,0.03);
+            background: var(--soft-blue);
             transition: var(--transition);
         }
-        .side-nav a:hover { background: var(--gold); color: #0f172a; }
+        .side-nav a:hover { background: var(--accent-color); color: #fff; }
 
         .close-nav {
             position: absolute; top: 30px; left: 30px;
-            color: var(--gold); font-size: 2.2rem; cursor: pointer;
+            color: var(--accent-color); font-size: 2rem; cursor: pointer;
         }
 
         .live-clock {
-            color: white;
-            background: rgba(255,255,255,0.08);
-            padding: 8px 18px;
-            border-radius: 12px;
-            border-right: 4px solid var(--gold);
+            color: var(--deep-text);
+            background: var(--soft-blue);
+            padding: 6px 15px;
+            border-radius: 10px;
+            font-size: 0.9rem;
         }
-        #clock-time { color: var(--gold); font-weight: 900; font-size: 1.3rem; text-shadow: 0 0 10px var(--gold); }
+        #clock-time { color: var(--accent-color); font-weight: 900; }
 
         .hero {
             height: 100vh;
-            background: linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.9)), 
-                        url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1350&q=80');
+            background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.9)), 
+                        url('https://images.unsplash.com/photo-1523050853064-db7946890cb0?auto=format&fit=crop&w=1350&q=80');
             background-size: cover;
             background-position: center;
-            background-attachment: fixed;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            color: white;
             padding: 20px;
         }
 
         .hero h1 {
-            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-size: clamp(2rem, 8vw, 4.5rem);
             font-weight: 900;
+            color: var(--deep-text);
             margin-bottom: 15px;
-            background: linear-gradient(to bottom, #fff, var(--gold));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
 
-        .hero p { font-size: 1.25rem; max-width: 700px; opacity: 0.95; margin-bottom: 35px; color: #cbd5e1; }
+        .hero h1 span { color: var(--accent-color); }
+
+        .hero p { font-size: 1.2rem; max-width: 650px; color: #64748b; margin-bottom: 30px; }
 
         .motivation-banner {
-            background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+            background: var(--accent-color);
             color: white;
-            padding: 15px 45px;
+            padding: 12px 35px;
             border-radius: 50px;
-            font-weight: 900;
-            font-size: 1.2rem;
-            margin-top: 20px;
-            box-shadow: 0 15px 30px rgba(14, 165, 233, 0.4);
+            font-weight: 700;
+            box-shadow: 0 10px 20px rgba(14, 165, 233, 0.2);
             animation: pulse 2.5s infinite;
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); box-shadow: 0 0 20px rgba(14, 165, 233, 0.4); }
-            50% { transform: scale(1.03); box-shadow: 0 0 40px rgba(14, 165, 233, 0.6); }
-            100% { transform: scale(1); box-shadow: 0 0 20px rgba(14, 165, 233, 0.4); }
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
-        .excellence-section {
-            padding: 100px 8%;
-            text-align: center;
-            background: transparent;
-        }
+        .excellence-section { padding: 80px 8%; text-align: center; }
 
         .excellence-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            margin-top: 60px;
+            gap: 25px;
+            margin-top: 50px;
         }
 
         .excellence-card {
-            padding: 40px 30px;
+            padding: 40px;
             border-radius: 25px;
-            background: rgba(255, 255, 255, 0.02);
-            backdrop-filter: blur(10px);
+            background: var(--white);
             box-shadow: var(--luxury-shadow);
-            border: 1px solid rgba(56, 189, 248, 0.1);
+            border: 1px solid var(--soft-blue);
             transition: var(--transition);
         }
-        .excellence-card:hover { transform: translateY(-12px); border-color: var(--gold); background: rgba(56, 189, 248, 0.05); }
+        .excellence-card:hover { transform: translateY(-10px); border-color: var(--accent-color); }
+        .excellence-card i { font-size: 3rem; color: var(--accent-color); margin-bottom: 20px; }
 
-        .excellence-card i { font-size: 3rem; color: var(--gold); margin-bottom: 20px; }
-
-        .teachers-section { padding: 100px 8%; background: transparent; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin-top: 60px; }
-        
-        .card {
-            background: rgba(255, 255, 255, 0.02); border-radius: 30px; padding: 45px;
-            text-align: center; box-shadow: var(--luxury-shadow);
-            transition: var(--transition); border: 1px solid rgba(255,255,255,0.05);
-            backdrop-filter: blur(10px);
-        }
-        .card:hover { transform: translateY(-10px); border-color: var(--gold); }
-        .card img { width: 140px; height: 140px; border-radius: 50%; border: 4px solid var(--gold); margin-bottom: 20px; object-fit: cover; box-shadow: 0 0 20px rgba(56, 189, 248, 0.3); }
-        .subject { background: var(--gold); color: #0f172a; padding: 6px 18px; border-radius: 50px; font-size: 0.95rem; font-weight: 800; display: inline-block; margin-bottom: 15px; }
-
-        .reg-section { padding: 100px 8%; background: linear-gradient(180deg, #0f172a 0%, #020617 100%); color: white; }
+        .reg-section { padding: 100px 8%; background: var(--soft-blue); }
         
         form {
-            max-width: 850px; margin: 0 auto; background: rgba(255, 255, 255, 0.03);
-            padding: 60px 50px; border-radius: 45px; border: 1px solid rgba(56, 189, 248, 0.15);
-            backdrop-filter: blur(30px); box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+            max-width: 800px; margin: 0 auto; background: var(--white);
+            padding: 50px; border-radius: 35px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.05);
         }
 
-        .form-group { margin-bottom: 30px; }
-        .form-group label { display: block; margin-bottom: 12px; font-weight: 700; color: var(--gold); font-size: 1.1rem; }
+        .form-group { margin-bottom: 25px; }
+        .form-group label { display: block; margin-bottom: 10px; font-weight: 700; color: var(--deep-text); }
         
         .input-with-icon { position: relative; }
-        .input-with-icon i { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--gold); opacity: 0.8; }
+        .input-with-icon i { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--accent-color); }
         .input-with-icon input, .input-with-icon select { padding-right: 45px; }
 
         input, select {
-            width: 100%; padding: 18px; border-radius: 15px; border: 2px solid rgba(255,255,255,0.1);
-            background: rgba(255,255,255,0.05); color: white; transition: 0.3s; font-size: 1rem;
+            width: 100%; padding: 15px; border-radius: 12px; border: 2px solid #e2e8f0;
+            background: #f8fafc; color: var(--deep-text); transition: 0.3s;
         }
-        input:focus, select:focus { border-color: var(--gold); background: rgba(255,255,255,0.08); outline: none; box-shadow: 0 0 20px rgba(56, 189, 248, 0.2); }
+        input:focus, select:focus { border-color: var(--accent-color); outline: none; background: #fff; }
 
         .submit-btn {
-            background: linear-gradient(135deg, #0ea5e9, #38bdf8); width: 100%; padding: 22px; border-radius: 18px;
-            border: none; font-weight: 900; cursor: pointer; font-size: 1.4rem;
+            background: var(--accent-color); width: 100%; padding: 20px; border-radius: 15px;
+            border: none; font-weight: 900; cursor: pointer; font-size: 1.3rem;
             color: #fff; transition: var(--transition);
-            box-shadow: 0 10px 30px rgba(14, 165, 233, 0.3);
-            margin-top: 10px;
+            box-shadow: 0 10px 25px rgba(14, 165, 233, 0.3);
         }
-        .submit-btn:hover { background: #fff; color: #0ea5e9; transform: translateY(-5px); box-shadow: 0 15px 40px rgba(255, 255, 255, 0.2); }
+        .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(14, 165, 233, 0.4); }
 
-        footer { text-align: center; padding: 80px 20px; background: #020617; color: #94a3b8; border-top: 1px solid rgba(56, 189, 248, 0.1); }
+        footer { text-align: center; padding: 60px 20px; background: var(--white); border-top: 1px solid var(--soft-blue); }
+
+        .dev-credit {
+            font-size: 0.75rem;
+            color: #cbd5e1;
+            margin-top: 15px;
+            font-weight: 400;
+            opacity: 0.6;
+        }
 
         #success-modal {
             display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: #1e293b; color: white; padding: 60px 40px; border-radius: 40px;
-            z-index: 3000; border: 2px solid var(--gold); text-align: center; width: 90%; max-width: 500px;
-            box-shadow: 0 0 100px rgba(14, 165, 233, 0.3);
+            background: var(--white); padding: 50px; border-radius: 30px;
+            z-index: 3000; border: 3px solid var(--accent-color); text-align: center; width: 90%; max-width: 500px;
+            box-shadow: 0 30px 70px rgba(0,0,0,0.1);
         }
 
         #sub-alert {
-            position: fixed; 
-            bottom: 100px; 
-            right: 30px; 
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            color: white; 
-            padding: 20px 30px; 
-            border-radius: 20px;
-            display: none; 
-            z-index: 5000; 
-            animation: bounceIn 1s;
-            box-shadow: 0 15px 40px rgba(239, 68, 68, 0.4); 
-            border: 2px solid rgba(255,255,255,0.2);
+            position: fixed; bottom: 30px; right: 30px; 
+            background: #fee2e2; color: #b91c1c; padding: 15px 25px; 
+            border-radius: 15px; display: none; z-index: 5000; border: 1px solid #fecaca;
         }
 
         @media (max-width: 768px) {
-            form { padding: 40px 20px; }
-            .hero h1 { font-size: 2.8rem; }
-            #sub-alert { left: 20px; right: 20px; bottom: 80px; text-align: center; }
+            header { padding: 10px 4%; }
+            form { padding: 30px 20px; }
+            .hero h1 { font-size: 2.5rem; }
         }
     </style>
 </head>
@@ -317,191 +285,149 @@
     <div id="loader"><div class="spinner"></div></div>
 
     <div id="sub-alert">
-        <div style="display: flex; align-items: center; gap: 15px;">
-            <i class="fas fa-bell" style="font-size: 1.5rem;"></i>
-            <div>
-                <strong style="display: block;">تنبيه الأبطال!</strong>
-                <span id="sub-message">يرجى التجديد قبل حلول موعد استحقاقك.</span>
-            </div>
-        </div>
+        <i class="fas fa-exclamation-circle"></i> <span id="sub-message">يرجى التجديد قريباً.</span>
     </div>
 
     <button class="view-switcher" onclick="toggleView()">
-        <i class="fas fa-wand-magic-sparkles"></i> تبديل مظهر العرض
+        <i class="fas fa-mobile-alt"></i> وضع الجوال
     </button>
 
     <header id="main-header">
         <div class="logo-box">
-            <img src="https://i.ibb.co/Gf63XzLz/logo.jpg" alt="لوجو سنتر القمة">
+            <img src="https://i.ibb.co/Gf63XzLz/logo.jpg" alt="سنتر القمة">
         </div>
 
         <div class="header-left">
             <div class="live-clock">
                 <span id="clock-time">00:00:00</span>
-                <span id="clock-date">...</span>
             </div>
             <div class="menu-btn" onclick="toggleSideNav()">
-                <i class="fas fa-grip-lines"></i>
+                <i class="fas fa-bars-staggered"></i>
             </div>
         </div>
     </header>
 
     <div class="side-nav" id="sideNav">
-        <i class="fas fa-xmark close-nav" onclick="toggleSideNav()"></i>
-        <a href="#"><i class="fas fa-house"></i> الرئيسية</a>
-        <a href="#teachers"><i class="fas fa-user-graduate"></i> الفريق التعليمي</a>
-        <a href="#register"><i class="fas fa-rocket"></i> انضم لجيش القمة</a>
+        <i class="fas fa-times close-nav" onclick="toggleSideNav()"></i>
+        <a href="#"><i class="fas fa-home"></i> الرئيسية</a>
+        <a href="#register"><i class="fas fa-pen-to-square"></i> تسجيل الحجز</a>
+        <a href="#location"><i class="fas fa-map-marker-alt"></i> عنواننا</a>
     </div>
 
     <section class="hero">
-        <h1 class="animate__animated animate__zoomIn">القمة اختيارك.. والنجاح قرارك!</h1>
-        <p class="animate__animated animate__fadeInUp animate__delay-1s">تجربة تعليمية فريدة تمزج بين التقنية الحديثة وشغف العلم لنصنع جيلًا من الأوائل.</p>
-        <div class="motivation-banner animate__animated animate__pulse animate__infinite">انطلق الآن نحو حلمك!</div>
-        
-        <a href="#register" style="text-decoration:none; margin-top: 40px;" class="cta-btn submit-btn animate__animated animate__fadeInUp animate__delay-1s">سجل حضورك الآن</a>
+        <h1 class="animate__animated animate__fadeInDown">سنتر <span>القمة</span> التعليمي</h1>
+        <p class="animate__animated animate__fadeInUp">أقوى صرح تعليمي لبناء جيل متميز ومبدع بأحدث الوسائل التعليمية المتطورة.</p>
+        <div class="motivation-banner">طريقك نحو التفوق يبدأ هنا</div>
+        <a href="#register" style="text-decoration:none; margin-top: 30px;" class="submit-btn">احجز مكانك الآن</a>
     </section>
 
     <section class="excellence-section">
-        <h2 style="font-size: 2.8rem; font-weight: 900; color: var(--gold);">لماذا يختارنا الأفضل؟</h2>
+        <h2 style="font-size: 2.5rem; color: var(--deep-text);">مميزاتنا</h2>
         <div class="excellence-grid">
-            <div class="excellence-card animate__animated animate__fadeInUp">
-                <i class="fas fa-bolt-lightning"></i>
-                <h3>طموح بلا سقف</h3>
-                <p>نعمل معك خطوة بخطوة لتحويل أحلامك إلى حقيقة ملموسة.</p>
+            <div class="excellence-card">
+                <i class="fas fa-graduation-cap"></i>
+                <h3>تعليم احترافي</h3>
+                <p>نخبة من أفضل المعلمين في كافة التخصصات التعليمية.</p>
             </div>
-            <div class="excellence-card animate__animated animate__fadeInUp animate__delay-1s">
-                <i class="fas fa-lightbulb"></i>
-                <h3>تفكير إبداعي</h3>
-                <p>نبتعد عن التلقين ونركز على الفهم العميق والتحليل الذكي للمناهج.</p>
+            <div class="excellence-card">
+                <i class="fas fa-laptop-code"></i>
+                <h3>تطور مستمر</h3>
+                <p>استخدام أحدث الوسائل التكنولوجية في الشرح والمتابعة.</p>
             </div>
-            <div class="excellence-card animate__animated animate__fadeInUp animate__delay-2s">
-                <i class="fas fa-star"></i>
-                <h3>دعم مستمر</h3>
-                <p>فريقنا معك في كل لحظة للإجابة على تساؤلاتك ودفعك للأمام.</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="teachers-section" id="teachers">
-        <center><h2 style="font-size: 3rem; font-weight: 900; color: var(--gold); margin-bottom: 20px;">نخبة المعلمين</h2></center>
-        <div class="grid">
-            <div class="card">
-                <img src="https://ui-avatars.com/api/?name=محمد+العدلي&background=0ea5e9&color=fff" alt="">
-                <br><span class="subject">اللغة الإنجليزية</span>
-                <h3>أ/ محمد العدلي</h3>
-                <p style="color: #94a3b8; margin-top: 10px;">أسطورة اللغة الإنجليزية وصانع الأوائل.</p>
-            </div>
-            <div class="card">
-                <img src="https://ui-avatars.com/api/?name=وليد+الضوي&background=0ea5e9&color=fff" alt="">
-                <br><span class="subject">اللغة العربية</span>
-                <h3>أ/ وليد الضوي</h3>
-                <p style="color: #94a3b8; margin-top: 10px;">عميد اللغة العربية وسيد البلاغة والنحو.</p>
-            </div>
-            <div class="card">
-                <img src="https://ui-avatars.com/api/?name=عبد+الرحمن&background=0ea5e9&color=fff" alt="">
-                <br><span class="subject">تأسيس لغات</span>
-                <h3>أ/ عبد الرحمن</h3>
-                <p style="color: #94a3b8; margin-top: 10px;">خبير تطوير المناهج واللغات الحديثة.</p>
+            <div class="excellence-card">
+                <i class="fas fa-check-double"></i>
+                <h3>متابعة دورية</h3>
+                <p>تقارير دورية لمستوى الطالب لضمان الوصول لأفضل النتائج.</p>
             </div>
         </div>
     </section>
 
     <section class="reg-section" id="register">
         <center>
-            <h2 style="font-size: 3rem; margin-bottom: 10px; color: var(--gold);">استمارة الانضمام</h2>
-            <p style="margin-bottom: 50px; opacity: 0.9; color: #cbd5e1;">خطوتك الأولى نحو القمة تبدأ من هنا</p>
+            <h2 style="font-size: 2.5rem; margin-bottom: 10px;">استمارة الحجز</h2>
+            <p style="margin-bottom: 40px; color: #64748b;">سجل بياناتك للانضمام إلينا</p>
         </center>
         <form id="studentForm">
             <div class="form-group">
-                <label><i class="fas fa-user-tag"></i> البيانات الأساسية</label>
+                <label>الاسم الكامل</label>
                 <div class="input-with-icon">
-                    <i class="fas fa-user-edit"></i>
+                    <i class="fas fa-user"></i>
                     <input type="text" name="name" placeholder="اسم الطالب الثلاثي" required>
                 </div>
-                
-                <div style="margin-top: 20px;">
-                    <div class="form-group">
-                        <label><i class="fas fa-mobile-screen"></i> رقم التواصل</label>
-                        <div class="input-with-icon">
-                            <i class="fas fa-phone"></i>
-                            <input type="tel" name="phone" placeholder="رقم الموبايل" required>
-                        </div>
-                    </div>
-                    <div class="form-group" style="margin-top: -10px;">
-                        <label><i class="fas fa-envelope-open-text"></i> البريد الإلكتروني</label>
-                        <div class="input-with-icon">
-                            <i class="fas fa-envelope"></i>
-                            <input type="email" name="gmail" placeholder="البريد الإلكتروني (Gmail)" required>
-                        </div>
-                    </div>
+            </div>
+
+            <div class="form-group">
+                <label>رقم الهاتف</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-phone"></i>
+                    <input type="tel" name="phone" placeholder="رقم الموبايل" required>
                 </div>
             </div>
 
             <div class="form-group">
-                <label><i class="fas fa-chalkboard-user"></i> نظام الدراسة</label>
+                <label>البريد الإلكتروني</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" name="gmail" placeholder="example@gmail.com" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>نظام الدراسة والدفع</label>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                    <div class="input-with-icon">
-                        <i class="fas fa-location-dot"></i>
-                        <select name="attendance_type" required>
-                            <option value="">طريقة الحضور</option>
-                            <option value="في السنتر">في السنتر</option>
-                            <option value="أون لاين">أون لاين</option>
-                        </select>
-                    </div>
-                    <div class="input-with-icon">
-                        <i class="fas fa-money-check-dollar"></i>
-                        <select name="payment_type" required>
-                            <option value="">طريقة الدفع</option>
-                            <option value="في السنتر">في السنتر</option>
-                            <option value="أون لاين">أون لاين (فودافون كاش)</option>
-                        </select>
-                    </div>
+                    <select name="attendance_type" required>
+                        <option value="">طريقة الحضور</option>
+                        <option value="في السنتر">في السنتر</option>
+                        <option value="أون لاين">أون لاين</option>
+                    </select>
+                    <select name="payment_type" required>
+                        <option value="">طريقة الدفع</option>
+                        <option value="في السنتر">في السنتر</option>
+                        <option value="فودافون كاش">فودافون كاش</option>
+                    </select>
                 </div>
             </div>
 
             <div class="form-group">
-                <label><i class="fas fa-graduation-cap"></i> المسار التعليمي</label>
+                <label>البيانات الدراسية</label>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
                     <select name="edu_type" required>
                         <option value="عام">ثانوي عام</option>
                         <option value="أزهر">ثانوي أزهري</option>
                     </select>
-                    <select name="grade" id="gradeSelect" required>
-                        <option value="">اختر الصف الدراسي</option>
-                        <option value="s1">الصف الأول الثانوي</option>
-                        <option value="s2">الصف الثاني الثانوي</option>
-                        <option value="s3">الصف الثالث الثانوي</option>
+                    <select name="grade" required>
+                        <option value="">الصف الدراسي</option>
+                        <option value="s1">الأول الثانوي</option>
+                        <option value="s2">الثاني الثانوي</option>
+                        <option value="s3">الثالث الثانوي</option>
                     </select>
                 </div>
-                
                 <div class="input-with-icon">
                     <i class="fas fa-book"></i>
-                    <input type="text" name="custom_subject" placeholder="المادة واسم المدرس (مثال: كيمياء - أ/ عبده مكي)" required>
+                    <input type="text" name="custom_subject" placeholder="المادة واسم المدرس" required>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label><i class="fas fa-shield-halved"></i> تأكيد الحجز (فودافون كاش: 01152956200)</label>
-                <div class="input-with-icon">
-                    <i class="fas fa-receipt"></i>
-                    <input type="tel" name="payment_number" placeholder="رقم المحفظة التي تم التحويل منها">
-                </div>
-            </div>
-
-            <button type="submit" class="submit-btn" id="submitBtn">تأكيد الانضمام للقمة</button>
+            <button type="submit" class="submit-btn" id="submitBtn">تأكيد الحجز الآن</button>
         </form>
     </section>
 
+    <section id="location" style="padding: 80px 8%; text-align: center;">
+        <h2 style="margin-bottom: 20px; font-size: 2.5rem;"><i class="fas fa-map-location-dot" style="color: var(--accent-color);"></i> عنواننا</h2>
+        <p style="font-size: 1.3rem; font-weight: 700;">المحلة الكبرى - شارع القمة - أمام مدرسة القمة</p>
+    </section>
+
     <div id="success-modal">
-        <i class="fas fa-circle-check" style="font-size: 5rem; color: var(--gold); margin-bottom: 20px; display: block;"></i>
-        <h2>تم استلام طلبك يا بطل!</h2>
-        <p>فخورون بانضمامك إلينا. سيتم مراجعة بياناتك والتواصل معك فورًا.</p>
-        <button class="submit-btn" onclick="location.reload()" style="margin-top:20px;">حسناً يا بطل</button>
+        <i class="fas fa-check-circle" style="font-size: 4rem; color: var(--accent-color); margin-bottom: 20px; display: block;"></i>
+        <h2>تم التسجيل بنجاح!</h2>
+        <p>سيتم التواصل معك قريباً لتأكيد المواعيد.</p>
+        <button class="submit-btn" onclick="location.reload()" style="margin-top:20px;">شكراً لك</button>
     </div>
 
     <footer>
         <p>جميع الحقوق محفوظة &copy; سنتر القمة التعليمي النموذجي 2026</p>
-        <p style="color: var(--gold); margin-top: 10px; font-size: 0.9rem; font-weight: 700;">إدارة أبو سيف | تطوير وإبداع: عبده مكي</p>
+        <p style="font-weight: 700; margin-top: 5px; color: var(--deep-text);">إدارة أبو سيف</p>
+        <div class="dev-credit">تطوير عبده مكي</div>
     </footer>
 
     <script>
@@ -512,45 +438,8 @@
                 document.getElementById('loader').style.opacity = '0'; 
                 setTimeout(()=> document.getElementById('loader').style.display='none', 500); 
             }, 1000);
-            requestNotifications();
-            checkSubscription();
-        }
-
-        function requestNotifications() {
-            if ("Notification" in window) {
-                Notification.requestPermission();
-            }
-        }
-
-        function sendSuccessNotification() {
-            if (Notification.permission === "granted") {
-                new Notification("سنتر القمة", {
-                    body: "أهلاً بك يا بطل! تم استلام بياناتك بنجاح وجاري المراجعة.",
-                    icon: "https://i.ibb.co/Gf63XzLz/logo.jpg"
-                });
-            }
-        }
-
-        function checkSubscription() {
-            const today = new Date();
-            let subDate = localStorage.getItem('qemma_sub_start');
-            if (!subDate) {
-                localStorage.setItem('qemma_sub_start', today.toISOString());
-                return;
-            }
-            const startDate = new Date(subDate);
-            const diffTime = Math.abs(today - startDate);
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-
-            if (diffDays >= 30) {
-                const nextRenewal = new Date(startDate);
-                nextRenewal.setDate(startDate.getDate() + 30);
-                const renewalDateStr = nextRenewal.toLocaleDateString('ar-EG', {day:'numeric', month:'long', year:'numeric'});
-                document.getElementById('sub-message').innerText = `باقي أيام قليلة على انتهاء اشتراكك، يرجى التجديد خلال يوم ${renewalDateStr}.`;
-                setTimeout(() => {
-                    document.getElementById('sub-alert').style.display = 'block';
-                }, 3000);
-            }
+            updateLiveClock();
+            setInterval(updateLiveClock, 1000);
         }
 
         function toggleSideNav() { document.getElementById('sideNav').classList.toggle('active'); }
@@ -559,27 +448,24 @@
         function updateLiveClock() {
             const now = new Date();
             document.getElementById('clock-time').innerText = now.toLocaleTimeString('ar-EG');
-            document.getElementById('clock-date').innerText = now.toLocaleDateString('ar-EG', {weekday:'long', day:'numeric', month:'long'});
         }
-        setInterval(updateLiveClock, 1000);
 
         const form = document.getElementById('studentForm');
         form.onsubmit = (e) => {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
-            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> جاري إلحاقك بالقمة...';
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
             btn.disabled = true;
 
             const formData = new FormData(form);
             fetch(scriptURL, { method: 'POST', body: formData, mode: 'no-cors' })
             .then(() => {
                 document.getElementById('success-modal').style.display = "block";
-                sendSuccessNotification();
             })
             .catch(() => {
-                alert("حدث خطأ بسيط، حاول مرة أخرى يا بطل.");
+                alert("حدث خطأ، حاول مرة أخرى.");
                 btn.disabled = false;
-                btn.innerText = "تأكيد الانضمام للقمة";
+                btn.innerText = "تأكيد الحجز الآن";
             });
         };
     </script>
