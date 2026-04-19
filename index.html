@@ -330,19 +330,19 @@
         <h2 style="font-size: 2.5rem; color: var(--deep-text);">لماذا نحن القمة؟</h2>
         <div class="excellence-grid">
             <div class="excellence-card">
-                <i class="fas fa-shield-halved"></i>
-                <h3>بيئة آمنة</h3>
-                <p>توفير أعلى درجات الأمان والراحة لطلابنا في العديسات.</p>
+                <i class="fas fa-trophy"></i>
+                <h3>صناعة الأوائل</h3>
+                <p>نحن لا ندرس المنهج فقط، نحن نعدّك لتكون الأول على المحافظة.</p>
             </div>
             <div class="excellence-card">
-                <i class="fas fa-rocket"></i>
-                <h3>طرق تدريس حديثة</h3>
-                <p>نستخدم الذكاء الاصطناعي والوسائل التفاعلية لتبسيط المعلومة.</p>
+                <i class="fas fa-bolt"></i>
+                <h3>تعلم تفاعلي</h3>
+                <p>وداعاً للملل! استمتع بأحدث طرق الشرح التفاعلية التي تضمن الفهم الكامل.</p>
             </div>
             <div class="excellence-card">
-                <i class="fas fa-award"></i>
-                <h3>شهادات تقدير</h3>
-                <p>تكريم دوري للمتفوقين لتحفيزهم على الاستمرار في النجاح.</p>
+                <i class="fas fa-users-gear"></i>
+                <h3>دعم مستمر</h3>
+                <p>فريقنا معك على مدار الساعة للإجابة على أي استفسار وضمان استمرارية نجاحك.</p>
             </div>
         </div>
     </section>
@@ -375,7 +375,7 @@
     <section class="reg-section" id="register">
         <center>
             <h2 style="font-size: 2.5rem; margin-bottom: 10px;">استمارة الحجز</h2>
-            <p style="margin-bottom: 40px; color: #64748b;">سجل بياناتك للانضمام إلينا</p>
+            <p style="margin-bottom: 40px; color: #64748b;">سجل بياناتك الآن.. المقاعد محدودة جداً!</p>
         </center>
         <form id="studentForm">
             <div class="form-group">
@@ -389,7 +389,7 @@
                 <label>رقم الهاتف</label>
                 <div class="input-with-icon">
                     <i class="fas fa-phone"></i>
-                    <input type="tel" name="phone" placeholder="رقم الموبايل" required>
+                    <input type="tel" name="phone" placeholder="رقم الموبايل (واتساب)" required>
                 </div>
             </div>
             <div class="form-group">
@@ -433,7 +433,7 @@
                     <input type="text" name="custom_subject" placeholder="المادة واسم المدرس" required>
                 </div>
             </div>
-            <button type="submit" class="submit-btn" id="submitBtn">تأكيد الحجز الآن</button>
+            <button type="submit" class="submit-btn" id="submitBtn">احجز مكانك في القمة الآن</button>
         </form>
     </section>
 
@@ -445,15 +445,15 @@
 
     <div id="success-modal">
         <i class="fas fa-check-circle" style="font-size: 4rem; color: var(--accent-color); margin-bottom: 20px; display: block;"></i>
-        <h2>تم التسجيل بنجاح!</h2>
-        <p>سيتم التواصل معك قريباً لتأكيد المواعيد.</p>
+        <h2>أهلاً بك في عائلة القمة!</h2>
+        <p>تم استلام طلبك بنجاح، فريقنا سيتواصل معك خلال دقائق.</p>
         <button class="submit-btn" onclick="location.reload()" style="margin-top:20px;">شكراً لك</button>
     </div>
 
     <footer>
         <p>جميع الحقوق محفوظة &copy; سنتر القمة التعليمي النموذجي 2026</p>
         <p style="font-weight: 700; margin-top: 5px; color: var(--deep-text);">إدارة أبو سيف</p>
-        <div class="dev-credit">تطوير عبده مكي</div>
+        <div class="dev-credit">بلمسة المبدع: عبده مكي</div>
     </footer>
 
     <script>
@@ -462,7 +462,10 @@
             "أنت بطل قصتك، والقمة بانتظارك!",
             "النجاح يتطلب شجاعة للاستمرار.",
             "اجعل يومك اليوم خطوة نحو حلمك.",
-            "المستحيل هو مجرد كلمة في قاموس الضعفاء."
+            "المستحيل هو مجرد كلمة في قاموس الضعفاء.",
+            "القمة لا تستقبل إلا الذين لا يرضون بغيرها!",
+            "مكانك في القمة محجوز.. فقط ابدأ!",
+            "كل ناجح في العالم بدأ بخطوة جريئة مثلك الآن."
         ];
 
         function initApp() {
@@ -473,40 +476,34 @@
             updateLiveClock();
             setInterval(updateLiveClock, 1000);
             
-            // تفعيل نظام الإشعارات الخارجية
+            // تغيير الكلمة التحفيزية عشوائياً عند كل دخول
+            const randomQuote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
+            document.getElementById('main-quote').innerText = randomQuote;
+
+            // تفعيل نظام الإشعارات الخارجية فوراً
             requestNotificationPermission();
-            scheduleDailyNotification();
         }
 
-        // إشعارات النظام الخارجية
         function requestNotificationPermission() {
             if ("Notification" in window) {
-                Notification.requestPermission();
+                Notification.requestPermission().then(permission => {
+                    if (permission === "granted") {
+                        showExternalNotification("أهلاً بك في سنتر القمة!", "اشترك الآن واضمن مكانك بين الأوائل.");
+                    }
+                });
             }
         }
 
         function showExternalNotification(title, body) {
             if ("Notification" in window && Notification.permission === "granted") {
-                new Notification(title, { body: body, icon: 'https://i.ibb.co/Gf63XzLz/logo.jpg' });
+                new Notification(title, { 
+                    body: body, 
+                    icon: 'https://i.ibb.co/Gf63XzLz/logo.jpg',
+                    vibrate: [200, 100, 200]
+                });
             }
         }
 
-        function scheduleDailyNotification() {
-            const lastNotified = localStorage.getItem('lastNotifyDate');
-            const today = new Date().toDateString();
-            
-            if (lastNotified !== today) {
-                const quote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
-                const studentName = localStorage.getItem('studentName') || "طالب القمة";
-                
-                setTimeout(() => {
-                    showExternalNotification(`صباح الخير يا ${studentName.split(' ')[0]}`, quote);
-                    localStorage.setItem('lastNotifyDate', today);
-                }, 5000);
-            }
-        }
-
-        // نظام الآراء
         function addReview() {
             const name = document.getElementById('revName').value;
             const text = document.getElementById('revText').value;
@@ -533,19 +530,25 @@
             const sName = document.getElementById('stName').value;
             localStorage.setItem('studentName', sName);
             
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري إرسال بياناتك...';
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري تأمين حجزك...';
             btn.disabled = true;
 
             const formData = new FormData(form);
-            fetch(scriptURL, { method: 'POST', body: formData, mode: 'no-cors' })
+            
+            // تعديل Fetch ليعمل بوضع no-cors لضمان التشغيل على التليفون دون أخطاء
+            fetch(scriptURL, { 
+                method: 'POST', 
+                body: formData, 
+                mode: 'no-cors' 
+            })
             .then(() => {
-                showExternalNotification("تم الحجز بنجاح!", `أهلاً بك يا ${sName} في القمة.`);
+                showExternalNotification("تم الحجز بنجاح!", `يا ${sName.split(' ')[0]}، أهلاً بك في طريق النجاح.`);
                 document.getElementById('success-modal').style.display = "block";
             })
             .catch(() => {
-                alert("حدث خطأ، حاول مرة أخرى.");
+                alert("حدث خطأ بسيط، حاول مرة أخرى.");
                 btn.disabled = false;
-                btn.innerText = "تأكيد الحجز الآن";
+                btn.innerText = "احجز مكانك في القمة الآن";
             });
         };
     </script>
