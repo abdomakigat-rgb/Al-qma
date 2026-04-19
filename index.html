@@ -350,15 +350,7 @@
     <section class="testimonials" id="testimonials">
         <h2 style="font-size: 2.5rem; margin-bottom: 10px;">ماذا يقول طلابنا؟</h2>
         <div class="reviews-container" id="reviewsList">
-            <div class="review-card">
-                <h4>أحمد علي</h4>
-                <p>"أفضل مكان تعليمي، الشرح مبسط جداً والمتابعة ممتازة."</p>
             </div>
-            <div class="review-card">
-                <h4>سارة محمد</h4>
-                <p>"بفضل سنتر القمة، قدرت أقفل درجات المواد الصعبة."</p>
-            </div>
-        </div>
 
         <div class="review-form">
             <h3>شاركنا رأيك في القمة</h3>
@@ -458,10 +450,11 @@
 
     <script>
         const scriptURL = 'https://script.google.com/macros/s/AKfycbwg8T6DboOUEZ7Ro6uOxZPb46E27GOrkPUmxxd36JPvlGMZpGh47P03GGCneYoiYKTaMA/exec';
+        
         const motivationalQuotes = [
             "أنت بطل قصتك، والقمة بانتظارك!",
-            "النجاح يتطلب شجاعة للاستمرار.",
-            "اجعل يومك اليوم خطوة نحو حلمك.",
+            "النجاح يتطلب شجاعة للاستمرار يا بطل القمة.",
+            "اجعل يومك اليوم خطوة نحو حلمك الكبير.",
             "المستحيل هو مجرد كلمة في قاموس الضعفاء.",
             "القمة لا تستقبل إلا الذين لا يرضون بغيرها!",
             "مكانك في القمة محجوز.. فقط ابدأ!",
@@ -475,12 +468,11 @@
             }, 1000);
             updateLiveClock();
             setInterval(updateLiveClock, 1000);
+            loadReviews(); // تحميل الآراء المحفوظة
             
-            // تغيير الكلمة التحفيزية عشوائياً عند كل دخول
             const randomQuote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
             document.getElementById('main-quote').innerText = randomQuote;
 
-            // تفعيل نظام الإشعارات الخارجية فوراً
             requestNotificationPermission();
         }
 
@@ -488,7 +480,9 @@
             if ("Notification" in window) {
                 Notification.requestPermission().then(permission => {
                     if (permission === "granted") {
-                        showExternalNotification("أهلاً بك في سنتر القمة!", "اشترك الآن واضمن مكانك بين الأوائل.");
+                        const savedName = localStorage.getItem('studentName') || "طالب القمة";
+                        const firstName = savedName.split(' ')[0];
+                        showExternalNotification(`أهلاً بك يا ${firstName}!`, "سنتر القمة يرحب بك في رحلة التفوق.");
                     }
                 });
             }
@@ -504,15 +498,43 @@
             }
         }
 
+        // نظام الآراء المطور للحفظ الدائم
         function addReview() {
             const name = document.getElementById('revName').value;
             const text = document.getElementById('revText').value;
+            
             if(name && text) {
-                const card = `<div class="review-card animate__animated animate__fadeIn"><h4>${name}</h4><p>"${text}"</p></div>`;
-                document.getElementById('reviewsList').innerHTML += card;
+                const newReview = { name: name, text: text };
+                let reviews = JSON.parse(localStorage.getItem('centerReviews')) || [];
+                reviews.push(newReview);
+                localStorage.setItem('centerReviews', JSON.stringify(reviews));
+                
+                renderReviewCard(name, text);
+                
                 document.getElementById('revName').value = '';
                 document.getElementById('revText').value = '';
+                
+                const firstName = name.split(' ')[0];
+                showExternalNotification("شكراً لرأيك يا " + firstName, "رأيك يهمنا ويساعدنا على التطوير.");
             }
+        }
+
+        function loadReviews() {
+            const defaultReviews = [
+                {name: "أحمد علي", text: "أفضل مكان تعليمي، الشرح مبسط جداً والمتابعة ممتازة."},
+                {name: "سارة محمد", text: "بفضل سنتر القمة، قدرت أقفل درجات المواد الصعبة."}
+            ];
+            let reviews = JSON.parse(localStorage.getItem('centerReviews')) || defaultReviews;
+            
+            document.getElementById('reviewsList').innerHTML = ''; // مسح القائمة الحالية
+            reviews.forEach(rev => {
+                renderReviewCard(rev.name, rev.text);
+            });
+        }
+
+        function renderReviewCard(name, text) {
+            const card = `<div class="review-card animate__animated animate__fadeIn"><h4>${name}</h4><p>"${text}"</p></div>`;
+            document.getElementById('reviewsList').innerHTML += card;
         }
 
         function toggleSideNav() { document.getElementById('sideNav').classList.toggle('active'); }
@@ -535,14 +557,14 @@
 
             const formData = new FormData(form);
             
-            // تعديل Fetch ليعمل بوضع no-cors لضمان التشغيل على التليفون دون أخطاء
             fetch(scriptURL, { 
                 method: 'POST', 
                 body: formData, 
                 mode: 'no-cors' 
             })
             .then(() => {
-                showExternalNotification("تم الحجز بنجاح!", `يا ${sName.split(' ')[0]}، أهلاً بك في طريق النجاح.`);
+                const firstName = sName.split(' ')[0];
+                showExternalNotification(`تم الحجز بنجاح يا ${firstName}!`, "أهلاً بك رسمياً في عائلة الأوائل.");
                 document.getElementById('success-modal').style.display = "block";
             })
             .catch(() => {
