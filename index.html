@@ -807,4 +807,21 @@
                 const btn = document.getElementById('submitBtn');
                 const sName = document.getElementById('stName').value;
                 localStorage.setItem('studentName', sName);
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin">
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري تأمين حجزك...';
+                btn.disabled = true;
+
+                fetch(scriptURL, { method: 'POST', body: new FormData(form) })
+                .then(() => showSuccess(sName))
+                .catch(() => showSuccess(sName));
+            };
+        }
+
+        function showSuccess(name) {
+            playSfx('successSound');
+            const modal = document.getElementById('success-modal');
+            if(modal) modal.style.display = "block";
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+    </script>
+</body>
+</html>
