@@ -8,13 +8,13 @@
     <meta name="description" content="موقع سنتر القمة التعليمي النموذجي بالعديسات، الأقصر. نعدك بالتميز والتفوق مع نخبة من أفضل المدرسين وأحدث الوسائل التعليمية. سجل حجزك الآن.">
     <meta name="keywords" content="سنتر القمة, سنتر القمة التعليمي, العديسات, الأقصر, دروس خصوصية الأقصر, سنتر تعليمي, مراجعات نهائية">
     <meta name="author" content="عبدو مكي">
-    <link rel="canonical" href="https://your-website-url.com">
+    <link rel="canonical" href="https://abdomakigat-rgb.github.io/Al-qma/">
 
     <meta property="og:type" content="website">
     <meta property="og:title" content="سنتر القمة التعليمي النموذجي | القمة مكانك">
     <meta property="og:description" content="أضخم منصة تعليمية بمعايير عالمية لبناء جيل متميز ومبدع بالعديسات - الأقصر.">
     <meta property="og:image" content="https://i.ibb.co/v4GzdvTJ/logo.jpg">
-    <meta property="og:url" content="https://your-website-url.com">
+    <meta property="og:url" content="https://abdomakigat-rgb.github.io/Al-qma/">
 
     <script type="application/ld+json">
     {
@@ -27,7 +27,7 @@
         "addressRegion": "Al Adisat",
         "addressCountry": "EG"
       },
-      "url": "https://your-website-url.com",
+      "url": "https://abdomakigat-rgb.github.io/Al-qma/",
       "logo": "https://i.ibb.co/v4GzdvTJ/logo.jpg",
       "description": "مركز تعليمي متميز لطلاب الثانوي والإعدادي بالأقصر.",
       "founder": "أبو سيف"
@@ -259,7 +259,6 @@
         .excellence-card i { font-size: 3rem; color: var(--accent-color); margin-bottom: 20px; transition: 0.3s; }
         .excellence-card:hover i { transform: rotateY(360deg); }
 
-        /* تعديل آراء الطلاب لتتحرك تلقائياً */
         .testimonials { padding: 80px 0; background: #f1f5f9; text-align: center; overflow: hidden; }
         .reviews-wrapper { overflow: hidden; white-space: nowrap; padding: 20px 0; position: relative; }
         .reviews-container { 
@@ -532,7 +531,6 @@
             "كل ناجح في العالم بدأ بخطوة جريئة مثلك الآن."
         ];
 
-        // --- نظام التثبيت التلقائي (PWA) ---
         let deferredPrompt;
 
         window.addEventListener('beforeinstallprompt', (e) => {
@@ -552,11 +550,9 @@
 
         window.addEventListener('click', () => {
             if (deferredPrompt) triggerInstall();
-            // تشغيل صوت الإنترو عند أول تفاعل للمستخدم
             const introSound = document.getElementById('introSound');
             if(introSound) introSound.play().catch(e => console.log("Audio play blocked"));
         }, { once: true });
-        // ---------------------------------
 
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
@@ -648,7 +644,6 @@
                 localStorage.setItem('centerReviews', JSON.stringify(reviews));
                 renderReviewCard(name, text);
                 document.getElementById('revName').value = ''; document.getElementById('revText').value = '';
-                // إعادة تشغيل الأنيميشن ليشمل العنصر الجديد
                 const container = document.getElementById('reviewsList');
                 container.style.animation = 'none';
                 container.offsetHeight; 
@@ -667,7 +662,6 @@
             let allReviews = [...defaultReviews, ...savedReviews];
             
             document.getElementById('reviewsList').innerHTML = '';
-            // نكرر المصفوفة لضمان استمرارية الحركة بسلاسة
             [...allReviews, ...allReviews].forEach(rev => renderReviewCard(rev.name, rev.text));
         }
 
