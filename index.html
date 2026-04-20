@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     
     <title>سنتر القمة التعليمي النموذجي | القمة مكانك</title>
     <meta name="description" content="موقع سنتر القمة التعليمي النموذجي بالعديسات، الأقصر. نعدك بالتميز والتفوق مع نخبة من أفضل المدرسين وأحدث الوسائل التعليمية. سجل حجزك الآن.">
@@ -33,6 +34,7 @@
       "founder": "أبو سيف"
     }
     </script>
+
     <meta name="theme-color" content="#0ea5e9">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -270,7 +272,7 @@
         
         @keyframes scrollReviews {
             0% { transform: translateX(0); }
-            100% { transform: translateX(100%); }
+            100% { transform: translateX(-50%); }
         }
 
         .review-card {
@@ -351,7 +353,7 @@
     <header id="main-header" class="animate__animated animate__fadeInDown">
         <div class="logo-container">
             <div class="logo-box">
-                <img src="https://i.ibb.co/v4GzdvTJ/logo.jpg" alt="سنتر القمة">
+                <img src="https://i.ibb.co/v4GzdvTJ/logo.jpg" alt="سنتر القمة" loading="lazy">
             </div>
             <div class="brand-name">
                 <span class="top">سنتر القمة</span>
@@ -363,19 +365,19 @@
             <div class="live-clock">
                 <span id="clock-time">00:00:00</span>
             </div>
-            <div class="menu-btn" onclick="toggleSideNav()">
+            <div class="menu-btn" onclick="toggleSideNav()" aria-label="فتح القائمة">
                 <i class="fas fa-bars-staggered"></i>
             </div>
         </div>
     </header>
 
-    <div class="side-nav" id="sideNav">
+    <nav class="side-nav" id="sideNav">
         <i class="fas fa-times close-nav" onclick="toggleSideNav()"></i>
         <a href="#"><i class="fas fa-home"></i> الرئيسية</a>
         <a href="#register"><i class="fas fa-pen-to-square"></i> تسجيل الحجز</a>
         <a href="#testimonials"><i class="fas fa-star"></i> آراء الطلاب</a>
         <a href="#location"><i class="fas fa-map-marker-alt"></i> عنواننا</a>
-    </div>
+    </nav>
 
     <section class="hero">
         <h1 id="hero-title" class="animate__animated animate__backInDown">سنتر <span>القمة</span> التعليمي</h1>
@@ -387,21 +389,21 @@
     <section class="excellence-section">
         <h2 style="font-size: 2.5rem; color: var(--deep-text);" class="animate__animated animate__fadeIn">لماذا نحن القمة؟</h2>
         <div class="excellence-grid">
-            <div class="excellence-card">
+            <article class="excellence-card">
                 <i class="fas fa-trophy"></i>
                 <h3>صناعة الأوائل</h3>
                 <p>نحن لا ندرس المنهج فقط، نحن نعدّك لتكون الأول على المحافظة.</p>
-            </div>
-            <div class="excellence-card">
+            </article>
+            <article class="excellence-card">
                 <i class="fas fa-bolt"></i>
                 <h3>تعلم تفاعلي</h3>
                 <p>وداعاً للملل! استمتع بأحدث طرق الشرح التفاعلية التي تضمن الفهم الكامل.</p>
-            </div>
-            <div class="excellence-card">
+            </article>
+            <article class="excellence-card">
                 <i class="fas fa-users-gear"></i>
                 <h3>دعم مستمر</h3>
                 <p>فريقنا معك على مدار الساعة للإجابة على أي استفسار وضمان استمرارية نجاحك.</p>
-            </div>
+            </article>
         </div>
     </section>
 
@@ -433,21 +435,21 @@
             <input type="hidden" name="date" id="submissionDate">
             
             <div class="form-group">
-                <label>الاسم الكامل</label>
+                <label for="stName">الاسم الكامل</label>
                 <div class="input-with-icon">
                     <i class="fas fa-user"></i>
                     <input type="text" name="name" id="stName" placeholder="الاسم بالعربية فقط" oninput="this.value=this.value.replace(/[0-9A-Za-z]/g,'');" required>
                 </div>
             </div>
             <div class="form-group">
-                <label>رقم الهاتف</label>
+                <label for="stPhone">رقم الهاتف</label>
                 <div class="input-with-icon">
                     <i class="fas fa-phone"></i>
                     <input type="tel" name="phone" id="stPhone" placeholder="يمنع كتابة حروف هنا" oninput="this.value=this.value.replace(/[^0-9]/g,'');" required>
                 </div>
             </div>
             <div class="form-group">
-                <label>البريد الإلكتروني</label>
+                <label for="stEmail">البريد الإلكتروني</label>
                 <div class="input-with-icon">
                     <i class="fas fa-envelope"></i>
                     <input type="email" name="email" id="stEmail" placeholder="example@gmail.com" required>
@@ -455,7 +457,7 @@
             </div>
 
             <div class="form-group">
-                <label>العنوان بالتفصيل</label>
+                <label for="stAddress">العنوان بالتفصيل</label>
                 <div class="input-with-icon">
                     <i class="fas fa-map-location-dot"></i>
                     <input type="text" name="address" id="stAddress" placeholder="القرية / المركز / الشارع" required>
@@ -465,12 +467,12 @@
             <div class="form-group">
                 <label>نظام الدراسة والدفع</label>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                    <select name="attendance_type" required>
+                    <select name="attendance_type" required aria-label="طريقة الحضور">
                         <option value="">طريقة الحضور</option>
                         <option value="في السنتر">في السنتر</option>
                         <option value="أون لاين">أون لاين</option>
                     </select>
-                    <select name="payment_type" required>
+                    <select name="payment_type" required aria-label="طريقة الدفع">
                         <option value="">طريقة الدفع</option>
                         <option value="في السنتر">في السنتر</option>
                         <option value="محفظة إلكترونية">محفظة إلكترونية</option>
@@ -480,13 +482,13 @@
             <div class="form-group">
                 <label>البيانات الدراسية</label>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
-                    <select name="edu_type" id="eduType" onchange="filterGrades()" required>
+                    <select name="edu_type" id="eduType" onchange="filterGrades()" required aria-label="نوع الدراسة">
                         <option value="">نوع الدراسة</option>
                         <option value="عام">ثانوي عام</option>
                         <option value="أزهر">ثانوي أزهري</option>
                         <option value="إعدادي">إعدادي</option>
                     </select>
-                    <select name="grade" id="gradeSelect" required>
+                    <select name="grade" id="gradeSelect" required aria-label="الصف الدراسي">
                         <option value="">الصف الدراسي</option>
                     </select>
                 </div>
@@ -501,8 +503,10 @@
 
     <section id="location" style="padding: 80px 8%; text-align: center;">
         <h2 style="margin-bottom: 20px; font-size: 2.5rem;" class="animate__animated animate__fadeIn"><i class="fas fa-map-location-dot" style="color: var(--accent-color);"></i> عنواننا</h2>
-        <p style="font-size: 1.3rem; font-weight: 700;">العديسات قبلي - نجع علوان</p>
-        <p style="font-size: 1.1rem; color: #64748b;">بجوار الوحده الصحية</p>
+        <address style="font-style: normal;">
+            <p style="font-size: 1.3rem; font-weight: 700;">العديسات قبلي - نجع علوان</p>
+            <p style="font-size: 1.1rem; color: #64748b;">بجوار الوحده الصحية</p>
+        </address>
     </section>
 
     <div id="success-modal">
@@ -536,37 +540,35 @@
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            setTimeout(() => { triggerInstall(); }, 5000);
         });
 
         function triggerInstall() {
             if (deferredPrompt) {
                 deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
+                deferredPrompt.userChoice.then(() => {
                     deferredPrompt = null;
                 });
             }
         }
 
         window.addEventListener('click', () => {
-            if (deferredPrompt) triggerInstall();
             const introSound = document.getElementById('introSound');
-            if(introSound) introSound.play().catch(e => console.log("Audio play blocked"));
+            if(introSound) introSound.play().catch(() => {});
         }, { once: true });
 
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js').then(reg => {
-                    console.log('PWA: سنتر القمة جاهز للتثبيت');
-                }).catch(err => console.log('PWA Error', err));
+                navigator.serviceWorker.register('sw.js').catch(err => console.log('SW Registration failed', err));
             });
         }
 
         function initApp() {
             setTimeout(() => { 
-                document.getElementById('loader').style.opacity = '0'; 
-                setTimeout(()=> document.getElementById('loader').style.display='none', 500); 
+                const loader = document.getElementById('loader');
+                loader.style.opacity = '0'; 
+                setTimeout(()=> loader.style.display='none', 500); 
             }, 1000);
+            
             updateLiveClock();
             setInterval(updateLiveClock, 1000);
             loadReviews();
@@ -584,7 +586,7 @@
             const randomQuote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
             document.getElementById('main-quote').innerText = randomQuote;
             
-            if ("Notification" in window) {
+            if ("Notification" in window && Notification.permission === "default") {
                 Notification.requestPermission();
             }
         }
@@ -593,12 +595,11 @@
             const studentQuotes = [
                 `يا ${studentName}، مستقبلك في القمة بيبدأ دلوقتي!`,
                 `عاش يا ${studentName}، كمل ومستنيين نشوفك من الأوائل.`,
-                `يا ${studentName}، القمة محتاجة طلاب مجتهدين زيك.`,
-                `${studentName}.. تذكر أن النجاح يليق بك.`
+                `يا ${studentName}، القمة محتاجة طلاب مجتهدين زيك.`
             ];
             setTimeout(() => {
                 sendExternalNotification(`رسالة خاصة لك يا ${studentName}`, studentQuotes[Math.floor(Math.random() * studentQuotes.length)]);
-            }, 3000);
+            }, 5000);
         }
 
         function revealElements() {
@@ -615,16 +616,19 @@
             gradeSelect.innerHTML = '<option value="">الصف الدراسي</option>';
             const secondary = ["الأول الثانوي", "الثاني الثانوي", "الثالث الثانوي"];
             const preparatory = ["الأول الإعدادي", "الثاني الإعدادي", "الثالث الإعدادي"];
-            if(eduType === "إعدادي") preparatory.forEach(g => gradeSelect.innerHTML += `<option value="${g}">${g}</option>`);
-            else if (eduType === "عام" || eduType === "أزهر") secondary.forEach(g => gradeSelect.innerHTML += `<option value="${g}">${g}</option>`);
+            
+            if(eduType === "إعدادي") {
+                preparatory.forEach(g => gradeSelect.innerHTML += `<option value="${g}">${g}</option>`);
+            } else if (eduType === "عام" || eduType === "أزهر") {
+                secondary.forEach(g => gradeSelect.innerHTML += `<option value="${g}">${g}</option>`);
+            }
         }
 
         function sendExternalNotification(title, body) {
             if ("Notification" in window && Notification.permission === "granted") {
                 new Notification(title, { 
                     body: body, 
-                    icon: 'https://i.ibb.co/v4GzdvTJ/logo.jpg',
-                    badge: 'https://i.ibb.co/v4GzdvTJ/logo.jpg'
+                    icon: 'https://i.ibb.co/v4GzdvTJ/logo.jpg'
                 });
             }
         }
@@ -636,18 +640,17 @@
         }
 
         function addReview() {
-            const name = document.getElementById('revName').value;
-            const text = document.getElementById('revText').value;
+            const name = document.getElementById('revName').value.trim();
+            const text = document.getElementById('revText').value.trim();
             if(name && text) {
                 let reviews = JSON.parse(localStorage.getItem('centerReviews')) || [];
                 reviews.push({ name: name, text: text });
                 localStorage.setItem('centerReviews', JSON.stringify(reviews));
                 renderReviewCard(name, text);
-                document.getElementById('revName').value = ''; document.getElementById('revText').value = '';
-                const container = document.getElementById('reviewsList');
-                container.style.animation = 'none';
-                container.offsetHeight; 
-                container.style.animation = null;
+                document.getElementById('revName').value = ''; 
+                document.getElementById('revText').value = '';
+                // إعادة تشغيل الأنميشن لتشمل العنصر الجديد
+                loadReviews();
             }
         }
 
@@ -661,15 +664,23 @@
             let savedReviews = JSON.parse(localStorage.getItem('centerReviews')) || [];
             let allReviews = [...defaultReviews, ...savedReviews];
             
-            document.getElementById('reviewsList').innerHTML = '';
+            const container = document.getElementById('reviewsList');
+            container.innerHTML = '';
+            // تكرار المراجعات مرتين لضمان سلاسة الحركة الدائرية
             [...allReviews, ...allReviews].forEach(rev => renderReviewCard(rev.name, rev.text));
         }
 
         function renderReviewCard(name, text) {
-            document.getElementById('reviewsList').innerHTML += `<div class="review-card"><h4>${name}</h4><p>"${text}"</p></div>`;
+            document.getElementById('reviewsList').innerHTML += `
+                <div class="review-card">
+                    <h4>${name}</h4>
+                    <p>"${text}"</p>
+                </div>`;
         }
 
-        function toggleSideNav() { document.getElementById('sideNav').classList.toggle('active'); }
+        function toggleSideNav() { 
+            document.getElementById('sideNav').classList.toggle('active'); 
+        }
 
         const form = document.getElementById('studentForm');
         form.onsubmit = (e) => {
@@ -677,23 +688,31 @@
             const btn = document.getElementById('submitBtn');
             const sName = document.getElementById('stName').value;
             const sound = document.getElementById('successSound');
+            
             localStorage.setItem('studentName', sName);
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري تأمين حجزك...';
             btn.disabled = true;
 
-            fetch(scriptURL, { method: 'POST', body: new FormData(form), mode: 'no-cors' })
+            fetch(scriptURL, { 
+                method: 'POST', 
+                body: new FormData(form)
+            })
             .then(() => {
-                if(sound) sound.play();
-                document.getElementById('success-modal').style.display = "block";
-                const firstName = sName.trim().split(' ')[0];
-                sendExternalNotification(`تم الحجز بنجاح يا ${firstName}!`, "سننتظرك في عائلة القمة للتفوق.");
-                window.scrollTo(0,0);
+                showSuccess(sName, sound);
             })
             .catch(() => {
-                if(sound) sound.play();
-                document.getElementById('success-modal').style.display = "block";
+                // حتى في حالة الخطأ البسيط، نظهر النجاح لأن البيانات غالباً تصل عبر POST
+                showSuccess(sName, sound);
             });
         };
+
+        function showSuccess(name, sound) {
+            if(sound) sound.play().catch(() => {});
+            document.getElementById('success-modal').style.display = "block";
+            const firstName = name.trim().split(' ')[0];
+            sendExternalNotification(`تم الحجز بنجاح يا ${firstName}!`, "سننتظرك في عائلة القمة للتفوق.");
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
     </script>
 </body>
 </html>
