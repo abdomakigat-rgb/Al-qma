@@ -71,7 +71,7 @@ self.addEventListener('fetch', event => {
       .then(cachedResponse => {
         const fetchPromise = fetch(event.request).then(networkResponse => {
           // تحديث الكاش بالنسخة الجديدة من النت
-          if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
+          if (networkResponse && networkResponse.status === 200) {
             const responseToCache = networkResponse.clone();
             caches.open(CACHE_NAME).then(cache => {
               cache.put(event.request, responseToCache);
@@ -93,14 +93,18 @@ self.addEventListener('fetch', event => {
 self.addEventListener('notificationclick', function(event) {
   event.notification.close();
   
+  const targetUrl = 'https://abdomakigat-rgb.github.io/Al-qma/';
+  
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then(clientList => {
-      // إذا كان الموقع مفتوحاً بالفعل، ركز عليه
+      // البحث عن أي نافذة مفتوحة للموقع
       for (const client of clientList) {
-        if (client.url === '/' && 'focus' in client) return client.focus();
+        if (client.url.includes('abdomakigat-rgb.github.io/Al-qma/') && 'focus' in client) {
+          return client.focus();
+        }
       }
       // إذا كان مغلقاً، افتحه في نافذة جديدة
-      if (clients.openWindow) return clients.openWindow('https://abdomakigat-rgb.github.io/Al-qma/');
+      if (clients.openWindow) return clients.openWindow(targetUrl);
     })
   );
 });
