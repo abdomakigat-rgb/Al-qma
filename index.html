@@ -165,6 +165,8 @@
             transition: 0.5s cubic-bezier(0.7, 0, 0.3, 1);
             padding: 100px 25px;
             box-shadow: -10px 0 40px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
         }
 
         .side-nav.active { right: 0; }
@@ -182,6 +184,20 @@
             transition: var(--transition);
         }
         .side-nav a:hover { background: var(--accent-color); color: #fff; transform: translateX(-10px); }
+
+        .nav-footer-pwa {
+            margin-top: auto;
+            padding: 20px 0;
+            border-top: 1px solid #eee;
+            text-align: center;
+        }
+
+        .nav-footer-pwa img {
+            width: 60px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
 
         .close-nav {
             position: absolute; top: 30px; left: 30px;
@@ -284,9 +300,8 @@
         .review-card h4 { color: var(--accent-color); margin-bottom: 10px; }
         .review-form { max-width: 800px; margin: 40px auto; background: var(--white); padding: 30px; border-radius: 25px; }
 
-        /* تعديل مكان زر التثبيت ليكون ثابت وبشكل احترافي */
         #pwa-bar {
-            display: flex; /* اجعله مرئياً دائماً للتجربة، سيعتمد على الجافا سكربت للمنطق */
+            display: flex; 
             position: fixed; 
             bottom: 30px; 
             left: 30px; 
@@ -307,7 +322,7 @@
         }
         @keyframes slideInLeft { from { transform: translateX(-120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         
-        #pwa-button { 
+        #pwa-button, .strat-install-btn { 
             animation: pulseBtn 2s infinite; 
             background: var(--accent-color); 
             color: white; 
@@ -320,6 +335,16 @@
             white-space: nowrap; 
             font-size: 0.85rem;
         }
+
+        .strat-install-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 25px;
+            font-size: 1rem;
+            margin-top: 15px;
+        }
+
         @keyframes pulseBtn { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
 
         .reg-section { padding: 100px 8%; background: var(--soft-blue); }
@@ -436,6 +461,14 @@
         <a href="#register"><i class="fas fa-pen-to-square"></i> تسجيل الحجز</a>
         <a href="#testimonials"><i class="fas fa-bolt"></i> ركن التحفيز</a>
         <a href="#location"><i class="fas fa-map-marker-alt"></i> عنواننا</a>
+
+        <div class="nav-footer-pwa">
+            <img src="https://i.ibb.co/v4GzdvTJ/logo.jpg" alt="Logo">
+            <div style="margin-bottom: 10px; font-weight: 700; font-size: 0.9rem;">تطبيق سنتر القمة الرسمي</div>
+            <button onclick="handlePwaAction()" class="strat-install-btn">
+                <i class="fas fa-download"></i> تثبيت التطبيق
+            </button>
+        </div>
     </nav>
 
     <section class="hero">
@@ -478,6 +511,11 @@
             <p id="studentPersonalQuote" style="font-size: 1.2rem; font-weight: 700; color: var(--accent-color); margin-top: 15px;">
                 قم بتسجيل بياناتك في الأسفل لنمنحك رسالة خاصة باسمك!
             </p>
+            
+            <button onclick="handlePwaAction()" class="strat-install-btn" style="background: #22c55e; margin-top: 20px;">
+                <i class="fas fa-mobile-screen-button"></i> هل تريد التطبيق على هاتفك؟ ثبته الآن
+            </button>
+
             <div style="display:none">
                 <input type="text" id="revName">
                 <textarea id="revText"></textarea>
@@ -609,6 +647,22 @@
             }
         }
 
+        // إعداد الإشعارات الحقيقية
+        function setupNotifications() {
+            if ("Notification" in window) {
+                Notification.requestPermission().then(permission => {
+                    if (permission === "granted") {
+                        console.log("تم تفعيل الإشعارات");
+                        // إشعار ترحيبي تجريبي
+                        new Notification("سنتر القمة", {
+                            body: "أهلاً بك في عائلة القمة! فعلنا الإشعارات ليصلك كل جديد.",
+                            icon: "https://i.ibb.co/v4GzdvTJ/logo.jpg"
+                        });
+                    }
+                });
+            }
+        }
+
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
@@ -618,7 +672,7 @@
         function handlePwaAction() {
             playSfx('clickSound');
             const btn = document.getElementById('pwa-button');
-            if (btn.innerText === 'تحديث الآن') {
+            if (btn && btn.innerText === 'تحديث الآن') {
                 window.location.reload();
             } else if (deferredPrompt) {
                 deferredPrompt.prompt();
@@ -627,7 +681,6 @@
                     document.getElementById('pwa-bar').style.display = 'none';
                 });
             } else {
-                // في حالة عدم توفر التثبيت، يمكن إظهار رسالة تعليمية
                 alert("اضغط على أيقونة المشاركة ثم 'إضافة إلى الشاشة الرئيسية' لتثبيت التطبيق 🚀");
             }
         }
@@ -669,6 +722,7 @@
                     setTimeout(()=> {
                         loader.style.display='none';
                         playSfx('introSound');
+                        setupNotifications(); // طلب الإشعارات عند الدخول
                     }, 500); 
                 }
             }, 1000);
@@ -679,10 +733,15 @@
             
             window.addEventListener('scroll', revealElements);
 
-            const savedName = localStorage.getItem('studentName');
-            if(savedName) {
-                document.getElementById('stName').value = savedName;
-                const firstName = savedName.trim().split(' ')[0];
+            // استرجاع البيانات المحفوظة بدقة
+            const savedData = JSON.parse(localStorage.getItem('studentFullData') || '{}');
+            if(savedData.name) {
+                document.getElementById('stName').value = savedData.name;
+                document.getElementById('stPhone').value = savedData.phone || '';
+                document.getElementById('stEmail').value = savedData.email || '';
+                document.getElementById('stAddress').value = savedData.address || '';
+                
+                const firstName = savedData.name.trim().split(' ')[0];
                 document.getElementById('hero-title').innerHTML = `أهلاً بك يا <span>${firstName}</span> في القمة`;
                 updateStudentMotivation(firstName);
             }
@@ -738,15 +797,6 @@
             if(subDate) subDate.value = now.toLocaleString('ar-EG');
         }
 
-        function getUserId() {
-            let uid = localStorage.getItem('pwa_user_id');
-            if (!uid) {
-                uid = 'user_' + Math.random().toString(36).substr(2, 9);
-                localStorage.setItem('pwa_user_id', uid);
-            }
-            return uid;
-        }
-
         function handleReviewAction() { }
 
         function loadReviews() {
@@ -774,11 +824,6 @@
             });
         }
 
-        function renderReviewCard(rev) { }
-        function editReview(id) { }
-        function deleteReview(id) { }
-        function cancelEdit() { }
-
         function toggleSideNav() { 
             playSfx('clickSound');
             const nav = document.getElementById('sideNav');
@@ -790,18 +835,27 @@
             form.onsubmit = (e) => {
                 e.preventDefault();
                 const btn = document.getElementById('submitBtn');
-                const sName = document.getElementById('stName').value;
-                localStorage.setItem('studentName', sName);
                 
-                const firstName = sName.trim().split(' ')[0];
+                // حفظ كافة البيانات بدون نقصان حرف واحد
+                const studentData = {
+                    name: document.getElementById('stName').value,
+                    phone: document.getElementById('stPhone').value,
+                    email: document.getElementById('stEmail').value,
+                    address: document.getElementById('stAddress').value,
+                    edu_type: document.getElementById('eduType').value,
+                    grade: document.getElementById('gradeSelect').value
+                };
+                localStorage.setItem('studentFullData', JSON.stringify(studentData));
+                
+                const firstName = studentData.name.trim().split(' ')[0];
                 updateStudentMotivation(firstName);
 
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري تأمين حجزك...';
                 btn.disabled = true;
 
                 fetch(scriptURL, { method: 'POST', body: new FormData(form) })
-                .then(() => showSuccess(sName))
-                .catch(() => showSuccess(sName));
+                .then(() => showSuccess(studentData.name))
+                .catch(() => showSuccess(studentData.name));
             };
         }
 
