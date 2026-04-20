@@ -556,11 +556,26 @@
             if(introSound) introSound.play().catch(() => {});
         }, { once: true });
 
+        // --- تعديل نظام التحديث التلقائي ---
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js').catch(err => console.log('SW Registration failed', err));
+                navigator.serviceWorker.register('sw.js').then(reg => {
+                    // الكود ده بيراقب لو في ملف sw.js جديد نزل
+                    reg.addEventListener('updatefound', () => {
+                        const newWorker = reg.installing;
+                        newWorker.addEventListener('statechange', () => {
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                // هنا بنجبر المتصفح يرفرش أول ما التحديث يخلص
+                                if (confirm("في تحديثات جديدة للقمة، حابب تشغلها دلوقتي؟")) {
+                                    window.location.reload();
+                                }
+                            }
+                        });
+                    });
+                }).catch(err => console.log('SW Registration failed', err));
             });
         }
+        // ----------------------------------
 
         function initApp() {
             setTimeout(() => { 
@@ -649,7 +664,6 @@
                 renderReviewCard(name, text);
                 document.getElementById('revName').value = ''; 
                 document.getElementById('revText').value = '';
-                // إعادة تشغيل الأنميشن لتشمل العنصر الجديد
                 loadReviews();
             }
         }
@@ -666,7 +680,6 @@
             
             const container = document.getElementById('reviewsList');
             container.innerHTML = '';
-            // تكرار المراجعات مرتين لضمان سلاسة الحركة الدائرية
             [...allReviews, ...allReviews].forEach(rev => renderReviewCard(rev.name, rev.text));
         }
 
@@ -701,7 +714,6 @@
                 showSuccess(sName, sound);
             })
             .catch(() => {
-                // حتى في حالة الخطأ البسيط، نظهر النجاح لأن البيانات غالباً تصل عبر POST
                 showSuccess(sName, sound);
             });
         };
