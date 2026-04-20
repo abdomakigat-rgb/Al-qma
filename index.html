@@ -556,32 +556,34 @@
             if(introSound) introSound.play().catch(() => {});
         }, { once: true });
 
-        // --- تعديل نظام التحديث التلقائي ---
+        // --- نظام التحديث الذكي للإصدار الجديد ---
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js').then(reg => {
-                    // الكود ده بيراقب لو في ملف sw.js جديد نزل
-                    reg.addEventListener('updatefound', () => {
-                        const newWorker = reg.installing;
-                        newWorker.addEventListener('statechange', () => {
-                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                // هنا بنجبر المتصفح يرفرش أول ما التحديث يخلص
-                                if (confirm("في تحديثات جديدة للقمة، حابب تشغلها دلوقتي؟")) {
+                    // مراقبة التحديثات الجديدة في الخلفية
+                    reg.onupdatefound = () => {
+                        const installingWorker = reg.installing;
+                        installingWorker.onstatechange = () => {
+                            if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                // إظهار تنبيه بوجود تحديث جديد
+                                if (confirm("تحديث جديد متاح لسنتر القمة! هل تريد التحميل الآن؟")) {
                                     window.location.reload();
                                 }
                             }
-                        });
-                    });
+                        };
+                    };
                 }).catch(err => console.log('SW Registration failed', err));
             });
         }
-        // ----------------------------------
+        // ---------------------------------------
 
         function initApp() {
             setTimeout(() => { 
                 const loader = document.getElementById('loader');
-                loader.style.opacity = '0'; 
-                setTimeout(()=> loader.style.display='none', 500); 
+                if(loader) {
+                    loader.style.opacity = '0'; 
+                    setTimeout(()=> loader.style.display='none', 500); 
+                }
             }, 1000);
             
             updateLiveClock();
@@ -650,8 +652,10 @@
 
         function updateLiveClock() {
             const now = new Date();
-            document.getElementById('clock-time').innerText = now.toLocaleTimeString('ar-EG');
-            document.getElementById('submissionDate').value = now.toLocaleString('ar-EG');
+            const clock = document.getElementById('clock-time');
+            if(clock) clock.innerText = now.toLocaleTimeString('ar-EG');
+            const subDate = document.getElementById('submissionDate');
+            if(subDate) subDate.value = now.toLocaleString('ar-EG');
         }
 
         function addReview() {
@@ -661,7 +665,6 @@
                 let reviews = JSON.parse(localStorage.getItem('centerReviews')) || [];
                 reviews.push({ name: name, text: text });
                 localStorage.setItem('centerReviews', JSON.stringify(reviews));
-                renderReviewCard(name, text);
                 document.getElementById('revName').value = ''; 
                 document.getElementById('revText').value = '';
                 loadReviews();
@@ -679,48 +682,57 @@
             let allReviews = [...defaultReviews, ...savedReviews];
             
             const container = document.getElementById('reviewsList');
-            container.innerHTML = '';
-            [...allReviews, ...allReviews].forEach(rev => renderReviewCard(rev.name, rev.text));
+            if(container) {
+                container.innerHTML = '';
+                [...allReviews, ...allReviews].forEach(rev => renderReviewCard(rev.name, rev.text));
+            }
         }
 
         function renderReviewCard(name, text) {
-            document.getElementById('reviewsList').innerHTML += `
-                <div class="review-card">
-                    <h4>${name}</h4>
-                    <p>"${text}"</p>
-                </div>`;
+            const container = document.getElementById('reviewsList');
+            if(container) {
+                container.innerHTML += `
+                    <div class="review-card">
+                        <h4>${name}</h4>
+                        <p>"${text}"</p>
+                    </div>`;
+            }
         }
 
         function toggleSideNav() { 
-            document.getElementById('sideNav').classList.toggle('active'); 
+            const nav = document.getElementById('sideNav');
+            if(nav) nav.classList.toggle('active'); 
         }
 
         const form = document.getElementById('studentForm');
-        form.onsubmit = (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('submitBtn');
-            const sName = document.getElementById('stName').value;
-            const sound = document.getElementById('successSound');
-            
-            localStorage.setItem('studentName', sName);
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري تأمين حجزك...';
-            btn.disabled = true;
+        if(form) {
+            form.onsubmit = (e) => {
+                e.preventDefault();
+                const btn = document.getElementById('submitBtn');
+                const sName = document.getElementById('stName').value;
+                const sound = document.getElementById('successSound');
+                
+                localStorage.setItem('studentName', sName);
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري تأمين حجزك...';
+                btn.disabled = true;
 
-            fetch(scriptURL, { 
-                method: 'POST', 
-                body: new FormData(form)
-            })
-            .then(() => {
-                showSuccess(sName, sound);
-            })
-            .catch(() => {
-                showSuccess(sName, sound);
-            });
-        };
+                fetch(scriptURL, { 
+                    method: 'POST', 
+                    body: new FormData(form)
+                })
+                .then(() => {
+                    showSuccess(sName, sound);
+                })
+                .catch(() => {
+                    showSuccess(sName, sound);
+                });
+            };
+        }
 
         function showSuccess(name, sound) {
             if(sound) sound.play().catch(() => {});
-            document.getElementById('success-modal').style.display = "block";
+            const modal = document.getElementById('success-modal');
+            if(modal) modal.style.display = "block";
             const firstName = name.trim().split(' ')[0];
             sendExternalNotification(`تم الحجز بنجاح يا ${firstName}!`, "سننتظرك في عائلة القمة للتفوق.");
             window.scrollTo({top: 0, behavior: 'smooth'});
