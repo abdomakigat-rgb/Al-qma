@@ -2,6 +2,7 @@
   "short_name": "القمة",
   "name": "سنتر القمة التعليمي النموذجي",
   "description": "تطبيق سنتر القمة التعليمي النموذجي - العديسات قبلي",
+  "id": "/Al-qma/",
   "icons": [
     {
       "src": "https://i.ibb.co/v4GzdvTJ/logo.jpg",
@@ -44,12 +45,31 @@
       "label": "القمة على الموبايل"
     }
   ],
+  "shortcuts": [
+    {
+      "name": "سجل الآن",
+      "short_name": "حجز",
+      "description": "الانتقال السريع لصفحة الحجز",
+      "url": "./index.html#register",
+      "icons": [{ "src": "https://i.ibb.co/v4GzdvTJ/logo.jpg", "sizes": "192x192" }]
+    },
+    {
+      "name": "آراء الطلاب",
+      "short_name": "الآراء",
+      "description": "ماذا يقول طلاب القمة؟",
+      "url": "./index.html#testimonials",
+      "icons": [{ "src": "https://i.ibb.co/v4GzdvTJ/logo.jpg", "sizes": "192x192" }]
+    }
+  ],
   "start_url": "./index.html",
   "display": "standalone",
+  "display_override": ["window-controls-overlay", "minimal-ui"],
   "orientation": "portrait",
   "theme_color": "#0ea5e9",
   "background_color": "#ffffff",
   "categories": ["education", "learning"],
   "lang": "ar-EG",
-  "dir": "rtl"
+  "dir": "rtl",
+  "prefer_related_applications": false,
+  "related_applications": []
 }
