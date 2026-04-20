@@ -4,6 +4,7 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+
 <url>
   <loc>https://abdomakigat-rgb.github.io/Al-qma/</loc>
   <lastmod>2026-04-20T22:15:00+00:00</lastmod>
@@ -15,7 +16,28 @@
   <loc>https://abdomakigat-rgb.github.io/Al-qma/#register</loc>
   <lastmod>2026-04-20T22:15:00+00:00</lastmod>
   <changefreq>weekly</changefreq>
-  <priority>0.8</priority>
+  <priority>0.80</priority>
+</url>
+
+<url>
+  <loc>https://abdomakigat-rgb.github.io/Al-qma/#lectures</loc>
+  <lastmod>2026-04-20T22:15:00+00:00</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.90</priority>
+</url>
+
+<url>
+  <loc>https://abdomakigat-rgb.github.io/Al-qma/#features</loc>
+  <lastmod>2026-04-20T22:15:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.70</priority>
+</url>
+
+<url>
+  <loc>https://abdomakigat-rgb.github.io/Al-qma/#reviews</loc>
+  <lastmod>2026-04-20T22:15:00+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.85</priority>
 </url>
 
 </urlset>
