@@ -284,9 +284,9 @@
         .review-card h4 { color: var(--accent-color); margin-bottom: 10px; }
         .review-form { max-width: 800px; margin: 40px auto; background: var(--white); padding: 30px; border-radius: 25px; }
 
-        /* تعديل مكان زر التثبيت ليكون في مكان استراتيجي ومظهر كبسولي عصري */
+        /* تعديل مكان زر التثبيت ليكون ثابت وبشكل احترافي */
         #pwa-bar {
-            display: none; 
+            display: flex; /* اجعله مرئياً دائماً للتجربة، سيعتمد على الجافا سكربت للمنطق */
             position: fixed; 
             bottom: 30px; 
             left: 30px; 
@@ -594,7 +594,9 @@
             "المستحيل هو مجرد كلمة في قاموس الضعفاء.",
             "القمة لا تستقبل إلا الذين لا يرضون بغيرها!",
             "مكانك في القمة محجوز.. فقط ابدأ!",
-            "كل ناجح في العالم بدأ بخطوة جريئة مثلك الآن."
+            "كل ناجح في العالم بدأ بخطوة جريئة مثلك الآن.",
+            "لا تلتفت للخلف، فالقمة أمامك والنجاح حليفك.",
+            "القمة هي البداية الحقيقية لكل من يطمح للعظمة."
         ];
 
         let deferredPrompt;
@@ -624,6 +626,9 @@
                     deferredPrompt = null;
                     document.getElementById('pwa-bar').style.display = 'none';
                 });
+            } else {
+                // في حالة عدم توفر التثبيت، يمكن إظهار رسالة تعليمية
+                alert("اضغط على أيقونة المشاركة ثم 'إضافة إلى الشاشة الرئيسية' لتثبيت التطبيق 🚀");
             }
         }
 
@@ -670,7 +675,7 @@
             
             updateLiveClock();
             setInterval(updateLiveClock, 1000);
-            loadReviews(); // سيقوم الآن بتحميل رسائل التحفيز
+            loadReviews(); 
             
             window.addEventListener('scroll', revealElements);
 
@@ -679,7 +684,6 @@
                 document.getElementById('stName').value = savedName;
                 const firstName = savedName.trim().split(' ')[0];
                 document.getElementById('hero-title').innerHTML = `أهلاً بك يا <span>${firstName}</span> في القمة`;
-                // تحديث رسالة التحفيز باسم الطالب
                 updateStudentMotivation(firstName);
             }
 
@@ -696,7 +700,8 @@
                 `يا ${name}، أنت تمتلك قدرات مذهلة، القمة بانتظارك!`,
                 `تذكر يا ${name} أن كل تعب اليوم هو نجاح الغد.`,
                 `لا تتوقف يا ${name}، فأنت على بعد خطوات من حلمك.`,
-                `${name}.. سنتر القمة يثق بأنك ستكون من الأوائل هذا العام!`
+                `${name}.. سنتر القمة يثق بأنك ستكون من الأوائل هذا العام!`,
+                `المستقبل يبدأ من هنا يا ${name}، فاجعل القمة محطتك الأولى.`
             ];
             const random = quotes[Math.floor(Math.random() * quotes.length)];
             document.getElementById('studentPersonalQuote').innerText = random;
@@ -742,9 +747,7 @@
             return uid;
         }
 
-        function handleReviewAction() {
-            // محتفظ بها لعدم حذف أي كود
-        }
+        function handleReviewAction() { }
 
         function loadReviews() {
             const container = document.getElementById('reviewsList');
@@ -758,10 +761,10 @@
                 {name: "بناء المستقبل", text: "كل حصة تحضرها هي طوبة في صرح مستقبلك العظيم."},
                 {name: "التميز", text: "القمة لا تفتح أبوابها إلا لمن يطرقها بالعمل والاجتهاد."},
                 {name: "رسالة لك", text: "تذكر دائماً أنك مشروع بطل، والقمة مكانك الطبيعي."},
-                {name: "وقتك", text: "تنظيم وقتك هو المفتاح السحري الذي سيفتح لك أبواب الأوائل."}
+                {name: "وقتك", text: "تنظيم وقتك هو المفتاح السحري الذي سيفتح لك أبواب الأوائل."},
+                {name: "التحدي", text: "الصعوبات هي من تصنع الأبطال، والقمة هي ميدان التحدي."}
             ];
 
-            // تكرار الرسائل لضمان حركة الشريط المستمرة
             [...studentQuotes, ...studentQuotes].forEach(rev => {
                 container.innerHTML += `
                     <div class="review-card">
@@ -771,21 +774,10 @@
             });
         }
 
-        function renderReviewCard(rev) {
-            // محتفظ بها لعدم حذف أي كود
-        }
-
-        function editReview(id) {
-            // محتفظ بها لعدم حذف أي كود
-        }
-
-        function deleteReview(id) {
-            // محتفظ بها لعدم حذف أي كود
-        }
-
-        function cancelEdit() {
-            // محتفظ بها لعدم حذف أي كود
-        }
+        function renderReviewCard(rev) { }
+        function editReview(id) { }
+        function deleteReview(id) { }
+        function cancelEdit() { }
 
         function toggleSideNav() { 
             playSfx('clickSound');
