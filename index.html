@@ -408,7 +408,7 @@
         <i class="fas fa-times close-nav" onclick="toggleSideNav()"></i>
         <a href="#"><i class="fas fa-home"></i> الرئيسية</a>
         <a href="#register"><i class="fas fa-pen-to-square"></i> تسجيل الحجز</a>
-        <a href="#testimonials"><i class="fas fa-star"></i> آراء الطلاب</a>
+        <a href="#testimonials"><i class="fas fa-bolt"></i> ركن التحفيز</a>
         <a href="#location"><i class="fas fa-map-marker-alt"></i> عنواننا</a>
     </nav>
 
@@ -441,22 +441,24 @@
     </section>
 
     <section class="testimonials" id="testimonials">
-        <h2 style="font-size: 2.5rem; margin-bottom: 20px;">ماذا يقول طلابنا؟</h2>
+        <h2 style="font-size: 2.5rem; margin-bottom: 20px;" id="motivationTitle">كلمات ملهمة لطلابنا</h2>
         <div class="reviews-wrapper">
-            <div class="reviews-container" id="reviewsList"></div>
+            <div class="reviews-container" id="reviewsList">
+                </div>
         </div>
 
-        <div class="review-form animate__animated animate__fadeInUp">
-            <h3 id="formTitle">شاركنا رأيك في القمة</h3>
-            <div class="form-group" style="margin-top: 15px;">
-                <input type="text" id="revName" placeholder="اسمك">
+        <div class="review-form animate__animated animate__fadeInUp" id="customQuoteBox">
+            <h3 id="formTitle">أهلاً بك في ركن التحفيز</h3>
+            <p id="studentPersonalQuote" style="font-size: 1.2rem; font-weight: 700; color: var(--accent-color); margin-top: 15px;">
+                قم بتسجيل بياناتك في الأسفل لنمنحك رسالة خاصة باسمك!
+            </p>
+            <div style="display:none">
+                <input type="text" id="revName">
+                <textarea id="revText"></textarea>
+                <input type="hidden" id="editIndex" value="-1">
+                <button id="revBtn" onclick="handleReviewAction()"></button>
+                <button id="cancelEditBtn" onclick="cancelEdit()"></button>
             </div>
-            <div class="form-group">
-                <textarea id="revText" rows="3" placeholder="اكتب رأيك هنا..."></textarea>
-            </div>
-            <input type="hidden" id="editIndex" value="-1">
-            <button class="submit-btn" id="revBtn" style="padding: 10px;" onclick="handleReviewAction()">إضافة الرأي</button>
-            <button class="submit-btn" id="cancelEditBtn" style="padding: 10px; background: #64748b; display: none; margin-top: 10px;" onclick="cancelEdit()">إلغاء التعديل</button>
         </div>
     </section>
 
@@ -642,7 +644,7 @@
             
             updateLiveClock();
             setInterval(updateLiveClock, 1000);
-            loadReviews();
+            loadReviews(); // سيقوم الآن بتحميل رسائل التحفيز
             
             window.addEventListener('scroll', revealElements);
 
@@ -651,6 +653,8 @@
                 document.getElementById('stName').value = savedName;
                 const firstName = savedName.trim().split(' ')[0];
                 document.getElementById('hero-title').innerHTML = `أهلاً بك يا <span>${firstName}</span> في القمة`;
+                // تحديث رسالة التحفيز باسم الطالب
+                updateStudentMotivation(firstName);
             }
 
             const randomQuote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
@@ -659,6 +663,18 @@
             document.querySelectorAll('button, .menu-btn, .side-nav a').forEach(el => {
                 el.addEventListener('click', () => playSfx('clickSound'));
             });
+        }
+
+        function updateStudentMotivation(name) {
+            const quotes = [
+                `يا ${name}، أنت تمتلك قدرات مذهلة، القمة بانتظارك!`,
+                `تذكر يا ${name} أن كل تعب اليوم هو نجاح الغد.`,
+                `لا تتوقف يا ${name}، فأنت على بعد خطوات من حلمك.`,
+                `${name}.. سنتر القمة يثق بأنك ستكون من الأوائل هذا العام!`
+            ];
+            const random = quotes[Math.floor(Math.random() * quotes.length)];
+            document.getElementById('studentPersonalQuote').innerText = random;
+            document.getElementById('motivationTitle').innerText = `رسالة خاصة لـ ${name}`;
         }
 
         function revealElements() {
@@ -701,97 +717,48 @@
         }
 
         function handleReviewAction() {
-            const name = document.getElementById('revName').value.trim();
-            const text = document.getElementById('revText').value.trim();
-            const editId = document.getElementById('editIndex').value;
-
-            if (!name || !text) return alert("يرجى ملء البيانات أولاً");
-
-            let savedReviews = JSON.parse(localStorage.getItem('centerReviews')) || [];
-
-            if (editId === "-1") {
-                const newReview = { id: Date.now().toString(), userId: getUserId(), name: name, text: text };
-                savedReviews.push(newReview);
-                playSfx('successSound');
-            } else {
-                const index = savedReviews.findIndex(r => r.id === editId);
-                if (index > -1) {
-                    savedReviews[index].name = name;
-                    savedReviews[index].text = text;
-                }
-                cancelEdit();
-                playSfx('successSound');
-            }
-
-            localStorage.setItem('centerReviews', JSON.stringify(savedReviews));
-            document.getElementById('revName').value = '';
-            document.getElementById('revText').value = '';
-            loadReviews();
+            // محتفظ بها لعدم حذف أي كود
         }
 
         function loadReviews() {
-            const defaultReviews = [
-                {id: 'd1', name: "أحمد علي", text: "أفضل مكان تعليمي، الشرح مبسط جداً والمتابعة ممتازة.", isDefault: true},
-                {id: 'd2', name: "سارة محمد", text: "بفضل سنتر القمة، قدرت أقفل درجات المواد الصعبة.", isDefault: true},
-                {id: 'd3', name: "محمود حسن", text: "المدرسين هنا قمة في الأخلاق والعلم، شكراً لكم.", isDefault: true}
-            ];
-            let savedReviews = JSON.parse(localStorage.getItem('centerReviews')) || [];
-            let allReviews = [...defaultReviews, ...savedReviews];
-            
             const container = document.getElementById('reviewsList');
             container.innerHTML = '';
-            [...allReviews, ...allReviews].forEach(rev => renderReviewCard(rev));
+            
+            const studentQuotes = [
+                {name: "طريق النجاح", text: "القمة ليست مكاناً تصل إليه، بل هي روح لا ترضى بغير الصدارة."},
+                {name: "الإصرار", text: "يا بطل، تعب اليوم هو فخر الغد، استمر ولا تتوقف."},
+                {name: "عائلة القمة", text: "نحن هنا لنصنع منك نجماً يضيء سماء المتفوقين."},
+                {name: "ثق بنفسك", text: "قدراتك لا حدود لها، فقط آمن بحلمك وسنصل معاً للقمة."},
+                {name: "بناء المستقبل", text: "كل حصة تحضرها هي طوبة في صرح مستقبلك العظيم."},
+                {name: "التميز", text: "القمة لا تفتح أبوابها إلا لمن يطرقها بالعمل والاجتهاد."},
+                {name: "رسالة لك", text: "تذكر دائماً أنك مشروع بطل، والقمة مكانك الطبيعي."},
+                {name: "وقتك", text: "تنظيم وقتك هو المفتاح السحري الذي سيفتح لك أبواب الأوائل."}
+            ];
+
+            // تكرار الرسائل لضمان حركة الشريط المستمرة
+            [...studentQuotes, ...studentQuotes].forEach(rev => {
+                container.innerHTML += `
+                    <div class="review-card">
+                        <h4 style="color: var(--accent-color);"><i class="fas fa-quote-right" style="margin-left: 8px; font-size: 0.8rem;"></i>${rev.name}</h4>
+                        <p style="font-weight: 700;">"${rev.text}"</p>
+                    </div>`;
+            });
         }
 
         function renderReviewCard(rev) {
-            const container = document.getElementById('reviewsList');
-            const isMyReview = !rev.isDefault && rev.userId === getUserId();
-            const actions = isMyReview ? `
-                <div style="margin-top: 10px; display: flex; gap: 15px; justify-content: flex-end; font-size: 0.8rem;">
-                    <i class="fas fa-edit" style="color: var(--accent-color); cursor: pointer;" onclick="editReview('${rev.id}')"></i>
-                    <i class="fas fa-trash" style="color: #ff3e3e; cursor: pointer;" onclick="deleteReview('${rev.id}')"></i>
-                </div>` : '';
-
-            container.innerHTML += `
-                <div class="review-card">
-                    <h4>${rev.name}</h4>
-                    <p>"${rev.text}"</p>
-                    ${actions}
-                </div>`;
+            // محتفظ بها لعدم حذف أي كود
         }
 
         function editReview(id) {
-            playSfx('clickSound');
-            let savedReviews = JSON.parse(localStorage.getItem('centerReviews')) || [];
-            const rev = savedReviews.find(r => r.id === id);
-            if (rev) {
-                document.getElementById('revName').value = rev.name;
-                document.getElementById('revText').value = rev.text;
-                document.getElementById('editIndex').value = id;
-                document.getElementById('formTitle').innerText = "تعديل رأيك";
-                document.getElementById('revBtn').innerText = "حفظ التعديلات";
-                document.getElementById('cancelEditBtn').style.display = "block";
-                document.getElementById('testimonials').scrollIntoView();
-            }
+            // محتفظ بها لعدم حذف أي كود
         }
 
         function deleteReview(id) {
-            if (confirm("هل أنت متأكد من حذف رأيك؟")) {
-                playSfx('deleteSound');
-                let savedReviews = JSON.parse(localStorage.getItem('centerReviews')) || [];
-                savedReviews = savedReviews.filter(r => r.id !== id);
-                localStorage.setItem('centerReviews', JSON.stringify(savedReviews));
-                loadReviews();
-            }
+            // محتفظ بها لعدم حذف أي كود
         }
 
         function cancelEdit() {
-            document.getElementById('editIndex').value = "-1";
-            document.getElementById('formTitle').innerText = "شاركنا رأيك في القمة";
-            document.getElementById('revBtn').innerText = "إضافة الرأي";
-            document.getElementById('cancelEditBtn').style.display = "none";
-            document.getElementById('revName').value = '';
-            document.getElementById('revText').value = '';
+            // محتفظ بها لعدم حذف أي كود
         }
 
         function toggleSideNav() { 
@@ -807,6 +774,10 @@
                 const btn = document.getElementById('submitBtn');
                 const sName = document.getElementById('stName').value;
                 localStorage.setItem('studentName', sName);
+                
+                const firstName = sName.trim().split(' ')[0];
+                updateStudentMotivation(firstName);
+
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري تأمين حجزك...';
                 btn.disabled = true;
 
