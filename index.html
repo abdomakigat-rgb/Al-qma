@@ -648,7 +648,10 @@
             measurementId: "G-4T5430TC3M"
         };
 
-        firebase.initializeApp(firebaseConfig);
+        // البدء الصحيح لـ Firebase Compat Mode
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
         const messaging = firebase.messaging();
         const db = firebase.firestore();
 
@@ -684,7 +687,6 @@
                 navigator.serviceWorker.register('sw.js')
                 .then(reg => {
                     console.log("Service Worker Registered! ✅");
-                    messaging.useServiceWorker(reg);
                 })
                 .catch(err => console.log("Service Worker Failed ❌", err));
             });
@@ -692,19 +694,24 @@
 
         async function saveTokenToFirestore(name) {
             try {
-                const token = await messaging.getToken({ 
-                    vapidKey: 'BG4qNJJLmOq29aauOqx5r5aq-N6c3Bas-XbyZ4jXKJh2TaK258ycIll7IwAaTKHYR-ZZIspwAuBsfHsJM0R5u-4' 
-                });
-                
-                if (token) {
-                    await db.collection("students_tokens").doc(token).set({
-                        studentName: name,
-                        fcmToken: token,
-                        lastActive: firebase.firestore.FieldValue.serverTimestamp()
+                // طلب الإذن للإشعارات أولاً
+                const permission = await Notification.requestPermission();
+                if (permission === "granted") {
+                    const token = await messaging.getToken({ 
+                        vapidKey: 'BG4qNJJLmOq29aauOqx5r5aq-N6c3Bas-XbyZ4jXKJh2TaK258ycIll7IwAaTKHYR-ZZIspwAuBsfHsJM0R5u-4' 
                     });
+                    
+                    if (token) {
+                        await db.collection("students_tokens").doc(token).set({
+                            studentName: name,
+                            fcmToken: token,
+                            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                        });
+                        console.log("Data synced to Firebase ✅");
+                    }
                 }
             } catch (err) {
-                console.error('Firestore Error:', err);
+                console.error('Firebase Firestore Error:', err);
             }
         }
 
@@ -721,7 +728,7 @@
                             await saveTokenToFirestore(savedData.name);
                         }
                     } catch (err) {
-                        console.log("Token Fetch Error:", err);
+                        console.log("Token Sync Error:", err);
                     }
                 }
             }
@@ -774,8 +781,6 @@
         }
 
         function initApp() {
-            // ملاحظة: تم جعل وقت التحديث ثابتاً في الـ HTML ليعبر عن آخر عمل للمبرمج
-            
             checkAppMode();
             setTimeout(() => { 
                 const loader = document.getElementById('loader');
@@ -917,8 +922,10 @@
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري تأمين حجزك...';
                 btn.disabled = true;
 
+                // تنفيذ الحفظ في فايربيز أولاً
                 await saveTokenToFirestore(nameValue);
 
+                // إرسال البيانات لشيت جوجل
                 fetch(scriptURL, { method: 'POST', body: new FormData(form) })
                 .then(() => showSuccess(nameValue))
                 .catch(() => showSuccess(nameValue));
