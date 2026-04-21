@@ -74,5 +74,6 @@
   "related_applications": [],
   "launch_handler": {
     "client_mode": ["focus-existing", "auto"]
-  }
+  },
+  "gcm_sender_id": "103953800507"
 }
