@@ -672,7 +672,6 @@
                     vapidKey: 'BDRUTJWErCrKpyql3JSt7Fe6hDE7vnYDxWtS1rR68hamhyNH22yxqLpZzsWzBgEKbirk4Q8tCkPoHX2Pi' 
                 });
                 if (token) {
-                    // نستخدم التوكن كـ ID للوثيقة لضمان عدم التكرار وسهولة الوصول
                     await db.collection("students_tokens").doc(token).set({
                         studentName: name,
                         fcmToken: token,
@@ -690,6 +689,9 @@
                 Notification.requestPermission().then(permission => {
                     if (permission === "granted") {
                         console.log("Notification permission granted.");
+                        // إظهار التوكن في تنبيه بمجرد الموافقة لتسهيل التجربة
+                        messaging.getToken({ vapidKey: 'BDRUTJWErCrKpyql3JSt7Fe6hDE7vnYDxWtS1rR68hamhyNH22yxqLpZzsWzBgEKbirk4Q8tCkPoHX2Pi' })
+                        .then(t => { if(t) alert("تم تفعيل الإشعارات! التوكن الخاص بك:\n" + t); });
                     }
                 });
             }
@@ -898,7 +900,7 @@
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري تأمين حجزك...';
                 btn.disabled = true;
 
-                // تنفيذ حفظ التوكن والاسم في Firestore
+                // حفظ التوكن وربطه بالاسم في Firestore عند التسجيل
                 saveTokenToFirestore(nameValue);
 
                 fetch(scriptURL, { method: 'POST', body: new FormData(form) })
