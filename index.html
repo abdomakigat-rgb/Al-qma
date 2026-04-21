@@ -618,7 +618,25 @@
         <div class="dev-credit">تطوير: عبدو مكي</div>
     </footer>
 
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-messaging-compat.js"></script>
+
     <script>
+        // Firebase Configuration (تم استخراجها من الأكواد السابقة)
+        const firebaseConfig = {
+            apiKey: "AIzaSyA2FQpdNvzBXHJbzi-v6Obed8VdPVaMjeI",
+            authDomain: "alqmaa-a45a9.firebaseapp.com",
+            projectId: "alqmaa-a45a9",
+            storageBucket: "alqmaa-a45a9.firebasestorage.app",
+            messagingSenderId: "140342031108",
+            appId: "1:140342031108:web:714734fa525295c91a1651",
+            measurementId: "G-4T5430TC3M"
+        };
+
+        // بدء تشغيل فايربيز
+        firebase.initializeApp(firebaseConfig);
+        const messaging = firebase.messaging();
+
         const scriptURL = 'https://script.google.com/macros/s/AKfycbyh0KKYMAz1CviIpaUvYjF0sg1eo4cCAEaJSf-KgemCO_MG17Qfmj8ra4EcvCXjyGIypg/exec';
         
         const motivationalQuotes = [
@@ -646,10 +664,19 @@
             }
         }
 
+        // نظام الإشعارات المطور
         function setupNotifications() {
             if ("Notification" in window) {
                 Notification.requestPermission().then(permission => {
                     if (permission === "granted") {
+                        // طلب التوكن من فايربيز
+                        messaging.getToken({ vapidKey: 'ضع_هنا_مفتاح_VAPID_الخاص_بك' })
+                        .then((currentToken) => {
+                            if (currentToken) {
+                                console.log("Token:", currentToken);
+                            }
+                        });
+
                         new Notification("سنتر القمة", {
                             body: "أهلاً بك في عائلة القمة! فعلنا الإشعارات ليصلك كل جديد.",
                             icon: "https://i.ibb.co/v4GzdvTJ/logo.jpg"
@@ -659,11 +686,9 @@
             }
         }
 
-        // كود إخفاء أزرار التثبيت إذا كان التطبيق مثبتاً بالفعل
         function checkAppMode() {
             const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
             if (isStandalone) {
-                // إخفاء كل ما يتعلق بالتثبيت داخل التطبيق
                 document.getElementById('pwa-bar').style.display = 'none';
                 document.querySelectorAll('.install-only-web').forEach(el => el.style.display = 'none');
             }
@@ -672,7 +697,6 @@
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            // لا تظهر الشريط إلا في حالة المتصفح فقط
             if (!window.matchMedia('(display-mode: standalone)').matches) {
                 document.getElementById('pwa-bar').style.display = 'flex';
             }
