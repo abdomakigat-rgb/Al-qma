@@ -17,6 +17,25 @@
     <meta property="og:image" content="https://i.ibb.co/v4GzdvTJ/logo.jpg">
     <meta property="og:url" content="https://abdomakigat-rgb.github.io/Al-qma/">
 
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+      window.OneSignal = window.OneSignal || [];
+      OneSignal.push(function() {
+        OneSignal.init({
+          appId: "YOUR_ONESIGNAL_APP_ID", // استبدل هذا الكود بـ App ID الخاص بك من OneSignal
+          safari_web_id: "optional_safari_id",
+          notifyButton: {
+            enable: true,
+          },
+          welcomeNotification: {
+            "title": "نورت القمة يا بطل! 🎓",
+            "message": "تم تفعيل الإشعارات بنجاح. أي جديد في السنتر هيوصلك هنا فوراً! 🚀",
+            "url": "https://abdomakigat-rgb.github.io/Al-qma/" 
+          }
+        });
+      });
+    </script>
+
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -634,7 +653,6 @@
     </footer>
 
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-messaging-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 
     <script>
@@ -648,11 +666,9 @@
             measurementId: "G-4T5430TC3M"
         };
 
-        // البدء الصحيح لـ Firebase Compat Mode
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
         }
-        const messaging = firebase.messaging();
         const db = firebase.firestore();
 
         const scriptURL = 'https://script.google.com/macros/s/AKfycbyh0KKYMAz1CviIpaUvYjF0sg1eo4cCAEaJSf-KgemCO_MG17Qfmj8ra4EcvCXjyGIypg/exec';
@@ -682,56 +698,13 @@
             }
         }
 
+        // Service Worker for OneSignal
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                .then(reg => {
-                    console.log("Service Worker Registered! ✅");
-                })
-                .catch(err => console.log("Service Worker Failed ❌", err));
+                navigator.serviceWorker.register('OneSignalSDKWorker.js')
+                .then(reg => console.log("OneSignal Worker Registered! ✅"))
+                .catch(err => console.log("Worker Failed ❌", err));
             });
-        }
-
-        async function saveTokenToFirestore(name) {
-            try {
-                // طلب الإذن للإشعارات أولاً
-                const permission = await Notification.requestPermission();
-                if (permission === "granted") {
-                    const token = await messaging.getToken({ 
-                        vapidKey: 'BG4qNJJLmOq29aauOqx5r5aq-N6c3Bas-XbyZ4jXKJh2TaK258ycIll7IwAaTKHYR-ZZIspwAuBsfHsJM0R5u-4' 
-                    });
-                    
-                    if (token) {
-                        await db.collection("students_tokens").doc(token).set({
-                            studentName: name,
-                            fcmToken: token,
-                            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                        });
-                        console.log("Data synced to Firebase ✅");
-                    }
-                }
-            } catch (err) {
-                console.error('Firebase Firestore Error:', err);
-            }
-        }
-
-        async function setupNotifications() {
-            if ("Notification" in window) {
-                const permission = await Notification.requestPermission();
-                if (permission === "granted") {
-                    try {
-                        const token = await messaging.getToken({ 
-                            vapidKey: 'BG4qNJJLmOq29aauOqx5r5aq-N6c3Bas-XbyZ4jXKJh2TaK258ycIll7IwAaTKHYR-ZZIspwAuBsfHsJM0R5u-4' 
-                        });
-                        const savedData = JSON.parse(localStorage.getItem('studentFullData') || '{}');
-                        if(savedData.name && token) {
-                            await saveTokenToFirestore(savedData.name);
-                        }
-                    } catch (err) {
-                        console.log("Token Sync Error:", err);
-                    }
-                }
-            }
         }
 
         function checkAppMode() {
@@ -766,20 +739,6 @@
             }
         }
 
-        function showUpdateBar() {
-            const bar = document.getElementById('pwa-bar');
-            const btn = document.getElementById('pwa-button');
-            const text = document.getElementById('pwa-text');
-            const sub = document.getElementById('pwa-subtext');
-            bar.style.display = 'flex';
-            bar.style.borderColor = '#22c55e';
-            text.innerHTML = 'نسخة مطورة من القمة جاهزة! ✨';
-            sub.innerText = 'اضغط لتحديث الموقع والاستمتاع بالمميزات الجديدة.';
-            btn.innerText = 'تحديث الآن';
-            btn.style.background = '#22c55e';
-            playSfx('successSound');
-        }
-
         function initApp() {
             checkAppMode();
             setTimeout(() => { 
@@ -789,7 +748,6 @@
                     setTimeout(()=> {
                         loader.style.display='none';
                         playSfx('introSound');
-                        setupNotifications(); 
                     }, 500); 
                 }
             }, 1000);
@@ -922,8 +880,13 @@
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري تأمين حجزك...';
                 btn.disabled = true;
 
-                // تنفيذ الحفظ في فايربيز أولاً
-                await saveTokenToFirestore(nameValue);
+                // حفظ البيانات في Firestore كمرجع
+                try {
+                    await db.collection("registrations").add({
+                        ...studentData,
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                } catch(err) { console.log("Firestore backup skiped"); }
 
                 // إرسال البيانات لشيت جوجل
                 fetch(scriptURL, { method: 'POST', body: new FormData(form) })
