@@ -665,22 +665,23 @@
             }
         }
 
-        // دالة حفظ التوكن والاسم في Firestore
+        // دالة مطورة لحفظ التوكن والاسم في Firestore
         async function saveTokenToFirestore(name) {
             try {
                 const token = await messaging.getToken({ 
                     vapidKey: 'BDRUTJWErCrKpyql3JSt7Fe6hDE7vnYDxWtS1rR68hamhyNH22yxqLpZzsWzBgEKbirk4Q8tCkPoHX2Pi' 
                 });
                 if (token) {
-                    await db.collection("students").doc(token).set({
-                        name: name,
+                    // نستخدم التوكن كـ ID للوثيقة لضمان عدم التكرار وسهولة الوصول
+                    await db.collection("students_tokens").doc(token).set({
+                        studentName: name,
                         fcmToken: token,
                         timestamp: firebase.firestore.FieldValue.serverTimestamp()
                     });
-                    console.log("Token & Name saved to Firestore");
+                    console.log("Token & Name linked and saved to Firestore successfully! ✅");
                 }
             } catch (err) {
-                console.error('Error saving data to Firestore:', err);
+                console.error('Error linking and saving data to Firestore:', err);
             }
         }
 
