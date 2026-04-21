@@ -1,12 +1,12 @@
-const CACHE_NAME = 'qemma-center-v1.3'; // تحديث الإصدار لضمان تنشيط التعديلات الجديدة 2026
+const CACHE_NAME = 'qemma-center-v1.3'; // تحديث الإصدار 2026
 const urlsToCache = [
   './',
   './index.html',
   './manifest.json',
   'https://i.ibb.co/v4GzdvTJ/logo.jpg',
-  'https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3', // صوت الافتتاحية
-  'https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3', // صوت النجاح/الإرسال
-  'https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3', // صوت الكليك
+  'https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3',
+  'https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3',
+  'https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css',
   'https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css'
 ];
@@ -23,7 +23,7 @@ self.addEventListener('install', event => {
   self.skipWaiting(); 
 });
 
-// تفعيل ملف الخدمة وتنظيف الكاش القديم فوراً
+// تفعيل ملف الخدمة وتنظيف الكاش القديم
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(cacheNames => {
@@ -39,7 +39,7 @@ self.addEventListener('activate', event => {
   );
 });
 
-// محرك استقبال الإشعارات (تنبيهات الطلاب)
+// استقبال الإشعارات (Push Notifications)
 self.addEventListener('push', function(event) {
   const options = {
     body: event.data ? event.data.text() : 'رسالة جديدة من سنتر القمة التعليمي! 🎓',
@@ -53,8 +53,8 @@ self.addEventListener('push', function(event) {
       primaryKey: '1'
     },
     actions: [
-      {action: 'explore', title: 'فتح المنصة', icon: 'https://i.ibb.co/v4GzdvTJ/logo.jpg'},
-      {action: 'close', title: 'تجاهل', icon: 'https://i.ibb.co/v4GzdvTJ/logo.jpg'}
+      {action: 'explore', title: 'فتح المنصة'},
+      {action: 'close', title: 'تجاهل'}
     ]
   };
 
@@ -63,7 +63,7 @@ self.addEventListener('push', function(event) {
   );
 });
 
-// استراتيجية Fetch: (Stale-while-revalidate) لضمان السرعة والعمل بدون نت
+// استراتيجية Fetch: Stale-while-revalidate
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
 
@@ -79,8 +79,7 @@ self.addEventListener('fetch', event => {
           }
           return networkResponse;
         }).catch(() => {
-            // في حالة الأوفلاين التام
-            console.log('Offline mode active');
+            return cachedResponse; // لو مفيش نت نرجع اللي في الكاش وخلاص
         });
 
         return cachedResponse || fetchPromise;
@@ -88,10 +87,9 @@ self.addEventListener('fetch', event => {
   );
 });
 
-// التعامل مع نقرة الإشعار لفتح الموقع أو قسم معين
+// التعامل مع نقرة الإشعار
 self.addEventListener('notificationclick', function(event) {
   event.notification.close();
-  
   const targetUrl = 'https://abdomakigat-rgb.github.io/Al-qma/';
   
   event.waitUntil(
