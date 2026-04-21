@@ -23,6 +23,8 @@ messaging.onBackgroundMessage((payload) => {
     body: payload.notification.body || "لديك رسالة جديدة من المنصة.",
     icon: 'https://i.ibb.co/v4GzdvTJ/logo.jpg', 
     badge: 'https://i.ibb.co/v4GzdvTJ/logo.jpg', 
+    vibrate: [200, 100, 200],
+    image: payload.notification.image || 'https://i.ibb.co/v4GzdvTJ/logo.jpg',
     data: {
       url: (payload.data && payload.data.url) ? payload.data.url : 'https://abdomakigat-rgb.github.io/Al-qma/' 
     }
@@ -30,19 +32,26 @@ messaging.onBackgroundMessage((payload) => {
   self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
-// 3. إعدادات الكاش
+// 3. إعدادات الكاش (v1.4)
 const CACHE_NAME = 'qemma-center-v1.4';
 const urlsToCache = [
   './',
   './index.html',
   './manifest.json',
-  'https://i.ibb.co/v4GzdvTJ/logo.jpg'
+  'https://i.ibb.co/v4GzdvTJ/logo.jpg',
+  'https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3',
+  'https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3',
+  'https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3',
+  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css',
+  'https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css',
+  'https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Reem+Kufi:wght@700&display=swap'
 ];
 
 // 4. التثبيت
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
+      console.log('تم فتح الكاش بنجاح ✅');
       return cache.addAll(urlsToCache);
     })
   );
@@ -56,6 +65,7 @@ self.addEventListener('activate', event => {
       return Promise.all(
         cacheNames.map(cache => {
           if (cache !== CACHE_NAME) {
+            console.log('حذف الكاش القديم 🗑️');
             return caches.delete(cache);
           }
         })
