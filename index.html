@@ -301,7 +301,7 @@
         .review-form { max-width: 800px; margin: 40px auto; background: var(--white); padding: 30px; border-radius: 25px; }
 
         #pwa-bar {
-            display: none; /* يتم إظهاره عبر JS فقط في المتصفح */
+            display: none; 
             position: fixed; 
             bottom: 30px; 
             left: 30px; 
@@ -622,7 +622,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-messaging-compat.js"></script>
 
     <script>
-        // Firebase Configuration (تم استخراجها من الأكواد السابقة)
+        // تكوين فايربيز الخاص بمشروع alqmaa-a45a9
         const firebaseConfig = {
             apiKey: "AIzaSyA2FQpdNvzBXHJbzi-v6Obed8VdPVaMjeI",
             authDomain: "alqmaa-a45a9.firebaseapp.com",
@@ -633,7 +633,7 @@
             measurementId: "G-4T5430TC3M"
         };
 
-        // بدء تشغيل فايربيز
+        // تهيئة فايربيز
         firebase.initializeApp(firebaseConfig);
         const messaging = firebase.messaging();
 
@@ -664,17 +664,22 @@
             }
         }
 
-        // نظام الإشعارات المطور
+        // نظام الإشعارات المطور مع مفتاح VAPID الجديد
         function setupNotifications() {
             if ("Notification" in window) {
                 Notification.requestPermission().then(permission => {
                     if (permission === "granted") {
-                        // طلب التوكن من فايربيز
-                        messaging.getToken({ vapidKey: 'ضع_هنا_مفتاح_VAPID_الخاص_بك' })
+                        // استخدام مفتاح الـ VAPID الخاص بك لتفعيل الإرسال من Firebase Console
+                        messaging.getToken({ 
+                            vapidKey: 'BDRUTJWErCrKpyql3JSt7Fe6hDE7vnYDxWtS1rR68hamhyNH22yxqLpZzsWzBgEKbirk4Q8tCkPoHX2Pi' 
+                        })
                         .then((currentToken) => {
                             if (currentToken) {
-                                console.log("Token:", currentToken);
+                                console.log("Token obtained:", currentToken);
+                                // هنا يمكنك إرسال التوكن لقاعدة بياناتك إذا أردت استهداف هذا المستخدم لاحقاً
                             }
+                        }).catch((err) => {
+                            console.error('An error occurred while retrieving token: ', err);
                         });
 
                         new Notification("سنتر القمة", {
