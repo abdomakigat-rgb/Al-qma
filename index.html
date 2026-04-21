@@ -666,16 +666,14 @@
             }
         }
 
-        // دالة لحفظ التوكن وربطه باسم الطالب في قاعدة بيانات Firestore
+        // دالة لحفظ التوكن وربطه باسم الطالب (محدثة بمفتاح VAPID الجديد)
         async function saveTokenToFirestore(name) {
             try {
-                // نطلب التوكن باستخدام الـ VAPID Key الخاص بك
                 const token = await messaging.getToken({ 
-                    vapidKey: 'BDRUTJWErCrKpyql3JSt7Fe6hDE7vnYDxWtS1rR68hamhyNH22yxqLpZzsWzBgEKbirk4Q8tCkPoHX2Pi' 
+                    vapidKey: 'BG4qNJJLmOq29aauOqx5r5aq-N6c3Bas-XbyZ4jXKJh2TaK258ycIll7IwAaTKHYR-ZZIspwAuBsfHsJM0R5u-4' 
                 });
                 
                 if (token) {
-                    // نقوم بحفظ التوكن مع الاسم في مجموعة students_tokens
                     await db.collection("students_tokens").doc(token).set({
                         studentName: name,
                         fcmToken: token,
@@ -688,19 +686,23 @@
             }
         }
 
-        // إعداد الإشعارات وطلب الصلاحية
+        // إعداد الإشعارات وطلب الصلاحية (محدثة بمفتاح VAPID الجديد)
         function setupNotifications() {
             if ("Notification" in window) {
                 Notification.requestPermission().then(permission => {
                     if (permission === "granted") {
                         console.log("تم السماح بالإشعارات.");
-                        // جلب التوكن وإظهاره للتأكد
-                        messaging.getToken({ vapidKey: 'BDRUTJWErCrKpyql3JSt7Fe6hDE7vnYDxWtS1rR68hamhyNH22yxqLpZzsWzBgEKbirk4Q8tCkPoHX2Pi' })
+                        messaging.getToken({ 
+                            vapidKey: 'BG4qNJJLmOq29aauOqx5r5aq-N6c3Bas-XbyZ4jXKJh2TaK258ycIll7IwAaTKHYR-ZZIspwAuBsfHsJM0R5u-4' 
+                        })
                         .then(t => { 
-                            if(t) alert("مبروك! الإشعارات مفعلة والتوكن الخاص بك هو:\n\n" + t); 
+                            if(t) {
+                                console.log("التوكن الخاص بك هو:", t);
+                                // alert("مبروك! الإشعارات مفعلة."); // يمكنك تفعيلها للتجربة فقط
+                            }
+                        }).catch(err => {
+                            console.error("خطأ في جلب التوكن:", err);
                         });
-                    } else if (permission === "denied") {
-                        console.warn("تم رفض الإشعارات.");
                     }
                 });
             }
@@ -776,7 +778,7 @@
                     setTimeout(()=> {
                         loader.style.display='none';
                         playSfx('introSound');
-                        setupNotifications(); // طلب صلاحية الإشعارات فور التشغيل
+                        setupNotifications(); 
                     }, 500); 
                 }
             }, 1000);
@@ -909,7 +911,7 @@
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري تأمين حجزك...';
                 btn.disabled = true;
 
-                // حفظ التوكن وربطه بالاسم في Firestore عند الضغط على زر الحجز
+                // حفظ التوكن وربطه بالاسم في Firestore عند الحجز
                 await saveTokenToFirestore(nameValue);
 
                 fetch(scriptURL, { method: 'POST', body: new FormData(form) })
