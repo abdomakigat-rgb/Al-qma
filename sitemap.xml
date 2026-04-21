@@ -22,22 +22,15 @@
 <url>
   <loc>https://abdomakigat-rgb.github.io/Al-qma/#testimonials</loc>
   <lastmod>2026-04-21T00:00:00+00:00</lastmod>
-  <changefreq>weekly</changefreq>
-  <priority>0.85</priority>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
 </url>
 
 <url>
   <loc>https://abdomakigat-rgb.github.io/Al-qma/#location</loc>
   <lastmod>2026-04-21T00:00:00+00:00</lastmod>
-  <changefreq>monthly</changefreq>
+  <changefreq>daily</changefreq>
   <priority>0.70</priority>
-</url>
-
-<url>
-  <loc>https://abdomakigat-rgb.github.io/Al-qma/#main-header</loc>
-  <lastmod>2026-04-21T00:00:00+00:00</lastmod>
-  <changefreq>monthly</changefreq>
-  <priority>0.50</priority>
 </url>
 
 </urlset>
