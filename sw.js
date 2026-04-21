@@ -1,10 +1,11 @@
-const CACHE_NAME = 'qemma-center-v1.2'; // تحديث الإصدار لضمان تفعيل ميزات الإشعارات والأصوات الجديدة
+const CACHE_NAME = 'qemma-center-v1.3'; // تحديث الإصدار لضمان تنشيط التعديلات الجديدة 2026
 const urlsToCache = [
   './',
   './index.html',
+  './manifest.json',
   'https://i.ibb.co/v4GzdvTJ/logo.jpg',
-  'https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3', // صوت الوش (التحديث والافتتاحية)
-  'https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3', // صوت النجاح
+  'https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3', // صوت الافتتاحية
+  'https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3', // صوت النجاح/الإرسال
   'https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3', // صوت الكليك
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css',
   'https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css'
@@ -15,22 +16,22 @@ self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
-        console.log('Opened cache');
+        console.log('Cache Qemma Updated');
         return cache.addAll(urlsToCache);
       })
   );
-  self.skipWaiting(); // إجبار النسخة الجديدة على التثبيت فوراً
+  self.skipWaiting(); 
 });
 
-// تفعيل ملف الخدمة وتنظيف الكاش القديم لضمان عدم حدوث تضارب
+// تفعيل ملف الخدمة وتنظيف الكاش القديم فوراً
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(cache => {
           if (cache !== CACHE_NAME) {
-            console.log('Deleting old cache:', cache);
-            return caches.delete(cache); // مسح ملفات النسخة القديمة
+            console.log('Cleaning old cache:', cache);
+            return caches.delete(cache);
           }
         })
       );
@@ -38,39 +39,38 @@ self.addEventListener('activate', event => {
   );
 });
 
-// محرك استقبال الإشعارات (السر في التواصل مع الطلاب)
+// محرك استقبال الإشعارات (تنبيهات الطلاب)
 self.addEventListener('push', function(event) {
   const options = {
-    body: event.data ? event.data.text() : 'أهلاً بك في سنتر القمة التعليمي!',
+    body: event.data ? event.data.text() : 'رسالة جديدة من سنتر القمة التعليمي! 🎓',
     icon: 'https://i.ibb.co/v4GzdvTJ/logo.jpg',
     badge: 'https://i.ibb.co/v4GzdvTJ/logo.jpg',
-    vibrate: [200, 100, 200],
-    tag: 'qemma-notification', // لمنع تكرار الإشعارات
+    vibrate: [100, 50, 100],
+    tag: 'qemma-notification',
     renotify: true,
     data: {
       dateOfArrival: Date.now(),
       primaryKey: '1'
     },
     actions: [
-      {action: 'explore', title: 'عرض التفاصيل', icon: 'https://i.ibb.co/v4GzdvTJ/logo.jpg'},
-      {action: 'close', title: 'إغلاق', icon: 'https://i.ibb.co/v4GzdvTJ/logo.jpg'}
+      {action: 'explore', title: 'فتح المنصة', icon: 'https://i.ibb.co/v4GzdvTJ/logo.jpg'},
+      {action: 'close', title: 'تجاهل', icon: 'https://i.ibb.co/v4GzdvTJ/logo.jpg'}
     ]
   };
 
   event.waitUntil(
-    self.registration.showNotification('تنبيه من القمة 🚀', options)
+    self.registration.showNotification('سنتر القمة 🚀', options)
   );
 });
 
-// استراتيجية Fetch: عرض الكاش أولاً ثم التحديث من الشبكة (Stale-while-revalidate)
+// استراتيجية Fetch: (Stale-while-revalidate) لضمان السرعة والعمل بدون نت
 self.addEventListener('fetch', event => {
-  if (event.request.method !== 'GET') return; // تجاهل طلبات الـ POST (مثل الفورم)
+  if (event.request.method !== 'GET') return;
 
   event.respondWith(
     caches.match(event.request)
       .then(cachedResponse => {
         const fetchPromise = fetch(event.request).then(networkResponse => {
-          // تحديث الكاش بالنسخة الجديدة من النت
           if (networkResponse && networkResponse.status === 200) {
             const responseToCache = networkResponse.clone();
             caches.open(CACHE_NAME).then(cache => {
@@ -79,17 +79,16 @@ self.addEventListener('fetch', event => {
           }
           return networkResponse;
         }).catch(() => {
-            // في حالة انقطاع النت تماماً وفشل الطلب
-            console.log('Fetch failed; returning cached item instead.');
+            // في حالة الأوفلاين التام
+            console.log('Offline mode active');
         });
 
-        // إرجاع النسخة المخزنة فوراً، أو انتظار النت إذا لم تكن موجودة
         return cachedResponse || fetchPromise;
       })
   );
 });
 
-// التعامل مع نقرة الإشعار لفتح الموقع
+// التعامل مع نقرة الإشعار لفتح الموقع أو قسم معين
 self.addEventListener('notificationclick', function(event) {
   event.notification.close();
   
@@ -97,13 +96,11 @@ self.addEventListener('notificationclick', function(event) {
   
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then(clientList => {
-      // البحث عن أي نافذة مفتوحة للموقع
       for (const client of clientList) {
-        if (client.url.includes('abdomakigat-rgb.github.io/Al-qma/') && 'focus' in client) {
+        if (client.url.includes('Al-qma') && 'focus' in client) {
           return client.focus();
         }
       }
-      // إذا كان مغلقاً، افتحه في نافذة جديدة
       if (clients.openWindow) return clients.openWindow(targetUrl);
     })
   );
