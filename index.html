@@ -22,7 +22,7 @@
       window.OneSignal = window.OneSignal || [];
       OneSignal.push(function() {
         OneSignal.init({
-          appId: "YOUR_ONESIGNAL_APP_ID", // استبدل هذا الكود بـ App ID الخاص بك من OneSignal
+          appId: "YOUR_ONESIGNAL_APP_ID", // ضع هنا الـ App ID الخاص بك من OneSignal
           safari_web_id: "optional_safari_id",
           notifyButton: {
             enable: true,
@@ -698,12 +698,12 @@
             }
         }
 
-        // Service Worker for OneSignal
+        // تسجيل ملف OneSignalSDKWorker.js في المسار الرئيسي
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('OneSignalSDKWorker.js')
-                .then(reg => console.log("OneSignal Worker Registered! ✅"))
-                .catch(err => console.log("Worker Failed ❌", err));
+                .then(reg => console.log("OneSignal Worker Ready ✅"))
+                .catch(err => console.log("Worker Registration Failed ❌", err));
             });
         }
 
@@ -788,8 +788,10 @@
                 `أنت فخر لنا يا ${name}، ننتظر اسمك في قائمة الأوائل.`
             ];
             const random = quotes[Math.floor(Math.random() * quotes.length)];
-            document.getElementById('studentPersonalQuote').innerText = random;
-            document.getElementById('motivationTitle').innerText = `رسالة خاصة لـ ${name}`;
+            const quoteEl = document.getElementById('studentPersonalQuote');
+            if(quoteEl) quoteEl.innerText = random;
+            const titleEl = document.getElementById('motivationTitle');
+            if(titleEl) titleEl.innerText = `رسالة خاصة لـ ${name}`;
         }
 
         function revealElements() {
@@ -826,6 +828,7 @@
 
         function loadReviews() {
             const container = document.getElementById('reviewsList');
+            if(!container) return;
             container.innerHTML = '';
             
             const studentQuotes = [
@@ -870,7 +873,8 @@
                     email: document.getElementById('stEmail').value,
                     address: document.getElementById('stAddress').value,
                     edu_type: document.getElementById('eduType').value,
-                    grade: document.getElementById('gradeSelect').value
+                    grade: document.getElementById('gradeSelect').value,
+                    subject_teacher: document.getElementById('stSubject').value
                 };
                 localStorage.setItem('studentFullData', JSON.stringify(studentData));
                 
@@ -880,15 +884,13 @@
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري تأمين حجزك...';
                 btn.disabled = true;
 
-                // حفظ البيانات في Firestore كمرجع
                 try {
                     await db.collection("registrations").add({
                         ...studentData,
                         timestamp: firebase.firestore.FieldValue.serverTimestamp()
                     });
-                } catch(err) { console.log("Firestore backup skiped"); }
+                } catch(err) { console.log("Firestore backup skipped"); }
 
-                // إرسال البيانات لشيت جوجل
                 fetch(scriptURL, { method: 'POST', body: new FormData(form) })
                 .then(() => showSuccess(nameValue))
                 .catch(() => showSuccess(nameValue));
