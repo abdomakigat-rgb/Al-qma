@@ -623,7 +623,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 
     <script>
-        // تكوين فايربيز
+        // تكوين فايربيز الجديد والمحدث
         const firebaseConfig = {
             apiKey: "AIzaSyA2FQpdNvzBXHJbzi-v6Obed8VdPVaMjeI",
             authDomain: "alqmaa-a45a9.firebaseapp.com",
@@ -634,6 +634,7 @@
             measurementId: "G-4T5430TC3M"
         };
 
+        // تهيئة فايربيز
         firebase.initializeApp(firebaseConfig);
         const messaging = firebase.messaging();
         const db = firebase.firestore();
@@ -665,33 +666,41 @@
             }
         }
 
-        // دالة مطورة لحفظ التوكن والاسم في Firestore
+        // دالة لحفظ التوكن وربطه باسم الطالب في قاعدة بيانات Firestore
         async function saveTokenToFirestore(name) {
             try {
+                // نطلب التوكن باستخدام الـ VAPID Key الخاص بك
                 const token = await messaging.getToken({ 
                     vapidKey: 'BDRUTJWErCrKpyql3JSt7Fe6hDE7vnYDxWtS1rR68hamhyNH22yxqLpZzsWzBgEKbirk4Q8tCkPoHX2Pi' 
                 });
+                
                 if (token) {
+                    // نقوم بحفظ التوكن مع الاسم في مجموعة students_tokens
                     await db.collection("students_tokens").doc(token).set({
                         studentName: name,
                         fcmToken: token,
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                        lastActive: firebase.firestore.FieldValue.serverTimestamp()
                     });
-                    console.log("Token & Name linked and saved to Firestore successfully! ✅");
+                    console.log("تم ربط التوكن والاسم بنجاح! ✅");
                 }
             } catch (err) {
-                console.error('Error linking and saving data to Firestore:', err);
+                console.error('خطأ في حفظ البيانات للفايربيز:', err);
             }
         }
 
+        // إعداد الإشعارات وطلب الصلاحية
         function setupNotifications() {
             if ("Notification" in window) {
                 Notification.requestPermission().then(permission => {
                     if (permission === "granted") {
-                        console.log("Notification permission granted.");
-                        // إظهار التوكن في تنبيه بمجرد الموافقة لتسهيل التجربة
+                        console.log("تم السماح بالإشعارات.");
+                        // جلب التوكن وإظهاره للتأكد
                         messaging.getToken({ vapidKey: 'BDRUTJWErCrKpyql3JSt7Fe6hDE7vnYDxWtS1rR68hamhyNH22yxqLpZzsWzBgEKbirk4Q8tCkPoHX2Pi' })
-                        .then(t => { if(t) alert("تم تفعيل الإشعارات! التوكن الخاص بك:\n" + t); });
+                        .then(t => { 
+                            if(t) alert("مبروك! الإشعارات مفعلة والتوكن الخاص بك هو:\n\n" + t); 
+                        });
+                    } else if (permission === "denied") {
+                        console.warn("تم رفض الإشعارات.");
                     }
                 });
             }
@@ -767,7 +776,7 @@
                     setTimeout(()=> {
                         loader.style.display='none';
                         playSfx('introSound');
-                        setupNotifications();
+                        setupNotifications(); // طلب صلاحية الإشعارات فور التشغيل
                     }, 500); 
                 }
             }, 1000);
@@ -879,7 +888,7 @@
 
         const form = document.getElementById('studentForm');
         if(form) {
-            form.onsubmit = (e) => {
+            form.onsubmit = async (e) => {
                 e.preventDefault();
                 const btn = document.getElementById('submitBtn');
                 
@@ -900,8 +909,8 @@
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري تأمين حجزك...';
                 btn.disabled = true;
 
-                // حفظ التوكن وربطه بالاسم في Firestore عند التسجيل
-                saveTokenToFirestore(nameValue);
+                // حفظ التوكن وربطه بالاسم في Firestore عند الضغط على زر الحجز
+                await saveTokenToFirestore(nameValue);
 
                 fetch(scriptURL, { method: 'POST', body: new FormData(form) })
                 .then(() => showSuccess(nameValue))
