@@ -1,4 +1,21 @@
-const CACHE_NAME = 'qemma-center-v1.3'; // تحديث الإصدار 2026
+// 1. استيراد مكتبات Firebase اللازمة للعمل في الخلفية
+importScripts('https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/9.22.1/firebase-messaging-compat.js');
+
+// 2. إعداد فايربيز الخاص بمشروعك (سنتر القمة)
+firebase.initializeApp({
+    apiKey: "AIzaSyA2FQpdNvzBXHJbzi-v6Obed8VdPVaMjeI",
+    authDomain: "alqmaa-a45a9.firebaseapp.com",
+    projectId: "alqmaa-a45a9",
+    storageBucket: "alqmaa-a45a9.firebasestorage.app",
+    messagingSenderId: "140342031108",
+    appId: "1:140342031108:web:714734fa525295c91a1651"
+});
+
+const messaging = firebase.messaging();
+
+// 3. إعدادات الكاش (v1.3) لضمان السرعة والعمل بدون إنترنت
+const CACHE_NAME = 'qemma-center-v1.3';
 const urlsToCache = [
   './',
   './index.html',
@@ -11,95 +28,80 @@ const urlsToCache = [
   'https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css'
 ];
 
-// تثبيت ملف الخدمة وتخزين الملفات الأساسية
+// تثبيت ملف الخدمة وتخزين الملفات
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        console.log('Cache Qemma Updated');
-        return cache.addAll(urlsToCache);
-      })
+    caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
   );
   self.skipWaiting(); 
 });
 
-// تفعيل ملف الخدمة وتنظيف الكاش القديم
+// تنظيف الكاش القديم عند التحديث
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(cache => {
-          if (cache !== CACHE_NAME) {
-            console.log('Cleaning old cache:', cache);
-            return caches.delete(cache);
-          }
+          if (cache !== CACHE_NAME) return caches.delete(cache);
         })
       );
     }).then(() => self.clients.claim())
   );
 });
 
-// استقبال الإشعارات (Push Notifications)
-self.addEventListener('push', function(event) {
-  const options = {
-    body: event.data ? event.data.text() : 'رسالة جديدة من سنتر القمة التعليمي! 🎓',
+// 4. استقبال الإشعارات في الخلفية (عندما يكون الموقع مغلقاً)
+messaging.onBackgroundMessage((payload) => {
+  console.log('Background Notification:', payload);
+  const notificationTitle = payload.notification.title || 'سنتر القمة 🚀';
+  const notificationOptions = {
+    body: payload.notification.body || 'لديك رسالة جديدة!',
     icon: 'https://i.ibb.co/v4GzdvTJ/logo.jpg',
     badge: 'https://i.ibb.co/v4GzdvTJ/logo.jpg',
-    vibrate: [100, 50, 100],
-    tag: 'qemma-notification',
-    renotify: true,
-    data: {
-      dateOfArrival: Date.now(),
-      primaryKey: '1'
-    },
-    actions: [
-      {action: 'explore', title: 'فتح المنصة'},
-      {action: 'close', title: 'تجاهل'}
-    ]
   };
-
-  event.waitUntil(
-    self.registration.showNotification('سنتر القمة 🚀', options)
-  );
+  self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
-// استراتيجية Fetch: Stale-while-revalidate
+// 5. استقبال الإشعارات العامة (Push API)
+self.addEventListener('push', function(event) {
+  if (event.data) {
+     const data = event.data.text();
+     const options = {
+        body: data,
+        icon: 'https://i.ibb.co/v4GzdvTJ/logo.jpg',
+        badge: 'https://i.ibb.co/v4GzdvTJ/logo.jpg',
+        vibrate: [100, 50, 100],
+        data: { primaryKey: '1' }
+     };
+     event.waitUntil(self.registration.showNotification('سنتر القمة 🎓', options));
+  }
+});
+
+// 6. استراتيجية Fetch (التعامل مع الطلبات والإنترنت ضعيف)
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
-
   event.respondWith(
-    caches.match(event.request)
-      .then(cachedResponse => {
-        const fetchPromise = fetch(event.request).then(networkResponse => {
-          if (networkResponse && networkResponse.status === 200) {
-            const responseToCache = networkResponse.clone();
-            caches.open(CACHE_NAME).then(cache => {
-              cache.put(event.request, responseToCache);
-            });
-          }
-          return networkResponse;
-        }).catch(() => {
-            return cachedResponse; // لو مفيش نت نرجع اللي في الكاش وخلاص
-        });
-
-        return cachedResponse || fetchPromise;
-      })
+    caches.match(event.request).then(cachedResponse => {
+      const fetchPromise = fetch(event.request).then(networkResponse => {
+        if (networkResponse && networkResponse.status === 200) {
+          const responseToCache = networkResponse.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(event.request, responseToCache));
+        }
+        return networkResponse;
+      }).catch(() => cachedResponse);
+      return cachedResponse || fetchPromise;
+    })
   );
 });
 
-// التعامل مع نقرة الإشعار
+// 7. التعامل مع النقر على الإشعار
 self.addEventListener('notificationclick', function(event) {
   event.notification.close();
-  const targetUrl = 'https://abdomakigat-rgb.github.io/Al-qma/';
-  
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then(clientList => {
       for (const client of clientList) {
-        if (client.url.includes('Al-qma') && 'focus' in client) {
-          return client.focus();
-        }
+        if (client.url.includes('Al-qma') && 'focus' in client) return client.focus();
       }
-      if (clients.openWindow) return clients.openWindow(targetUrl);
+      return clients.openWindow('https://abdomakigat-rgb.github.io/Al-qma/');
     })
   );
 });
