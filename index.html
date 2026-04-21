@@ -301,7 +301,7 @@
         .review-form { max-width: 800px; margin: 40px auto; background: var(--white); padding: 30px; border-radius: 25px; }
 
         #pwa-bar {
-            display: flex; 
+            display: none; /* يتم إظهاره عبر JS فقط في المتصفح */
             position: fixed; 
             bottom: 30px; 
             left: 30px; 
@@ -462,7 +462,7 @@
         <a href="#testimonials"><i class="fas fa-bolt"></i> ركن التحفيز</a>
         <a href="#location"><i class="fas fa-map-marker-alt"></i> عنواننا</a>
 
-        <div class="nav-footer-pwa">
+        <div class="nav-footer-pwa install-only-web">
             <img src="https://i.ibb.co/v4GzdvTJ/logo.jpg" alt="Logo">
             <div style="margin-bottom: 10px; font-weight: 700; font-size: 0.9rem;">تطبيق سنتر القمة الرسمي</div>
             <button onclick="handlePwaAction()" class="strat-install-btn">
@@ -512,10 +512,6 @@
                 قم بتسجيل بياناتك في الأسفل لنمنحك رسالة خاصة باسمك!
             </p>
             
-            <button onclick="handlePwaAction()" class="strat-install-btn" style="background: #22c55e; margin-top: 20px;">
-                <i class="fas fa-mobile-screen-button"></i> هل تريد التطبيق على هاتفك؟ ثبته الآن
-            </button>
-
             <div style="display:none">
                 <input type="text" id="revName">
                 <textarea id="revText"></textarea>
@@ -634,7 +630,10 @@
             "مكانك في القمة محجوز.. فقط ابدأ!",
             "كل ناجح في العالم بدأ بخطوة جريئة مثلك الآن.",
             "لا تلتفت للخلف، فالقمة أمامك والنجاح حليفك.",
-            "القمة هي البداية الحقيقية لكل من يطمح للعظمة."
+            "القمة هي البداية الحقيقية لكل من يطمح للعظمة.",
+            "ذكاؤك يحتاج لمجهودك ليتحول إلى عبقرية في القمة.",
+            "القمة لا تعترف بالأعذار، بل تعترف بالإنجازات.",
+            "كن أنت الفخر لوالديك، فالقمة تليق بك."
         ];
 
         let deferredPrompt;
@@ -647,13 +646,10 @@
             }
         }
 
-        // إعداد الإشعارات الحقيقية
         function setupNotifications() {
             if ("Notification" in window) {
                 Notification.requestPermission().then(permission => {
                     if (permission === "granted") {
-                        console.log("تم تفعيل الإشعارات");
-                        // إشعار ترحيبي تجريبي
                         new Notification("سنتر القمة", {
                             body: "أهلاً بك في عائلة القمة! فعلنا الإشعارات ليصلك كل جديد.",
                             icon: "https://i.ibb.co/v4GzdvTJ/logo.jpg"
@@ -663,10 +659,23 @@
             }
         }
 
+        // كود إخفاء أزرار التثبيت إذا كان التطبيق مثبتاً بالفعل
+        function checkAppMode() {
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+            if (isStandalone) {
+                // إخفاء كل ما يتعلق بالتثبيت داخل التطبيق
+                document.getElementById('pwa-bar').style.display = 'none';
+                document.querySelectorAll('.install-only-web').forEach(el => el.style.display = 'none');
+            }
+        }
+
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            document.getElementById('pwa-bar').style.display = 'flex';
+            // لا تظهر الشريط إلا في حالة المتصفح فقط
+            if (!window.matchMedia('(display-mode: standalone)').matches) {
+                document.getElementById('pwa-bar').style.display = 'flex';
+            }
         });
 
         function handlePwaAction() {
@@ -715,6 +724,7 @@
         }
 
         function initApp() {
+            checkAppMode();
             setTimeout(() => { 
                 const loader = document.getElementById('loader');
                 if(loader) {
@@ -722,7 +732,7 @@
                     setTimeout(()=> {
                         loader.style.display='none';
                         playSfx('introSound');
-                        setupNotifications(); // طلب الإشعارات عند الدخول
+                        setupNotifications();
                     }, 500); 
                 }
             }, 1000);
@@ -733,7 +743,6 @@
             
             window.addEventListener('scroll', revealElements);
 
-            // استرجاع البيانات المحفوظة بدقة
             const savedData = JSON.parse(localStorage.getItem('studentFullData') || '{}');
             if(savedData.name) {
                 document.getElementById('stName').value = savedData.name;
@@ -760,7 +769,8 @@
                 `تذكر يا ${name} أن كل تعب اليوم هو نجاح الغد.`,
                 `لا تتوقف يا ${name}، فأنت على بعد خطوات من حلمك.`,
                 `${name}.. سنتر القمة يثق بأنك ستكون من الأوائل هذا العام!`,
-                `المستقبل يبدأ من هنا يا ${name}، فاجعل القمة محطتك الأولى.`
+                `المستقبل يبدأ من هنا يا ${name}، فاجعل القمة محطتك الأولى.`,
+                `أنت فخر لنا يا ${name}، ننتظر اسمك في قائمة الأوائل.`
             ];
             const random = quotes[Math.floor(Math.random() * quotes.length)];
             document.getElementById('studentPersonalQuote').innerText = random;
@@ -812,6 +822,8 @@
                 {name: "التميز", text: "القمة لا تفتح أبوابها إلا لمن يطرقها بالعمل والاجتهاد."},
                 {name: "رسالة لك", text: "تذكر دائماً أنك مشروع بطل، والقمة مكانك الطبيعي."},
                 {name: "وقتك", text: "تنظيم وقتك هو المفتاح السحري الذي سيفتح لك أبواب الأوائل."},
+                {name: "قوة الإرادة", text: "لا يوجد مستحيل أمام طالب يضع القمة نصب عينيه."},
+                {name: "التفوق الهادئ", text: "اجتهد في صمت، ودع نتيجتك في القمة هي من تتحدث."},
                 {name: "التحدي", text: "الصعوبات هي من تصنع الأبطال، والقمة هي ميدان التحدي."}
             ];
 
@@ -836,7 +848,6 @@
                 e.preventDefault();
                 const btn = document.getElementById('submitBtn');
                 
-                // حفظ كافة البيانات بدون نقصان حرف واحد
                 const studentData = {
                     name: document.getElementById('stName').value,
                     phone: document.getElementById('stPhone').value,
