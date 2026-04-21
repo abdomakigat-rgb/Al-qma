@@ -620,9 +620,10 @@
 
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-messaging-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 
     <script>
-        // تكوين فايربيز الخاص بمشروع alqmaa-a45a9
+        // تكوين فايربيز
         const firebaseConfig = {
             apiKey: "AIzaSyA2FQpdNvzBXHJbzi-v6Obed8VdPVaMjeI",
             authDomain: "alqmaa-a45a9.firebaseapp.com",
@@ -633,9 +634,9 @@
             measurementId: "G-4T5430TC3M"
         };
 
-        // تهيئة فايربيز
         firebase.initializeApp(firebaseConfig);
         const messaging = firebase.messaging();
+        const db = firebase.firestore();
 
         const scriptURL = 'https://script.google.com/macros/s/AKfycbyh0KKYMAz1CviIpaUvYjF0sg1eo4cCAEaJSf-KgemCO_MG17Qfmj8ra4EcvCXjyGIypg/exec';
         
@@ -664,28 +665,30 @@
             }
         }
 
-        // نظام الإشعارات المطور مع مفتاح VAPID الجديد
+        // دالة حفظ التوكن والاسم في Firestore
+        async function saveTokenToFirestore(name) {
+            try {
+                const token = await messaging.getToken({ 
+                    vapidKey: 'BDRUTJWErCrKpyql3JSt7Fe6hDE7vnYDxWtS1rR68hamhyNH22yxqLpZzsWzBgEKbirk4Q8tCkPoHX2Pi' 
+                });
+                if (token) {
+                    await db.collection("students").doc(token).set({
+                        name: name,
+                        fcmToken: token,
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    console.log("Token & Name saved to Firestore");
+                }
+            } catch (err) {
+                console.error('Error saving data to Firestore:', err);
+            }
+        }
+
         function setupNotifications() {
             if ("Notification" in window) {
                 Notification.requestPermission().then(permission => {
                     if (permission === "granted") {
-                        // استخدام مفتاح الـ VAPID الخاص بك لتفعيل الإرسال من Firebase Console
-                        messaging.getToken({ 
-                            vapidKey: 'BDRUTJWErCrKpyql3JSt7Fe6hDE7vnYDxWtS1rR68hamhyNH22yxqLpZzsWzBgEKbirk4Q8tCkPoHX2Pi' 
-                        })
-                        .then((currentToken) => {
-                            if (currentToken) {
-                                console.log("Token obtained:", currentToken);
-                                // هنا يمكنك إرسال التوكن لقاعدة بياناتك إذا أردت استهداف هذا المستخدم لاحقاً
-                            }
-                        }).catch((err) => {
-                            console.error('An error occurred while retrieving token: ', err);
-                        });
-
-                        new Notification("سنتر القمة", {
-                            body: "أهلاً بك في عائلة القمة! فعلنا الإشعارات ليصلك كل جديد.",
-                            icon: "https://i.ibb.co/v4GzdvTJ/logo.jpg"
-                        });
+                        console.log("Notification permission granted.");
                     }
                 });
             }
@@ -877,8 +880,9 @@
                 e.preventDefault();
                 const btn = document.getElementById('submitBtn');
                 
+                const nameValue = document.getElementById('stName').value;
                 const studentData = {
-                    name: document.getElementById('stName').value,
+                    name: nameValue,
                     phone: document.getElementById('stPhone').value,
                     email: document.getElementById('stEmail').value,
                     address: document.getElementById('stAddress').value,
@@ -887,15 +891,18 @@
                 };
                 localStorage.setItem('studentFullData', JSON.stringify(studentData));
                 
-                const firstName = studentData.name.trim().split(' ')[0];
+                const firstName = nameValue.trim().split(' ')[0];
                 updateStudentMotivation(firstName);
 
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري تأمين حجزك...';
                 btn.disabled = true;
 
+                // تنفيذ حفظ التوكن والاسم في Firestore
+                saveTokenToFirestore(nameValue);
+
                 fetch(scriptURL, { method: 'POST', body: new FormData(form) })
-                .then(() => showSuccess(studentData.name))
-                .catch(() => showSuccess(studentData.name));
+                .then(() => showSuccess(nameValue))
+                .catch(() => showSuccess(nameValue));
             };
         }
 
