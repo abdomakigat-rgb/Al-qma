@@ -1,7 +1,7 @@
 {
   "short_name": "القمة",
   "name": "سنتر القمة التعليمي النموذجي",
-  "description": "تطبيق سنتر القمة التعليمي النموذجي - العديسات قبلي",
+  "description": "تطبيق سنتر القمة التعليمي النموذجي - القمة مكانك للتفوق والتميز الدراسي بالعديسات.",
   "id": "/Al-qma/",
   "icons": [
     {
@@ -47,29 +47,32 @@
   ],
   "shortcuts": [
     {
-      "name": "سجل الآن",
-      "short_name": "حجز",
-      "description": "الانتقال السريع لصفحة الحجز",
+      "name": "سجل حجزك",
+      "short_name": "حجز جديد",
+      "description": "سجل بياناتك الآن في سنتر القمة",
       "url": "./index.html#register",
       "icons": [{ "src": "https://i.ibb.co/v4GzdvTJ/logo.jpg", "sizes": "192x192" }]
     },
     {
-      "name": "آراء الطلاب",
-      "short_name": "الآراء",
-      "description": "ماذا يقول طلاب القمة؟",
+      "name": "ركن التحفيز",
+      "short_name": "تحفيز",
+      "description": "رسائل ملهمة لطلابنا المتفوقين",
       "url": "./index.html#testimonials",
       "icons": [{ "src": "https://i.ibb.co/v4GzdvTJ/logo.jpg", "sizes": "192x192" }]
     }
   ],
-  "start_url": "./index.html",
+  "start_url": "./index.html?launcher=pwa",
   "display": "standalone",
   "display_override": ["window-controls-overlay", "minimal-ui"],
   "orientation": "portrait",
   "theme_color": "#0ea5e9",
-  "background_color": "#ffffff",
+  "background_color": "#f8fafc",
   "categories": ["education", "learning"],
   "lang": "ar-EG",
   "dir": "rtl",
   "prefer_related_applications": false,
-  "related_applications": []
+  "related_applications": [],
+  "launch_handler": {
+    "client_mode": ["focus-existing", "auto"]
+  }
 }
