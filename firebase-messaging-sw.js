@@ -9,7 +9,8 @@ const firebaseConfig = {
     projectId: "alqmaa-a45a9",
     storageBucket: "alqmaa-a45a9.firebasestorage.app",
     messagingSenderId: "140342031108",
-    appId: "1:140342031108:web:714734fa525295c91a1651"
+    appId: "1:140342031108:web:714734fa525295c91a1651",
+    measurementId: "G-4T5430TC3M" // إضافة المعرف للاحصائيات
 };
 
 // بدء تشغيل فايربيز داخل الـ Service Worker
@@ -23,10 +24,10 @@ messaging.onBackgroundMessage((payload) => {
   const notificationTitle = payload.notification.title || "تنبيه من سنتر القمة";
   const notificationOptions = {
     body: payload.notification.body || "لديك رسالة جديدة من المنصة.",
-    icon: 'https://i.ibb.co/v4GzdvTJ/logo.jpg', // لوجو السنتر
-    badge: 'https://i.ibb.co/v4GzdvTJ/logo.jpg', // أيقونة صغيرة للإشعارات
+    icon: 'https://i.ibb.co/v4GzdvTJ/logo.jpg', 
+    badge: 'https://i.ibb.co/v4GzdvTJ/logo.jpg', 
     data: {
-      url: payload.data ? payload.data.url : '/' // رابط يفتح لما يدوس على الإشعار
+      url: (payload.data && payload.data.url) ? payload.data.url : '/' 
     }
   };
 
@@ -36,7 +37,7 @@ messaging.onBackgroundMessage((payload) => {
 // إضافة حدث عند الضغط على الإشعار لفتح الموقع
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
-  const urlToOpen = event.notification.data.url || '/';
+  const urlToOpen = (event.notification.data && event.notification.data.url) ? event.notification.data.url : '/';
   
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then((windowClients) => {
