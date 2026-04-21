@@ -381,6 +381,13 @@
 
         footer { text-align: center; padding: 60px 20px; background: var(--white); border-top: 1px solid var(--soft-blue); }
 
+        .update-info {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-top: 10px;
+            font-weight: 700;
+        }
+
         .dev-credit {
             font-size: 0.75rem;
             color: var(--accent-color); 
@@ -615,6 +622,7 @@
     <footer>
         <p>جميع الحقوق محفوظة &copy; سنتر القمة التعليمي النموذجي 2026</p>
         <p style="font-weight: 700; margin-top: 5px; color: var(--deep-text);">إدارة أبو سيف</p>
+        <div id="last-update-box" class="update-info">جاري تحميل وقت التحديث...</div>
         <div class="dev-credit">تطوير: عبدو مكي</div>
     </footer>
 
@@ -623,7 +631,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 
     <script>
-        // تكوين فايربيز الجديد والمحدث
         const firebaseConfig = {
             apiKey: "AIzaSyA2FQpdNvzBXHJbzi-v6Obed8VdPVaMjeI",
             authDomain: "alqmaa-a45a9.firebaseapp.com",
@@ -634,7 +641,6 @@
             measurementId: "G-4T5430TC3M"
         };
 
-        // تهيئة فايربيز
         firebase.initializeApp(firebaseConfig);
         const messaging = firebase.messaging();
         const db = firebase.firestore();
@@ -666,7 +672,18 @@
             }
         }
 
-        // دالة لحفظ التوكن وربطه باسم الطالب (محدثة بمفتاح VAPID الجديد)
+        // --- محرك الإشعارات والربط بالـ Service Worker ---
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                .then(reg => {
+                    console.log("Service Worker Registered! ✅");
+                    messaging.useServiceWorker(reg);
+                })
+                .catch(err => console.log("Service Worker Failed ❌", err));
+            });
+        }
+
         async function saveTokenToFirestore(name) {
             try {
                 const token = await messaging.getToken({ 
@@ -679,32 +696,28 @@
                         fcmToken: token,
                         lastActive: firebase.firestore.FieldValue.serverTimestamp()
                     });
-                    console.log("تم ربط التوكن والاسم بنجاح! ✅");
                 }
             } catch (err) {
-                console.error('خطأ في حفظ البيانات للفايربيز:', err);
+                console.error('Firestore Error:', err);
             }
         }
 
-        // إعداد الإشعارات وطلب الصلاحية (محدثة بمفتاح VAPID الجديد)
-        function setupNotifications() {
+        async function setupNotifications() {
             if ("Notification" in window) {
-                Notification.requestPermission().then(permission => {
-                    if (permission === "granted") {
-                        console.log("تم السماح بالإشعارات.");
-                        messaging.getToken({ 
+                const permission = await Notification.requestPermission();
+                if (permission === "granted") {
+                    try {
+                        const token = await messaging.getToken({ 
                             vapidKey: 'BG4qNJJLmOq29aauOqx5r5aq-N6c3Bas-XbyZ4jXKJh2TaK258ycIll7IwAaTKHYR-ZZIspwAuBsfHsJM0R5u-4' 
-                        })
-                        .then(t => { 
-                            if(t) {
-                                console.log("التوكن الخاص بك هو:", t);
-                                // alert("مبروك! الإشعارات مفعلة."); // يمكنك تفعيلها للتجربة فقط
-                            }
-                        }).catch(err => {
-                            console.error("خطأ في جلب التوكن:", err);
                         });
+                        const savedData = JSON.parse(localStorage.getItem('studentFullData') || '{}');
+                        if(savedData.name && token) {
+                            await saveTokenToFirestore(savedData.name);
+                        }
+                    } catch (err) {
+                        console.log("Token Fetch Error:", err);
                     }
-                });
+                }
             }
         }
 
@@ -740,21 +753,6 @@
             }
         }
 
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js').then(reg => {
-                    reg.onupdatefound = () => {
-                        const installingWorker = reg.installing;
-                        installingWorker.onstatechange = () => {
-                            if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                showUpdateBar();
-                            }
-                        };
-                    };
-                });
-            });
-        }
-
         function showUpdateBar() {
             const bar = document.getElementById('pwa-bar');
             const btn = document.getElementById('pwa-button');
@@ -770,6 +768,11 @@
         }
 
         function initApp() {
+            // عرض وقت التحديث الأخير
+            const updateBox = document.getElementById('last-update-box');
+            const now = new Date();
+            updateBox.innerHTML = `<i class="fas fa-clock"></i> آخر تحديث للمنصة: ${now.toLocaleDateString('ar-EG')} | ${now.toLocaleTimeString('ar-EG')}`;
+
             checkAppMode();
             setTimeout(() => { 
                 const loader = document.getElementById('loader');
@@ -911,7 +914,6 @@
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري تأمين حجزك...';
                 btn.disabled = true;
 
-                // حفظ التوكن وربطه بالاسم في Firestore عند الحجز
                 await saveTokenToFirestore(nameValue);
 
                 fetch(scriptURL, { method: 'POST', body: new FormData(form) })
