@@ -22,7 +22,7 @@
       window.OneSignal = window.OneSignal || [];
       OneSignal.push(function() {
         OneSignal.init({
-          appId: "os_v2_app_jxlodp7jkrdqldqt4mvfygqkicqunkyoyp2e4tfn2dczis453bus3ox7z2hpx3yxm3nhlbjxljnyzm54xa6bhrvhicskvjwmbxm3v2i", // تم إضافة مفتاحك هنا
+          appId: "4dd6e1bf-e954-4705-8e13-e32a5c1a0a40",
           safari_web_id: "optional_safari_id",
           notifyButton: {
             enable: true,
@@ -44,7 +44,7 @@
             "url": "https://abdomakigat-rgb.github.io/Al-qma/" 
           },
           serviceWorkerPath: 'OneSignalSDKWorker.js', 
-          serviceWorkerParam: { scope: '/' }
+          serviceWorkerParam: { scope: '/Al-qma/' }
         });
       });
     </script>
@@ -792,14 +792,12 @@
             form.onsubmit = (e) => {
                 e.preventDefault();
                 
-                // ملء التاريخ تلقائياً قبل الإرسال
                 document.getElementById('submissionDate').value = new Date().toLocaleString('ar-EG');
                 
                 const btn = document.getElementById('submitBtn');
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحجز...';
                 btn.disabled = true;
 
-                // إرسال البيانات لـ OneSignal لفرز الطلاب لاحقاً
                 if (window.OneSignal) {
                   OneSignal.push(function() {
                     OneSignal.sendTags({
@@ -813,7 +811,6 @@
                 .then(response => {
                     playSfx('successSound');
                     document.getElementById('success-modal').style.display = "block";
-                    // حفظ الاسم محلياً للترحيب به مستقبلاً
                     localStorage.setItem('studentFullData', JSON.stringify({name: document.getElementById('stName').value}));
                     form.reset();
                 })
