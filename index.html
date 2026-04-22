@@ -22,7 +22,7 @@
       window.OneSignal = window.OneSignal || [];
       OneSignal.push(function() {
         OneSignal.init({
-          appId: "YOUR_ONESIGNAL_APP_ID", // ضع هنا الـ App ID الخاص بك من OneSignal
+          appId: "YOUR_ONESIGNAL_APP_ID", // ضع هنا الـ App ID الحقيقي الخاص بك
           safari_web_id: "optional_safari_id",
           notifyButton: {
             enable: true,
@@ -43,7 +43,7 @@
             "message": "تم تفعيل الإشعارات بنجاح. أي جديد في السنتر هيوصلك هنا فوراً! 🚀",
             "url": "https://abdomakigat-rgb.github.io/Al-qma/" 
           },
-          serviceWorkerPath: 'OneSignalSDKWorker.js', // تأكد من وجود الملف في الـ Root
+          serviceWorkerPath: 'OneSignalSDKWorker.js', 
           serviceWorkerParam: { scope: '/' }
         });
       });
@@ -596,12 +596,12 @@
             <div class="form-group">
                 <label>نظام الدراسة والدفع</label>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                    <select name="attendance_type" required aria-label="طريقة الحضور">
+                    <select name="attendance_type" id="attendanceType" required aria-label="طريقة الحضور">
                         <option value="">طريقة الحضور</option>
                         <option value="في السنتر">في السنتر</option>
                         <option value="أون لاين">أون لاين</option>
                     </select>
-                    <select name="payment_type" required aria-label="طريقة الدفع">
+                    <select name="payment_type" id="paymentType" required aria-label="طريقة الدفع">
                         <option value="">طريقة الدفع</option>
                         <option value="في السنتر">في السنتر</option>
                         <option value="محفظة إلكترونية">محفظة إلكترونية</option>
@@ -791,14 +791,30 @@
         if(form) {
             form.onsubmit = (e) => {
                 e.preventDefault();
+                
+                // ملء التاريخ تلقائياً قبل الإرسال
+                document.getElementById('submissionDate').value = new Date().toLocaleString('ar-EG');
+                
                 const btn = document.getElementById('submitBtn');
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحجز...';
                 btn.disabled = true;
+
+                // إرسال البيانات لـ OneSignal لفرز الطلاب لاحقاً
+                if (window.OneSignal) {
+                  OneSignal.push(function() {
+                    OneSignal.sendTags({
+                      "study_type": document.getElementById('eduType').value,
+                      "student_name": document.getElementById('stName').value
+                    });
+                  });
+                }
 
                 fetch(scriptURL, { method: 'POST', body: new FormData(form) })
                 .then(response => {
                     playSfx('successSound');
                     document.getElementById('success-modal').style.display = "block";
+                    // حفظ الاسم محلياً للترحيب به مستقبلاً
+                    localStorage.setItem('studentFullData', JSON.stringify({name: document.getElementById('stName').value}));
                     form.reset();
                 })
                 .catch(error => {
