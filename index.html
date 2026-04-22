@@ -26,12 +26,25 @@
           safari_web_id: "optional_safari_id",
           notifyButton: {
             enable: true,
+            size: 'medium',
+            theme: 'default',
+            position: 'bottom-left',
+            text: {
+                'tip.state.unsubscribed': 'اشترك في الإشعارات',
+                'tip.state.subscribed': 'أنت مشترك في الإشعارات',
+                'tip.state.blocked': 'لقد قمت بحظر الإشعارات',
+                'message.prenotify': 'اضغط هنا للاشتراك في إشعارات مركز القمة',
+                'action.subscribe': 'اشتراك الآن',
+                'action.unsubscribe': 'إلغاء الاشتراك'
+            }
           },
           welcomeNotification: {
             "title": "نورت القمة يا بطل! 🎓",
             "message": "تم تفعيل الإشعارات بنجاح. أي جديد في السنتر هيوصلك هنا فوراً! 🚀",
             "url": "https://abdomakigat-rgb.github.io/Al-qma/" 
-          }
+          },
+          serviceWorkerPath: 'OneSignalSDKWorker.js', // تأكد من وجود الملف في الـ Root
+          serviceWorkerParam: { scope: '/' }
         });
       });
     </script>
@@ -462,7 +475,6 @@
     <audio id="successSound" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3" preload="auto"></audio>
     <audio id="introSound" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" preload="auto"></audio>
     <audio id="clickSound" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3" preload="auto"></audio>
-    <audio id="deleteSound" src="https://assets.mixkit.co/active_storage/sfx/256/256-preview.mp3" preload="auto"></audio>
 
     <header id="main-header" class="animate__animated animate__fadeInDown">
         <div class="logo-container">
@@ -532,8 +544,7 @@
     <section class="testimonials" id="testimonials">
         <h2 style="font-size: 2.5rem; margin-bottom: 20px;" id="motivationTitle">كلمات ملهمة لطلابنا</h2>
         <div class="reviews-wrapper">
-            <div class="reviews-container" id="reviewsList">
-                </div>
+            <div class="reviews-container" id="reviewsList"></div>
         </div>
 
         <div class="review-form animate__animated animate__fadeInUp" id="customQuoteBox">
@@ -541,14 +552,6 @@
             <p id="studentPersonalQuote" style="font-size: 1.2rem; font-weight: 700; color: var(--accent-color); margin-top: 15px;">
                 قم بتسجيل بياناتك في الأسفل لنمنحك رسالة خاصة باسمك!
             </p>
-            
-            <div style="display:none">
-                <input type="text" id="revName">
-                <textarea id="revText"></textarea>
-                <input type="hidden" id="editIndex" value="-1">
-                <button id="revBtn" onclick="handleReviewAction()"></button>
-                <button id="cancelEditBtn" onclick="cancelEdit()"></button>
-            </div>
         </div>
     </section>
 
@@ -647,44 +650,21 @@
         <p style="font-weight: 700; margin-top: 5px; color: var(--deep-text);">إدارة أبو سيف</p>
         <div id="last-update-box" class="update-info">
             <i class="fas fa-code-branch" style="color: var(--accent-color); margin-left: 5px;"></i>
-            آخر تحديث للمبرمج: <span style="color: var(--deep-text);">22 أبريل 2026 - 09:53 AM</span>
+            آخر تحديث للمبرمج: <span style="color: var(--deep-text);">22 أبريل 2026 - 10:45 AM</span>
         </div>
         <div class="dev-credit">تطوير: عبدو مكي</div>
     </footer>
 
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
-
     <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyA2FQpdNvzBXHJbzi-v6Obed8VdPVaMjeI",
-            authDomain: "alqmaa-a45a9.firebaseapp.com",
-            projectId: "alqmaa-a45a9",
-            storageBucket: "alqmaa-a45a9.firebasestorage.app",
-            messagingSenderId: "140342031108",
-            appId: "1:140342031108:web:714734fa525295c91a1651",
-            measurementId: "G-4T5430TC3M"
-        };
-
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
-        const db = firebase.firestore();
-
         const scriptURL = 'https://script.google.com/macros/s/AKfycbyh0KKYMAz1CviIpaUvYjF0sg1eo4cCAEaJSf-KgemCO_MG17Qfmj8ra4EcvCXjyGIypg/exec';
         
         const motivationalQuotes = [
             "أنت بطل قصتك، والقمة بانتظارك!",
             "النجاح يتطلب شجاعة للاستمرار يا بطل القمة.",
             "اجعل يومك اليوم خطوة نحو حلمك الكبير.",
-            "المستحيل هو مجرد كلمة في قاموس الضعفاء.",
             "القمة لا تستقبل إلا الذين لا يرضون بغيرها!",
             "مكانك في القمة محجوز.. فقط ابدأ!",
-            "كل ناجح في العالم بدأ بخطوة جريئة مثلك الآن.",
-            "لا تلتفت للخلف، فالقمة أمامك والنجاح حليفك.",
-            "القمة هي البداية الحقيقية لكل من يطمح للعظمة.",
             "ذكاؤك يحتاج لمجهودك ليتحول إلى عبقرية في القمة.",
-            "القمة لا تعترف بالأعذار، بل تعترف بالإنجازات.",
             "كن أنت الفخر لوالديك، فالقمة تليق بك."
         ];
 
@@ -696,14 +676,6 @@
                 sound.currentTime = 0;
                 sound.play().catch(() => {});
             }
-        }
-
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('OneSignalSDKWorker.js')
-                .then(reg => console.log("OneSignal Worker Ready ✅"))
-                .catch(err => console.log("Worker Registration Failed ❌", err));
-            });
         }
 
         function checkAppMode() {
@@ -724,10 +696,7 @@
 
         function handlePwaAction() {
             playSfx('clickSound');
-            const btn = document.getElementById('pwa-button');
-            if (btn && btn.innerText === 'تحديث الآن') {
-                window.location.reload();
-            } else if (deferredPrompt) {
+            if (deferredPrompt) {
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then(() => {
                     deferredPrompt = null;
@@ -759,11 +728,6 @@
 
             const savedData = JSON.parse(localStorage.getItem('studentFullData') || '{}');
             if(savedData.name) {
-                document.getElementById('stName').value = savedData.name;
-                document.getElementById('stPhone').value = savedData.phone || '';
-                document.getElementById('stEmail').value = savedData.email || '';
-                document.getElementById('stAddress').value = savedData.address || '';
-                
                 const firstName = savedData.name.trim().split(' ')[0];
                 document.getElementById('hero-title').innerHTML = `أهلاً بك يا <span>${firstName}</span> في القمة`;
                 updateStudentMotivation(firstName);
@@ -771,26 +735,11 @@
 
             const randomQuote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
             document.getElementById('main-quote').innerText = randomQuote;
-            
-            document.querySelectorAll('button, .menu-btn, .side-nav a').forEach(el => {
-                el.addEventListener('click', () => playSfx('clickSound'));
-            });
         }
 
         function updateStudentMotivation(name) {
-            const quotes = [
-                `يا ${name}، أنت تمتلك قدرات مذهلة، القمة بانتظارك!`,
-                `تذكر يا ${name} أن كل تعب اليوم هو نجاح الغد.`,
-                `لا تتوقف يا ${name}، فأنت على بعد خطوات من حلمك.`,
-                `${name}.. سنتر القمة يثق بأنك ستكون من الأوائل هذا العام!`,
-                `المستقبل يبدأ من هنا يا ${name}، فاجعل القمة محطتك الأولى.`,
-                `أنت فخر لنا يا ${name}، ننتظر اسمك في قائمة الأوائل.`
-            ];
-            const random = quotes[Math.floor(Math.random() * quotes.length)];
             const quoteEl = document.getElementById('studentPersonalQuote');
-            if(quoteEl) quoteEl.innerText = random;
-            const titleEl = document.getElementById('motivationTitle');
-            if(titleEl) titleEl.innerText = `رسالة خاصة لـ ${name}`;
+            if(quoteEl) quoteEl.innerText = `يا ${name}، القمة تثق في قدراتك تماماً!`;
         }
 
         function revealElements() {
@@ -819,42 +768,21 @@
             const now = new Date();
             const clock = document.getElementById('clock-time');
             if(clock) clock.innerText = now.toLocaleTimeString('ar-EG');
-            const subDate = document.getElementById('submissionDate');
-            if(subDate) subDate.value = now.toLocaleString('ar-EG');
         }
-
-        function handleReviewAction() { }
 
         function loadReviews() {
             const container = document.getElementById('reviewsList');
             if(!container) return;
-            container.innerHTML = '';
-            
             const studentQuotes = [
                 {name: "طريق النجاح", text: "القمة ليست مكاناً تصل إليه، بل هي روح لا ترضى بغير الصدارة."},
-                {name: "الإصرار", text: "يا بطل، تعب اليوم هو فخر الغد، استمر ولا تتوقف."},
-                {name: "عائلة القمة", text: "نحن هنا لنصنع منك نجماً يضيء سماء المتفوقين."},
-                {name: "ثق بنفسك", text: "قدراتك لا حدود لها، فقط آمن بحلمك وسنصل معاً للقمة."},
-                {name: "بناء المستقبل", text: "كل حصة تحضرها هي طوبة في صرح مستقبلك العظيم."},
-                {name: "التميز", text: "القمة لا تفتح أبوابها إلا لمن يطرقها بالعمل والاجتهاد."},
-                {name: "رسالة لك", text: "تذكر دائماً أنك مشروع بطل، والقمة مكانك الطبيعي."},
-                {name: "وقتك", text: "تنظيم وقتك هو المفتاح السحري الذي سيفتح لك أبواب الأوائل."},
-                {name: "قوة الإرادة", text: "لا يوجد مستحيل أمام طالب يضع القمة نصب عينيه."},
-                {name: "التفوق الهادئ", text: "اجتهد في صمت، ودع نتيجتك في القمة هي من تتحدث."},
-                {name: "التحدي", text: "الصعوبات هي من تصنع الأبطال، والقمة هي ميدان التحدي."}
+                {name: "الإصرار", text: "يا بطل، تعب اليوم هو فخر الغد، استمر ولا تتوقف."}
             ];
-
             [...studentQuotes, ...studentQuotes].forEach(rev => {
-                container.innerHTML += `
-                    <div class="review-card">
-                        <h4 style="color: var(--accent-color);"><i class="fas fa-quote-right" style="margin-left: 8px; font-size: 0.8rem;"></i>${rev.name}</h4>
-                        <p style="font-weight: 700;">"${rev.text}"</p>
-                    </div>`;
+                container.innerHTML += `<div class="review-card"><h4>${rev.name}</h4><p>"${rev.text}"</p></div>`;
             });
         }
 
         function toggleSideNav() { 
-            playSfx('clickSound');
             const nav = document.getElementById('sideNav');
             if(nav) nav.classList.toggle('active'); 
         }
@@ -864,49 +792,21 @@
             form.onsubmit = (e) => {
                 e.preventDefault();
                 const btn = document.getElementById('submitBtn');
-                
-                const nameValue = document.getElementById('stName').value;
-                const studentData = {
-                    name: nameValue,
-                    phone: document.getElementById('stPhone').value,
-                    email: document.getElementById('stEmail').value,
-                    address: document.getElementById('stAddress').value,
-                    edu_type: document.getElementById('eduType').value,
-                    grade: document.getElementById('gradeSelect').value,
-                    subject_teacher: document.getElementById('stSubject').value,
-                    date: new Date().toLocaleString('ar-EG')
-                };
-
-                localStorage.setItem('studentFullData', JSON.stringify(studentData));
-                
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري تأمين حجزك...';
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحجز...';
                 btn.disabled = true;
 
-                // إرسال لـ Firebase (تمت إزالة await لمنع التعليق)
-                db.collection("registrations").add({
-                    ...studentData,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                }).catch(err => console.log("Firebase Error"));
-
-                // إرسال لـ Google Sheets مع تأمين الاستجابة
                 fetch(scriptURL, { method: 'POST', body: new FormData(form) })
                 .then(response => {
-                    showSuccess(nameValue);
+                    playSfx('successSound');
+                    document.getElementById('success-modal').style.display = "block";
+                    form.reset();
                 })
                 .catch(error => {
-                    // حتى لو حصل خطأ في الشبكة بنظهر النجاح لأن البيانات وصلت لـ Firebase
-                    showSuccess(nameValue);
+                    alert("حدث خطأ، حاول مرة أخرى.");
+                    btn.disabled = false;
+                    btn.innerText = "احجز مكانك في القمة الآن";
                 });
             };
-        }
-
-        function showSuccess(name) {
-            playSfx('successSound');
-            const modal = document.getElementById('success-modal');
-            if(modal) modal.style.display = "block";
-            window.scrollTo({top: 0, behavior: 'smooth'});
-            // إفراغ الفورم بعد النجاح
-            form.reset();
         }
     </script>
 </body>
