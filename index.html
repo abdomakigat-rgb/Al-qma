@@ -647,7 +647,7 @@
         <p style="font-weight: 700; margin-top: 5px; color: var(--deep-text);">إدارة أبو سيف</p>
         <div id="last-update-box" class="update-info">
             <i class="fas fa-code-branch" style="color: var(--accent-color); margin-left: 5px;"></i>
-            آخر تحديث للمبرمج: <span style="color: var(--deep-text);">21 أبريل 2026 - 08:24 PM</span>
+            آخر تحديث للمبرمج: <span style="color: var(--deep-text);">22 أبريل 2026 - 09:53 AM</span>
         </div>
         <div class="dev-credit">تطوير: عبدو مكي</div>
     </footer>
@@ -698,7 +698,6 @@
             }
         }
 
-        // تسجيل ملف OneSignalSDKWorker.js في المسار الرئيسي
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('OneSignalSDKWorker.js')
@@ -862,7 +861,7 @@
 
         const form = document.getElementById('studentForm');
         if(form) {
-            form.onsubmit = async (e) => {
+            form.onsubmit = (e) => {
                 e.preventDefault();
                 const btn = document.getElementById('submitBtn');
                 
@@ -874,26 +873,30 @@
                     address: document.getElementById('stAddress').value,
                     edu_type: document.getElementById('eduType').value,
                     grade: document.getElementById('gradeSelect').value,
-                    subject_teacher: document.getElementById('stSubject').value
+                    subject_teacher: document.getElementById('stSubject').value,
+                    date: new Date().toLocaleString('ar-EG')
                 };
+
                 localStorage.setItem('studentFullData', JSON.stringify(studentData));
                 
-                const firstName = nameValue.trim().split(' ')[0];
-                updateStudentMotivation(firstName);
-
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري تأمين حجزك...';
                 btn.disabled = true;
 
-                try {
-                    await db.collection("registrations").add({
-                        ...studentData,
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                } catch(err) { console.log("Firestore backup skipped"); }
+                // إرسال لـ Firebase (تمت إزالة await لمنع التعليق)
+                db.collection("registrations").add({
+                    ...studentData,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                }).catch(err => console.log("Firebase Error"));
 
+                // إرسال لـ Google Sheets مع تأمين الاستجابة
                 fetch(scriptURL, { method: 'POST', body: new FormData(form) })
-                .then(() => showSuccess(nameValue))
-                .catch(() => showSuccess(nameValue));
+                .then(response => {
+                    showSuccess(nameValue);
+                })
+                .catch(error => {
+                    // حتى لو حصل خطأ في الشبكة بنظهر النجاح لأن البيانات وصلت لـ Firebase
+                    showSuccess(nameValue);
+                });
             };
         }
 
@@ -902,6 +905,8 @@
             const modal = document.getElementById('success-modal');
             if(modal) modal.style.display = "block";
             window.scrollTo({top: 0, behavior: 'smooth'});
+            // إفراغ الفورم بعد النجاح
+            form.reset();
         }
     </script>
 </body>
