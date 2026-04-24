@@ -611,14 +611,21 @@
             <div class="form-group">
                 <label>البيانات الدراسية</label>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
-                    <select name="edu_type" id="eduType" onchange="filterGrades()" required aria-label="نوع الدراسة">
-                        <option value="">نوع الدراسة</option>
-                        <option value="عام">ثانوي عام</option>
-                        <option value="أزهر">ثانوي أزهري</option>
+                    <select name="edu_type" id="eduType" onchange="filterGrades()" required aria-label="المرحلة التعليمية">
+                        <option value="">اختر المرحلة</option>
+                        <option value="ابتدائي">ابتدائي</option>
                         <option value="إعدادي">إعدادي</option>
+                        <option value="ثانوي">ثانوي</option>
                     </select>
+                    <select name="edu_system" id="eduSystem" onchange="filterGrades()" required aria-label="نوع التعليم">
+                        <option value="">عام أم أزهر؟</option>
+                        <option value="عام">عام</option>
+                        <option value="أزهر">أزهري</option>
+                    </select>
+                </div>
+                <div class="form-group">
                     <select name="grade" id="gradeSelect" required aria-label="الصف الدراسي">
-                        <option value="">الصف الدراسي</option>
+                        <option value="">اختر الصف الدراسي</option>
                     </select>
                 </div>
                 <div class="input-with-icon">
@@ -632,10 +639,28 @@
 
     <section id="location" style="padding: 80px 8%; text-align: center;">
         <h2 style="margin-bottom: 20px; font-size: 2.5rem;" class="animate__animated animate__fadeIn"><i class="fas fa-map-location-dot" style="color: var(--accent-color);"></i> عنواننا</h2>
-        <address style="font-style: normal;">
-            <p style="font-size: 1.3rem; font-weight: 700;">العديسات قبلي - نجع علوان</p>
-            <p style="font-size: 1.1rem; color: #64748b;">بجوار الوحده الصحية</p>
-        </address>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-top: 20px;">
+            <address style="font-style: normal; background: #fff; padding: 25px; border-radius: 20px; box-shadow: var(--luxury-shadow);">
+                <h3 style="color: var(--accent-color); margin-bottom: 10px;">الفرع الأول</h3>
+                <p style="font-size: 1.2rem; font-weight: 700;">العديسات قبلي - نجع علوان</p>
+                <p style="font-size: 1.1rem; color: #64748b;">بجوار الوحده الصحية</p>
+            </address>
+
+            <address style="font-style: normal; background: #fff; padding: 25px; border-radius: 20px; box-shadow: var(--luxury-shadow);">
+                <h3 style="color: var(--accent-color); margin-bottom: 10px;">الفرع الثاني</h3>
+                <p style="font-size: 1.2rem; font-weight: 700;">العديسات قبلي - نجع المهيدات</p>
+                <p style="font-size: 1.1rem; color: #64748b;">بجوار مسجد النايب (الرحمن)</p>
+            </address>
+        </div>
+
+        <div style="margin-top: 40px;">
+            <p style="font-weight: 900; font-size: 1.2rem;">للاستفسار تواصل معنا:</p>
+            <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 15px;">
+                <a href="tel:01102464400" style="text-decoration:none; color: var(--accent-color); font-weight: 700; font-size: 1.1rem; background: var(--soft-blue); padding: 10px 20px; border-radius: 50px;"><i class="fas fa-phone"></i> 01102464400</a>
+                <a href="tel:01030438441" style="text-decoration:none; color: var(--accent-color); font-weight: 700; font-size: 1.1rem; background: var(--soft-blue); padding: 10px 20px; border-radius: 50px;"><i class="fas fa-phone"></i> 01030438441</a>
+            </div>
+        </div>
     </section>
 
     <div id="success-modal">
@@ -752,16 +777,26 @@
 
         function filterGrades() {
             const eduType = document.getElementById('eduType').value;
+            const eduSystem = document.getElementById('eduSystem').value;
             const gradeSelect = document.getElementById('gradeSelect');
-            gradeSelect.innerHTML = '<option value="">الصف الدراسي</option>';
-            const secondary = ["الأول الثانوي", "الثاني الثانوي", "الثالث الثانوي"];
-            const preparatory = ["الأول الإعدادي", "الثاني الإعدادي", "الثالث الإعدادي"];
             
-            if(eduType === "إعدادي") {
-                preparatory.forEach(g => gradeSelect.innerHTML += `<option value="${g}">${g}</option>`);
-            } else if (eduType === "عام" || eduType === "أزهر") {
-                secondary.forEach(g => gradeSelect.innerHTML += `<option value="${g}">${g}</option>`);
-            }
+            gradeSelect.innerHTML = '<option value="">اختر الصف الدراسي</option>';
+            
+            if(!eduType || !eduSystem) return;
+
+            const primary = ["الأول الابتدائي", "الثاني الابتدائي", "الثالث الابتدائي", "الرابع الابتدائي", "الخامس الابتدائي", "السادس الابتدائي"];
+            const preparatory = ["الأول الإعدادي", "الثاني الإعدادي", "الثالث الإعدادي"];
+            const secondary = ["الأول الثانوي", "الثاني الثانوي", "الثالث الثانوي"];
+            
+            let selectedGrades = [];
+            if(eduType === "ابتدائي") selectedGrades = primary;
+            else if(eduType === "إعدادي") selectedGrades = preparatory;
+            else if(eduType === "ثانوي") selectedGrades = secondary;
+
+            selectedGrades.forEach(g => {
+                const suffix = eduSystem === "أزهر" ? " (أزهري)" : " (عام)";
+                gradeSelect.innerHTML += `<option value="${g}${suffix}">${g}${suffix}</option>`;
+            });
         }
 
         function updateLiveClock() {
