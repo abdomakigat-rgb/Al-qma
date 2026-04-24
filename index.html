@@ -613,6 +613,7 @@
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
                     <select name="edu_type" id="eduType" onchange="filterGrades()" required aria-label="المرحلة التعليمية">
                         <option value="">اختر المرحلة</option>
+                        <option value="تأسيس">تأسيس</option>
                         <option value="ابتدائي">ابتدائي</option>
                         <option value="إعدادي">إعدادي</option>
                         <option value="ثانوي">ثانوي</option>
@@ -784,12 +785,14 @@
             
             if(!eduType || !eduSystem) return;
 
+            const foundation = ["تأسيس لغة عربية", "تأسيس لغة إنجليزية", "تأسيس رياضيات", "تأسيس نور بيان"];
             const primary = ["الأول الابتدائي", "الثاني الابتدائي", "الثالث الابتدائي", "الرابع الابتدائي", "الخامس الابتدائي", "السادس الابتدائي"];
             const preparatory = ["الأول الإعدادي", "الثاني الإعدادي", "الثالث الإعدادي"];
             const secondary = ["الأول الثانوي", "الثاني الثانوي", "الثالث الثانوي"];
             
             let selectedGrades = [];
-            if(eduType === "ابتدائي") selectedGrades = primary;
+            if(eduType === "تأسيس") selectedGrades = foundation;
+            else if(eduType === "ابتدائي") selectedGrades = primary;
             else if(eduType === "إعدادي") selectedGrades = preparatory;
             else if(eduType === "ثانوي") selectedGrades = secondary;
 
